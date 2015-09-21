@@ -295,15 +295,17 @@ class Register(db.Model):
     charged = db.Column(Boolean)
     ptype = db.Column(Integer) # PayType
     origin = db.Column(Integer)
+    operator = db.Column(String(32))
     extend = db.Column(String(64))
 
-    def __init__(self, username, cid, charged=False, ptype=0, extend=''):
+    def __init__(self, username, cid, op, charged=False, ptype=0, extend=''):
         self.username = username
         self.cid = cid
         self.charged = charged
         self.ptype = ptype
         self.origin = cid
+        self.operator = op
         self.extend = extend
  
     def __repr__(self):
-        return "<Register(:s): {:s}报名了{:s}>".format(self.rid, self.username, self.cid)
+        return "<Register{:s}: {:s}报名了{:s}>".format(self.rid, self.username, self.cid)

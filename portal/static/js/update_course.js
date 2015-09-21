@@ -2,7 +2,6 @@ $(document).ready(function() {
 
     $("#btn_update_course").bind("click", function() {
     	var cid = document.getElementById("update_course_id");
-    	console.log(cid)
     	var name = document.getElementById("update_course_name");
 
     	var status = document.getElementById("btn_update_course_status");

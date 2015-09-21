@@ -8,7 +8,7 @@ from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from portal import app, db, lm
-from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus, PayType
+from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus, PayType, Register
 
 # 测试页面
 @app.route('/test')
@@ -258,8 +258,6 @@ def register_course():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
 		cid = request.args.get('cid')
 		username = request.args.get('username')
-		print cid
-		print username
 
 		course = Course.query.filter(Course.cid==cid).first()
 		user = Users.query.filter(Users.username==username).first()
@@ -417,6 +415,36 @@ def api_update_course():
 			course.charge = request.args.get("fee")
 			course.extend = request.args.get("extend")
 
+			db.session.commit()
+			return jsonify({'error':0})
+	except:
+		return jsonify({'error':4, 'cause': '数据库操作失败'})
+
+@app.route('/rest/register_course', methods=['GET', 'POST'])
+def api_register_course():
+	try:
+		cid = request.args.get('cid')
+		username = request.args.get("username")
+		paytype = request.args.get("paytype")
+		extend = request.args.get("extend")
+		course = Course.query.filter(Course.cid==cid).first()
+		user = Users.query.filter(Users.username==username).first()
+		if course is None:
+			flash(u'查找不到与之匹配的课程信息')
+			return render_template('error.html')
+		elif user is None:
+			flash(u'查找不到报名的用户，请先注册用户')
+			return render_template('error.html')
+		else:
+			operator = current_user.username
+			print paytype
+			if paytype == 0:
+				charged = False
+			else:
+				charged = True
+			register = Register(username=username, cid=cid, op=operator, charged=charged, ptype=paytype, extend=extend)
+			print register
+			db.session.add(register)
 			db.session.commit()
 			return jsonify({'error':0})
 	except:
