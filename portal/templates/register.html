@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+  <head>
+    <title>用户注册</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+    <link href="/static/css/register.css" rel="stylesheet">
+    <style type='text/css'>
+    .info-nessecary {
+      color: #f00;
+      vertical-align: middle;
+    }
+    </style>
+  </head>
+
+  <body>
+    <div class='container'>
+      <div class='register-form'>
+        <h4 class='register-form-heading' align='center'>用户注册</h4>
+        <hr class='register-padding'/>
+        <div class='input-form'>
+          <input id='iusername' type='text' class='form-control' placeholder='用户名' required/>
+          <span class='info-nessecary'>&nbsp;*6-30个字符，允许包含字母、数字和下划线</span>
+
+          <input id='ipassword' type='password' class='form-control' placeholder='登录密码' required/>
+          <span class='info-nessecary'>&nbsp;*6-18个字符，允许包含字母、数字和下划线</span>
+
+          <input id='ipassword2' type='password' class='form-control' placeholder='确认密码' required/>
+          <span class='info-nessecary'>&nbsp;*再次输入您的登录密码</span>
+
+          <input id='iphone' type='text' class='form-control' placeholder='手机号' required/>
+          <span class='info-nessecary'>&nbsp;*输入11位手机号</span>
+
+          <input id='iemail' type='text' class='form-control' placeholder='电子邮箱' required/>
+          <span class='info-nessecary'>&nbsp;*输入您的电子邮箱地址，在您忘记密码时帮助您找回密码</span>
+
+          <input id='iname' type='text' class='form-control' placeholder='姓名'/>
+          <span>（可选）输入您的姓名</span>
+          
+          <hr class='register-padding'/>
+          <button id='btn_register' type='submit' class='btn btn-primary register-button full'>提交注册</button>
+        </div>
+    </div>
+
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/custom_common.js"></script>
+    <script src="/static/js/register.js"></script>
+  </body>
+</html>

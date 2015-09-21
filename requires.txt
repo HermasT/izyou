@@ -1,0 +1,9 @@
+flask-appconfig
+flask-wtf
+flask-bootstrap
+flask-sqlalchemy
+flask-login=0.2.11
+flask-mail
+requests
+enum
+psycopg2

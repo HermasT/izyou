@@ -1,0 +1,180 @@
+{% extends "admin_base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}
+智友文化 - 修改课程信息
+{% endblock %}
+
+{% block content %}
+<div class='container'>
+	<div class="panel panel-default">
+	  	<div class="panel-heading" >
+	  		<a class='custom_index' href="javascript:history.back(-1)">返回</a>
+	  		<span class='custom_title' align='center'>修改课程信息</span>
+	  	</div>
+	  	<div class="panel-body">
+			<div class="row row-padding">
+	  			<div class="col-lg-1" align='right'>
+				    <span class='group-info'>课程编号</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='update_course_id' type="text" class="form-control" readonly value='{{course.cid}}'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>名称</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='update_course_name' type="text" class="form-control" readonly value='{{course.name}}' placeholder='输入课程名称'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>课程状态</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<div class="dropdown">
+  						<button id='btn_update_course_status' class="btn btn-default dropdown-toggle" type="button" 
+  							data-toggle="dropdown" aria-haspopup="true" value='{{course.status}}' aria-expanded="true">{{status}} 
+    						<span class="caret"></span>
+  						</button>
+					    <ul class="dropdown-menu" aria-labelledby="btn_update_course_status">
+					    	{% for astatus in allstatus %}
+						    <li onclick="select_status('{{astatus.status}}', '{{astatus.name}}')"><a>{{astatus.name}}</a></li>
+						    {% endfor %}
+					    </ul>
+					</div>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>开始日期</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+			  	<div id='startpicker' class="col-lg-4 input-group date padding-left" align='left'>
+                    <input id='update_course_start' class='form-control' type='text' readonly value='{{course.start}}'></input>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>结束日期</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+			  	<div id='endpicker' class="col-lg-4 input-group date padding-left" align='left'>
+                    <input id='update_course_end' class='form-control' type='text' readonly value='{{course.end}}'></input>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>授课讲师</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<div class="dropdown">
+  						<button id='btn_update_course_teacher' class="btn btn-default dropdown-toggle" type="button" 
+  							data-toggle="dropdown" aria-haspopup="true" value='{{course.tid}}' aria-expanded="true">{{tname}} 
+    						<span class="caret"></span>
+  						</button>
+					    <ul class="dropdown-menu" aria-labelledby="btn_update_course_teacher">
+					    	{% for teacher in teachers %}
+						    <li onclick="select_teacher('{{teacher.tid}}', '{{teacher.name}}')"><a>{{teacher.name}}</a></li>
+						    {% endfor %}
+					    </ul>
+					</div>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>课时次数</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='update_course_count' type="text" class="form-control" value='{{course.count}}'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>报名费</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='update_course_fee' type="text" class="form-control" value='{{course.charge}}'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>介绍信息</span><strong style="visibility:hidden">*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='update_course_desc' type="text" class="form-control" value='{{course.desc}}'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>其他信息</span><strong style="visibility:hidden">*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='update_course_extend' type="text" class="form-control" value='{{course.extend}}'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'></div>
+				<div class="col-lg-2">
+					<button id='btn_update_course' class='btn btn-primary full'>提交</button>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="/static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script src="/static/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script src="/static/js/update_course.js"></script>
+<script type="text/javascript">
+    $('#startpicker').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+  		autoclose: 1,
+  		todayHighlight: 1,
+  		startView: 2,
+  		minView: 2,
+  		forceParse: 0
+    });
+    $('#endpicker').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+  		autoclose: 1,
+  		todayHighlight: 1,
+  		startView: 2,
+  		minView: 2,
+  		forceParse: 0
+    });
+    function select_teacher(tid, name) {
+    	$("#btn_update_course_teacher").val(tid);
+		$("#btn_update_course_teacher").html(name + " <span class='caret'></span>");
+    }
+    function select_status(status, name) {
+    	console.log(status);
+    	console.log(name);
+    	$("#btn_update_course_status").val(status);
+		$("#btn_update_course_status").html(name + " <span class='caret'></span>");
+    }
+</script>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

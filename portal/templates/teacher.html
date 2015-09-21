@@ -1,0 +1,100 @@
+{% extends "admin_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}
+智友文化 - 师资管理
+{% endblock %}
+
+{% block content %}
+<link href="/static/css/custom.css" rel="stylesheet">
+
+<div class='container'>
+	<div class="panel panel-default">
+	  	<div class="panel-heading">
+	  		<a class='custom_index' href="/index"></a>
+	  		<span class='custom_title' align='center'>师资管理</span>
+  		</div>
+
+	  	<div class="panel-body">
+		  	<div class="col-lg-4">
+			      <input id='search_teacher_name' type="text" class="form-control" placeholder="讲师姓名"></input>
+		  	</div>
+		  	<div class="col-lg-2" align='center'>
+		  	  	<button id='search_teacher' class="btn btn-default full" type="button" onclick='search_teacher()'>查找</button>
+		  	</div>
+		  	<div class="col-lg-4" align='center'>
+		  	</div>
+		  	<div class="col-lg-2" align='center'>
+		    	<a href='/add_teacher'><button input='button' class='btn btn-primary full'>新增讲师</button></a>
+		  	</div>
+		</div>
+	</div>
+
+	<br/><br/>
+	<table class="table table-striped table-bordered table-hover">
+		<tr class='info' align="center">
+			<td>#</td>
+			<td>姓名</td>
+			<td>出生年月</td>
+			<td>性别</td>
+			<td>科目</td>
+			<!-- <td>单位课时费</td> -->
+			<td>基本信息</td>
+			<td>其他</td>
+			<td width="140px"></td>
+		</tr>
+		{% for teacher in pagination.items %}
+		<tr align="center">
+			<td>{{teacher.tid}}</td>
+			<td>{{teacher.name}}</td>
+			<td>{{teacher.birth}}</td>
+			<td>{{teacher.gender}}</td>
+			<td>{{teacher.gtype}}</td>
+			<!-- <td>{{teacher.uprice}}</td> -->
+			<td>{{teacher.desc}}</td>
+			<td>{{teacher.extend}}</td>
+			<td>
+				<a href="/update_teacher?tid={{teacher.tid}}">编辑</a>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	{% if pagination.pages > 1 %}
+    <nav align='center'>
+        <ul class='pagination'>
+            {% if pagination.has_prev %}
+            <li><a href="/teacher?page={{pagination.prev_num}}"><span aria-hidden="true">上一页</span></a></li>
+            {% else %}
+            <li class='disabled'><span aria-hidden="true">上一页</span></li>
+            {% endif %}
+            <li class='active'><span aria-hidden="true">{{pagination.page}}/{{pagination.pages}}</span></li>
+            {% if pagination.has_next %}
+            <li><a href="/teacher?page={{pagination.next_num}}"><span aria-hidden="true">下一页</span></a></li>
+            {% else %}
+            <li class='disabled'><span aria-hidden="true">下一页</span></li>
+            {% endif %}
+      	</ul>
+    </nav>
+    {% endif %}
+</div>
+
+<script src="/static/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+
+<script src="/static/js/custom_common.js"></script>
+<script src="/static/js/index.js"></script>
+
+<script type="text/javascript">
+	function search_teacher() {
+		var name = document.getElementById("search_teacher_name");
+		window.location.href = "/search_teacher?name=" + name.value;
+	}
+</script>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

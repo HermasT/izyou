@@ -1,0 +1,50 @@
+{% extends "portal_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+
+{% block title %}智友文化传播 - 首页 {% endblock %}
+
+{% block content %}
+{{ user.username }}
+<div class='container'>
+<div class="row">
+  <div class="col-sm-6 col-md-4">
+    <div class="thumbnail">
+      <!-- <img src="..." alt="..."> -->
+      <div class="caption">
+        <h3>桥牌</h3>
+        <p>桥牌是一门高雅的运动</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-4">
+    <div class="thumbnail">
+      <!-- <img src="..." alt="..."> -->
+      <div class="caption">
+        <h3>数独</h3>
+        <p>数独是一门高雅的运动</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-4">
+    <div class="thumbnail">
+      <!-- <img src="..." alt="..."> -->
+      <div class="caption">
+        <h3>围棋</h3>
+        <p>围棋是一门高雅的运动</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/index.js"></script>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

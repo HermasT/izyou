@@ -1,0 +1,155 @@
+{% extends "admin_base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}
+智友文化 - 新增课程
+{% endblock %}
+
+{% block content %}
+<div class='container'>
+	<div class="panel panel-default">
+	  	<div class="panel-heading" >
+	  		<a class='custom_index' href="javascript:history.back(-1)">返回</a>
+	  		<span class='custom_title' align='center'>新增课程</span>
+	  	</div>
+	  	<div class="panel-body">
+			<div class="row row-padding">
+	  			<div class="col-lg-1" align='right'>
+				    <span class='group-info'>课程编号</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='create_course_id' type="text" class="form-control" readonly placeholder='由服务端生成'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>名称</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='create_course_name' type="text" class="form-control" placeholder='输入课程名称'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>开始日期</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+			  	<div id='startpicker' class="col-lg-4 input-group date padding-left" align='left'>
+                    <input id='create_course_start' class='form-control' type='text' readonly></input>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>结束日期</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+			  	<div id='endpicker' class="col-lg-4 input-group date padding-left" align='left'>
+                    <input id='create_course_end' class='form-control' type='text' readonly></input>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>授课讲师</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<div class="dropdown">
+  						<button id='btn_create_course_teacher' class="btn btn-default dropdown-toggle" type="button" 
+  							id="group_type_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">请选择讲师
+    						<span class="caret"></span>
+  						</button>
+					    <ul class="dropdown-menu" aria-labelledby="group_type_dropdown">
+					    	{% for teacher in teachers %}
+						    <li onclick="select_teacher('{{teacher.tid}}', '{{teacher.name}}')"><a>{{teacher.name}}</a></li>
+						    {% endfor %}
+					    </ul>
+					</div>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>课时次数</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='create_course_count' type="text" class="form-control"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>报名费</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='create_course_fee' type="text" class="form-control"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>介绍信息</span><strong style="visibility:hidden">*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='create_course_desc' type="text" class="form-control"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>其他信息</span><strong style="visibility:hidden">*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='create_course_extend' type="text" class="form-control"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'></div>
+				<div class="col-lg-2">
+					<button id='btn_create_course' class='btn btn-primary full'>提交</button>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="/static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script src="/static/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script src="/static/js/create_course.js"></script>
+<script type="text/javascript">
+    $('#startpicker').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+  		autoclose: 1,
+  		todayHighlight: 1,
+  		startView: 2,
+  		minView: 2,
+  		forceParse: 0
+    });
+    $('#endpicker').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+  		autoclose: 1,
+  		todayHighlight: 1,
+  		startView: 2,
+  		minView: 2,
+  		forceParse: 0
+    });
+    function select_teacher(tid, name) {
+    	$("#btn_create_course_teacher").val(tid);
+		$("#btn_create_course_teacher").html(name + " <span class='caret'></span>");
+    }
+</script>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

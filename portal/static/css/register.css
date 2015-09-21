@@ -1,0 +1,21 @@
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.register-form {
+  max-width: 430px;
+  padding-top: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-style: solid;
+  border-radius: 5px;
+}
+input {
+  margin-top: 15px;
+}
+.register-button {
+  margin-bottom: 15px;
+  width: 100%
+}

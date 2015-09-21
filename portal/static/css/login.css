@@ -1,0 +1,29 @@
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.sign-form {
+  max-width: 430px;
+  padding-top: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-style: solid;
+  border-radius: 5px;
+}
+input {
+  margin-top: 15px;
+}
+.login-button {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 35%;
+}
+.login-button + .login-button {
+  margin-left: 5px;
+}
+.sign-reset {
+  float: right;
+  margin-top: 22px;
+}

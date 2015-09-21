@@ -1,0 +1,20 @@
+{% extends "portal_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}智友文化 - 联系我们 {% endblock %}
+
+{% block content %}
+
+<div class="col-lg-12 col-md-12 col-sm-12 well">
+  <h1>Hello, world!</h1>
+  <p>智友文化传播史一家综合性的文化传播公司，宗旨是大力推广智力运动在中国的发展，2015年9月成立于北京。</p>
+  <!-- <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p> -->
+</div>
+
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

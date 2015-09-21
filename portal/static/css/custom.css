@@ -1,0 +1,122 @@
+body {
+  	padding-top: 30px;
+  	padding-bottom: 30px;
+  	padding-left: 30px;
+  	padding-right: 30px;
+}
+
+.panel {
+	margin-bottom: 10px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 0px;
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+      		box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.login {
+	border-width: 1px;
+	border-color: #ddd;
+	left: 50%;
+	display: absolute;
+}
+
+.panel-heading {
+	padding: 10px 10px;
+	border-bottom: 1px solid transparent;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+}
+
+.panel-body {
+	padding: 15px;
+}
+
+.error-form {
+  max-width: 400px;
+  padding-top: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin: 0 auto;
+}
+
+.full {
+	width: 100%;
+}
+
+.title-navbar {
+	width: 96px;
+	display: block;
+	text-align: center;
+}
+
+.navbar-logo {
+	font-size: 18px;
+	color: #f00;
+}
+
+.navbar-button {
+	width: 72px;
+	height: inherit;
+	line-height: inherit;
+	margin: 8px;
+}
+
+.padding-left {
+	left: 15px;
+}
+
+.group-info,
+.group-info-secondary {
+	font-size: 14px;
+	text-align: right;
+	vertical-align: middle;
+	line-height: 32px;
+	height: 32px;
+	width: 150px;
+	display: inline;
+}
+
+.group-info-secondary {
+	text-align: left;
+	color: #666;
+	width: auto;
+}
+
+.row + .row {
+	padding-top: 15px;
+}
+
+.row-padding {
+	padding-left: 10px;
+}
+
+.info-nessecary {
+	color: #f00;
+	vertical-align: middle;
+	line-height: 32px;
+	height: 32px;
+}
+
+.check {
+	vertical-align: middle;
+	line-height: 24px;
+	height: 24px;
+}
+
+.custom_title {
+	height: inherit;
+	line-height: inherit;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 20px;
+	font-weight: bold;
+	position: absolute;
+	left:45%;
+}
+
+.custom_index {
+	font-size: 16px;
+	margin-left: 20px;
+	font-weight: bold;
+}
