@@ -8,7 +8,7 @@ from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from portal import app, db, lm
-from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus
+from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus, PayType
 
 # 测试页面
 @app.route('/test')
@@ -248,6 +248,32 @@ def update_course():
 			allteachers = Teacher.query.order_by(Teacher.tid).all()
 			return render_template('update_course.html', course=course, 
 				tname=teacher.name, teachers=allteachers, status=status, allstatus=CourseStatus.getAll())
+	else:
+		flash(u'您没有权限访问该页面')
+		return render_template('error.html')
+
+@app.route('/register_course',methods=['GET', 'POST'])
+@login_required
+def register_course():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		cid = request.args.get('cid')
+		username = request.args.get('username')
+		print cid
+		print username
+
+		course = Course.query.filter(Course.cid==cid).first()
+		user = Users.query.filter(Users.username==username).first()
+		if course is None:
+			flash(u'查找不到与之匹配的课程')
+			return render_template('error.html')
+		elif user is None:
+			flash(u'查找不到与之匹配的用户')
+			return render_template('error.html')
+		else:
+			status = CourseStatus.getName(course.status)
+			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
+			allteachers = Teacher.query.order_by(Teacher.tid).all()
+			return render_template('register_course.html', course=course, pays=PayType.getAll())
 	else:
 		flash(u'您没有权限访问该页面')
 		return render_template('error.html')

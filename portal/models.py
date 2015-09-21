@@ -93,6 +93,18 @@ class PayType(Enum):
     online = 4
     others = 5
 
+    @staticmethod
+    def getAll():
+        return [
+            {'type':0, 'name': '未支付'},
+            {'type':1, 'name': '现金支付'},
+            {'type':2, 'name': '微信支付'},
+            {'type':3, 'name': '支付宝'},
+            {'type':4, 'name': '在线支付'},
+            {'type':5, 'name': '其他'}
+        ]
+
+
 # class PType(db.Model):
 #     type = db.Column(Integer, primary_key=True)
 #     name = db.Column(String(16), nullable=True)
@@ -281,7 +293,7 @@ class Register(db.Model):
     username = db.Column(String(32)) # ForeignKey('users.username')
     cid = db.Column(Integer) # ForeignKey('course.cid')
     charged = db.Column(Boolean)
-    ptype = db.Column(Integer)
+    ptype = db.Column(Integer) # PayType
     origin = db.Column(Integer)
     extend = db.Column(String(64))
 
