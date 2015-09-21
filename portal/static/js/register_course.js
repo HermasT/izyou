@@ -21,8 +21,6 @@ $(document).ready(function() {
 
 		var extend = document.getElementById("register_course_extend");
 
-		console.log("register_course")
-	    
 		$.ajax({
 			url:'/rest/register_course',
 		    data: {
@@ -35,9 +33,13 @@ $(document).ready(function() {
 		    cache: false,
 		    dataType: 'json',
 		    success: function(data) {
-		    	$.MsgBox.Alert("课程报名", "您的请求已提交成功", function() {
-		    		// window.location.href = "/course";
-		    	});
+		    	if (data['error'] == 0) {
+		    		$.MsgBox.Alert("课程报名", "您的请求已提交成功", function() {
+		    			// window.location.href = "/register_success?rid=" + data['rid'];
+		    		});
+		    	} else {
+		    		$.MsgBox.Alert("课程报名", data['cause']);
+		    	}
 		    },
 		    error: function() {
 		        $.MsgBox.Alert("课程报名", "请求失败，请稍候重试");

@@ -16,7 +16,6 @@ $(document).ready(function() {
 			    cache: false,
 			    dataType: 'json',
 			    success: function(data) {
-			    	console.log(data)
 			    	if (data["error"] > 0) {
 			    		$.MsgBox.Alert("登录失败", data["cause"]);
 			    	} else {

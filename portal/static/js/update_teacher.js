@@ -71,9 +71,13 @@ $(document).ready(function() {
 		    cache: false,
 		    dataType: 'json',
 		    success: function(data) {
-		    	$.MsgBox.Alert("更改讲师信息", "您的请求已提交成功", function() {
-		    		window.location.href = "/teacher";
-		    	});
+		    	if (data["error"] == 0) {
+		    		$.MsgBox.Alert("更改讲师信息", "您的请求已提交成功", function() {
+			    		window.location.href = "/teacher";
+			    	});
+		    	} else {
+		    		$.MsgBox.Alert("更改讲师信息", data["cause"]);
+		    	}
 		    },
 		    error: function() {
 		        $.MsgBox.Alert("更改讲师信息", "请求失败，请稍候重试");

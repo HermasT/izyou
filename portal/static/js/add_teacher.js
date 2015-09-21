@@ -69,10 +69,14 @@ $(document).ready(function() {
 		    cache: false,
 		    dataType: 'json',
 		    success: function(data) {
-		    	$("#add_teacher_id").val(data["tid"]);
-		    	$.MsgBox.Alert("新增讲师", "您的请求已提交成功", function() {
-		    		window.location.href = "/teacher";
-		    	});
+		    	if (data["error"] == 0) {
+		    		$("#add_teacher_id").val(data["tid"]);
+			    	$.MsgBox.Alert("新增讲师", "您的请求已提交成功", function() {
+			    		window.location.href = "/teacher";
+			    	});
+		    	} else {
+		    		$.MsgBox.Alert("新增讲师", data["error"]);
+		    	}
 		    },
 		    error: function() {
 		        $.MsgBox.Alert("新增讲师", "请求失败，请稍候重试");

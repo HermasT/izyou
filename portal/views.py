@@ -446,6 +446,6 @@ def api_register_course():
 			print register
 			db.session.add(register)
 			db.session.commit()
-			return jsonify({'error':0})
+			return jsonify({'error':0, 'rid': register.rid})
 	except:
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
