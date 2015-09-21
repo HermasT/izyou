@@ -285,8 +285,8 @@ class Register(db.Model):
     origin = db.Column(Integer)
     extend = db.Column(String(64))
 
-    def __init__(self, uid, cid, charged=False, ptype=0, extend=''):
-        self.uid = uid
+    def __init__(self, username, cid, charged=False, ptype=0, extend=''):
+        self.username = username
         self.cid = cid
         self.charged = charged
         self.ptype = ptype
@@ -294,4 +294,4 @@ class Register(db.Model):
         self.extend = extend
  
     def __repr__(self):
-        return "<Register(:s): {:s}报名了{:s}>".format(self.rid, self.uid, self.cid)
+        return "<Register(:s): {:s}报名了{:s}>".format(self.rid, self.username, self.cid)
