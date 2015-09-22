@@ -17,8 +17,8 @@ MAIL_SERVER = 'smtp.qq.com'
 MAIL_PORT = 25
 MAIL_USE_TLS = True
 MAIL_USE_SSL = False
-MAIL_USERNAME = '36838082@qq.com' # change to admin qq account
-MAIL_PASSWORD = 'putizhileihermas' # change to admin qq password
+MAIL_USERNAME = 'your-qq-account'
+MAIL_PASSWORD = 'your-qq-password'
 
 # administrator
 #ADMINS = ['you@example.com']
