@@ -9,11 +9,30 @@ from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.mail import Mail
-# from config import basedir, ADMINS, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD
+
+from config import SECRET_KEY, RECAPTCHA_PUBLIC_KEY, SQLALCHEMY_DATABASE_URI
+from config import MAIL_SERVER, MAIL_PORT, MAIL_USE_TLS, MAIL_USE_SSL, MAIL_USERNAME, MAIL_PASSWORD
 
 # 应用实例
 app = Flask(__name__)
+
+# 初始化bootstrap                                       
 Bootstrap(app)
+
+# 应用配置管理
+# app.config.from_object('config')
+app.config['SECRET_KEY'] = SECRET_KEY
+app.config['RECAPTCHA_PUBLIC_KEY'] = RECAPTCHA_PUBLIC_KEY
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+app.extensions['bootstrap']['cdns'] = {'jquery': StaticCDN(), 'html5shiv': StaticCDN(),
+                                       'respond.js': StaticCDN(),
+                                       'bootstrap': StaticCDN(), 'static': StaticCDN(), 'local': StaticCDN()}
+app.config['MAIL_SERVER']=MAIL_SERVER
+app.config['MAIL_PORT']=MAIL_PORT
+app.config['MAIL_USE_TLS']=MAIL_USE_TLS
+app.config['MAIL_USE_SSL']=MAIL_USE_SSL
+app.config['MAIL_USERNAME']=MAIL_USERNAME
+app.config['MAIL_PASSWORD']=MAIL_PASSWORD
 
 # 数据库实例
 db = SQLAlchemy(app)
@@ -26,17 +45,8 @@ lm.login_message = u'您需要登录才能访问该页面'
 lm.login_message_category = "info"
 lm.session_protection = "strong"
 
-# 邮箱实力
+# 邮箱实例
 mail = Mail(app)
-
-# 应用配置管理
-# app.config.from_object('config')
-app.config['SECRET_KEY'] = 'devkey'
-app.config['RECAPTCHA_PUBLIC_KEY'] = '6Lfol9cSAAAAADAkodaYl9wvQCwBMr3qGR_PPHcw'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://hema:123456@localhost/izyou'
-app.extensions['bootstrap']['cdns'] = {'jquery': StaticCDN(), 'html5shiv': StaticCDN(),
-                                       'respond.js': StaticCDN(),
-                                       'bootstrap': StaticCDN(), 'static': StaticCDN(), 'local': StaticCDN()}
 
 # if not app.debug:
 #     import logging

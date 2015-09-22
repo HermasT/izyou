@@ -7,12 +7,16 @@ from flask_bootstrap import Bootstrap, StaticCDN
 from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
-from portal import app, db, lm
+from portal import app, db, lm, mail
 from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus, PayType, Register
+from mail import MailUtil
 
 # 测试页面
 @app.route('/test')
 def test():
+	message = MailUtil.buildMessage('test subject', sender=config.MAIL_USERNAME, recipients=['hermasTang@hotmail.com'], body='test body')
+	mailthread = MailUtil(message)
+	mailthread.start()
     return render_template('test.html')
 
 # 异常
@@ -437,13 +441,11 @@ def api_register_course():
 			return render_template('error.html')
 		else:
 			operator = current_user.username
-			print paytype
-			if paytype == 0:
+			if paytype == 0 or paytype == str(0):
 				charged = False
 			else:
 				charged = True
 			register = Register(username=username, cid=cid, op=operator, charged=charged, ptype=paytype, extend=extend)
-			print register
 			db.session.add(register)
 			db.session.commit()
 			return jsonify({'error':0, 'rid': register.rid})
