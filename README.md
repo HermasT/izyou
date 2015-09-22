@@ -4,7 +4,7 @@ izyou project
 
 1. dependcies
 $ pip install -r requires.txt
-$ pip intall flask-login=0.2.11
+$ pip intall flask-login==0.2.11
 
 2. create database izyou via psql client
 
