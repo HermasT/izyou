@@ -17,7 +17,7 @@ def test():
 	message = MailUtil.buildMessage('test subject', sender=config.MAIL_USERNAME, recipients=['hermasTang@hotmail.com'], body='test body')
 	mailthread = MailUtil(message)
 	mailthread.start()
-    return render_template('test.html')
+        return render_template('test.html')
 
 # 异常
 @app.errorhandler(404)
