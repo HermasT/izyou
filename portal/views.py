@@ -17,7 +17,7 @@ def test():
 	message = MailUtil.buildMessage('test subject', sender=config.MAIL_USERNAME, recipients=['hermasTang@hotmail.com'], body='test body')
 	mailthread = MailUtil(message)
 	mailthread.start()
-        return render_template('test.html')
+	return render_template('test.html')
 
 # 异常
 @app.errorhandler(404)
@@ -59,7 +59,6 @@ def register():
 # 首页
 @app.route('/', methods=("GET", "POST"))
 @app.route('/index', methods = ['GET', 'POST'])
-@app.route('/', methods = ['GET', 'POST'])
 def index():
 	try:
 		username = current_user.username
