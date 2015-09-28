@@ -7,33 +7,71 @@
 
 {% block content %}
 {{ user.username }}
+<style type="text/css">
+  p {
+    text-indent: 2em;
+  }
+
+  img { 
+    -webkit-filter: grayscale(1);
+    filter:gray;
+    filter: grayscale(1);
+  } 
+
+  .index-button {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 5px;
+  }
+
+  .index-button + .index-button {
+    margin-left: 15px;
+  }
+</style>
+
 <div class='container'>
 <div class="row">
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail">
-      <!-- <img src="..." alt="..."> -->
+      <img src="/static/bridge.jpg" alt="桥牌">
       <div class="caption">
         <h3>桥牌</h3>
-        <p>桥牌是一门高雅的运动</p>
+        <p>桥牌起源于英国，是一项风靡全球的高雅、文明、竞技性很强的智力运动.桥牌运动有助于提高人们的智力、逻辑推理和解决问题的能力。</p>
+        <p>长期参与桥牌运动，能够使您增长智慧、陶冶情操，帮助您遇事考虑全面、临危不乱。桥牌运动也是当今社会社交活动的高雅方式之一。</p>
+        <p>桥牌已经成为2012年夏季奥运会表演项目和2007年全国大学生运动会正式比赛项目。</p>
+      </div>
+      <div class='index-button'>
+        <a href="/go_detail" class="btn btn-default index-button" role="button">了解更多</a>
+        <a href="/go_register" class="btn btn-primary index-button" role="button">我要报名</a>
       </div>
     </div>
   </div>
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail">
-      <!-- <img src="..." alt="..."> -->
+      <img src="/static/sudoku.jpg" alt="数独">
       <div class="caption">
         <h3>数独</h3>
-        <p>数独是一门高雅的运动</p>
+        <p>数独（すうどく，Sūdoku）是一种运用纸、笔进行演算的逻辑游戏。玩家需要根据9×9盘面上的已知数字，推理出所有剩余空格的数字，并满足每一行、每一列、每一个粗线宫内的数字均含1-9，不重复。数独盘面是个九宫，每一宫又分为九个小格。在这八十一格中给出一定的已知数字和解题条件，利用逻辑和推理，在其他的空格上填入1-9的数字。使1-9每个数字在每一行、每一列和每一宫中都只出现一次，所以又称“九宫格”。</p>
+        <p>学习数独对于提高人的逻辑推理和计算能力有很大的帮助。进年来数独受到越来越多的关注，广泛开展于中小学生中，中国选手在国际上也有出色的表现。</p>
+      </div>
+      <div class='index-button'>
+        <a href="/go_detail" class="btn btn-default index-button" role="button">了解更多</a>
+        <a href="/go_register" class="btn btn-primary index-button" role="button">我要报名</a>
       </div>
     </div>
   </div>
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail">
-      <!-- <img src="..." alt="..."> -->
+      <img src="/static/go.png" alt="围棋">
       <div class="caption">
         <h3>围棋</h3>
-        <p>围棋是一门高雅的运动</p>
+        <p>围棋是一个智力游戏，起源于中国，有超过三千年的历史。围棋蕴涵着古代哲学中一元生两仪、两仪生四象、四象生八卦、天圆地方、十九农节气、三百六十周天之数等等含义，其变化丰富，意韵深远，魅力无穷。</p>
+        <p>学习围棋能锻炼人的思维、提高人的智力。作为中国传统优秀文化瑰宝，围棋现已成为素质教育的载体，对于提高学生的整体素质和能力起着积极的作用。</p>
       </div>
+      <div class='index-button'>
+          <a href="/go_detail" class="btn btn-default index-button" role="button">了解更多</a>
+          <a href="/go_register" class="btn btn-primary index-button" role="button">我要报名</a>
+        </div>
     </div>
   </div>
 </div>
