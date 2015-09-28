@@ -5,13 +5,37 @@
 {% block title %}智友文化 - 联系我们 {% endblock %}
 
 {% block content %}
-
-<div class="col-lg-12 col-md-12 col-sm-12 well">
-  <h1>Hello, world!</h1>
-  <p>智友文化传播史一家综合性的文化传播公司，宗旨是大力推广智力运动在中国的发展，2015年9月成立于北京。</p>
-  <!-- <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p> -->
+<style type="text/css">
+	.bold {
+		font-weight: bold;
+	}
+	.contact_list {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	.contact_title {
+		/*margin-left: 30px;*/
+		color: #000;
+		text-align: right;
+		display: inline-block;
+		width: 80px;
+	}
+	.contact_content {
+		margin-left: 30px;
+		color: #444;
+	}
+</style>
+<div class='container'>
+	<div class="col-lg-12 col-md-12 col-sm-12">
+	<div class='contact_list'>
+		<span size='20' class='contact_title bold'>地址</span><span class='contact_content'>北京西城区中南海胡同321号</span>
+	</div>
+	<div class='contact_list'><span class='contact_title bold'>电话</span><span class='contact_content'>010-33980982</span></div>
+	<div class='contact_list'><span class='contact_title bold'>QQ</span><span class='contact_content'>36838082</span></div>
+	<div class='contact_list'><span class='contact_title bold'>Email</span><span class='contact_content'>service@izyou.com</span></div>
+	<div class='contact_list'><span class='contact_title bold'>手机</span><span class='contact_content'>13612345678</span></div>
+	</div>
 </div>
-
 {% endblock %}
 
 {% block head %}
