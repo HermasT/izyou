@@ -51,6 +51,7 @@ class GameType(Enum):
     chess = 4
     cchess = 5
     miexed = 6
+    count = 7
 
     @staticmethod
     def getName(type):

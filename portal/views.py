@@ -66,9 +66,24 @@ def index():
 	except:
 		return render_template('index.html', index=1, user=None)
 
+@app.route('/course_register', methods = ['GET', 'POST'])
+@login_required
+def course_register():
+	gtype = request.args.get('type', GameType.undefined)
+	try:
+		if int(gtype) >= GameType.count:
+			gtype = GameType.undefined
+	except:
+		gtype = GameType.undefined
+	return "我要报名" + str(gtype)
+	# try:
+	# 	username = current_user.username
+	# 	return render_template('index.html', index=1, user=username)
+	# except:
+	# 	return render_template('index.html', index=1, user=None)
+		
 # 关于
 @app.route('/about', methods=['GET', 'POST'])
-@login_required
 def about():
 	try:
 		username = current_user.username
@@ -78,7 +93,6 @@ def about():
 
 # 师资
 @app.route('/fanculty', methods=['GET', 'POST'])
-@login_required
 def fanculty():
 	try:
 		username = current_user.username
@@ -88,7 +102,6 @@ def fanculty():
 
 # 联系
 @app.route('/contact', methods=['GET', 'POST'])
-@login_required
 def contact():
 	try:
 		username = current_user.username
