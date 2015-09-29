@@ -54,12 +54,14 @@ if __name__ == '__main__':
 	# 	db.session.commit()
 
 	# # 添加课程
-	# db.session.add(Course(name=u'桥牌初级班', tid=2, start='2015 10-01', end='2015 12-01', count=10, charge=800.0))
-	# db.session.add(Course(name=u'桥牌高级班', tid=1, start='2015 09-11', end='2015 12-01', count=10, charge=1200.0))
-	# db.session.add(Course(name=u'数独入门班', tid=3, start='2015 09-11', end='2015 12-01', count=10, charge=800.0))
+	# db.session.add(Course(name=u'桥牌初级班', gtype=GameType.bridge, tid=2, start='2015 10-01', end='2015 12-01', count=10, charge=800.0))
+	# db.session.add(Course(name=u'桥牌高级班', gtype=GameType.bridge, tid=1, start='2015 09-11', end='2015 12-01', count=10, charge=1200.0))
+	# db.session.add(Course(name=u'数独入门班', gtype=GameType.sudoku, tid=3, start='2015 09-11', end='2015 12-01', count=10, charge=800.0))
 	# db.session.commit()
-	# for i in range(1, 18):
-	# 	db.session.add(Course(name=u'桥牌初级班', tid=2, start='2015 10-01', end='2015 12-01', count=10, charge=800.0))
+	# for i in range(1, 8):
+	# 	db.session.add(Course(name=u'围棋入门', gtype=GameType.go, tid=2, start='2015 10-01', end='2015 12-01', count=10, charge=800.0))
+	# 	db.session.add(Course(name=u'数独高级班', gtype=GameType.sudoku, tid=2, start='2015 10-01', end='2015 12-01', count=10, charge=800.0))
+	# 	db.session.add(Course(name=u'桥牌初级班', gtype=GameType.bridge, tid=2, start='2015 10-01', end='2015 12-01', count=10, charge=800.0))
 	# 	db.session.commit()
 
 	# # 添加教室

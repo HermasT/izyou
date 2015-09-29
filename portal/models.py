@@ -215,8 +215,8 @@ class Teacher(db.Model):
 # 课程
 class CourseStatus(Enum):
     applying = 0
-    full = 1
-    opening =2
+    opening = 1
+    full = 2
     ended = 3
     cancelled = 4
 
@@ -224,8 +224,8 @@ class CourseStatus(Enum):
     def getAll():
         return [
             {'status':0, 'name': '报名中'},
-            {'status':1, 'name': '已报满'},
-            {'status':2, 'name': '已开课'},
+            {'status':1, 'name': '已开课'},
+            {'status':2, 'name': '已报满'},
             {'status':3, 'name': '已结束'},
             {'status':4, 'name': '已取消'}
         ]
@@ -235,9 +235,9 @@ class CourseStatus(Enum):
         if status == 0:
             return '报名中'
         elif status == 1:
-            return '已报满'
-        elif status == 2:
             return '已开课'
+        elif status == 2:
+            return '已报满'
         elif status == 3:
             return '已结束'
         elif status == 4:
@@ -248,6 +248,7 @@ class CourseStatus(Enum):
 class Course(db.Model):
     cid = db.Column(Integer, primary_key=True)
     name = db.Column(String(32), nullable=False)
+    gtype = db.Column(Integer, nullable=False)
     tid = db.Column(Integer) # ForeignKey('teacher.tid')
     start = db.Column(Date)
     end = db.Column(Date)
@@ -257,8 +258,9 @@ class Course(db.Model):
     desc = db.Column(String(128))
     extend = db.Column(String(64))
 
-    def __init__(self, name, tid, start, end, count, charge, desc='', extend=''):
+    def __init__(self, name, gtype, tid, start, end, count, charge, desc='', extend=''):
         self.name = name
+        self.gtype = gtype;
         self.tid = tid
         self.start = start
         self.end = end

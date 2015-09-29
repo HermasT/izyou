@@ -65,6 +65,9 @@ body {
 .bottom {
 	color: #666;
 	text-align: center;
+	margin-bottom: 10px;
+	z-index: 999;
+ 	overflow: visible;
 }
 
 .padding-left {

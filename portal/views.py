@@ -69,18 +69,34 @@ def index():
 @app.route('/course_register', methods = ['GET', 'POST'])
 @login_required
 def course_register():
-	gtype = request.args.get('type', GameType.undefined)
-	try:
-		if int(gtype) >= GameType.count:
+	if current_user is not None and current_user.is_privileged(UserType.registered):
+		page = request.args.get("page", 1)
+		if page < 1:
+			page = 1
+
+		gtype = request.args.get('type', GameType.undefined)
+		try:
+			if int(gtype) >= GameType.count:
+				gtype = GameType.undefined
+		except:
 			gtype = GameType.undefined
-	except:
-		gtype = GameType.undefined
-	return "我要报名" + str(gtype)
-	# try:
-	# 	username = current_user.username
-	# 	return render_template('index.html', index=1, user=username)
-	# except:
-	# 	return render_template('index.html', index=1, user=None)
+		
+		if int(gtype) == GameType.undefined:
+			paginate = Course.query.order_by(Course.cid).paginate(int(page), config.PAGE_ITEMS, False)
+		else:
+			paginate = Course.query.filter(Course.gtype==gtype, Course.status<2).order_by(desc(Course.cid)).paginate(int(page), config.PAGE_ITEMS, False)
+
+		status = []
+		teachers = []
+		for course in paginate.items:
+			status.append(CourseStatus.getName(course.status))
+			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
+			teachers.append(teacher.name)
+		return render_template('course_register.html', index=1, type=gtype,
+			user=current_user.username, pagination=paginate, status=status, teachers=teachers)
+	else:
+		flash(u'请您登录')
+		return render_template('error.html')
 		
 # 关于
 @app.route('/about', methods=['GET', 'POST'])
