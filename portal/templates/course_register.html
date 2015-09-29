@@ -16,12 +16,12 @@
 			<td>授课讲师</td>
 			<td>开始时间</td>
 			<td>结束时间</td>
-			<td>授课次数</td>
+			<td>课时次数</td>
 			<td>报名费</td>
 			<td>当前状态</td>
 			<td>课程介绍</td>
 			<td>其他</td>
-			<!-- <td width="80px"></td> -->
+			<td width="80px"></td>
 		</tr>
 		{% for course in pagination.items %}
 		<tr align="center">
@@ -35,13 +35,14 @@
 			<td>{{status[loop.index - 1]}}</td>
 			<td>{{course.desc}}</td>
 			<td>{{course.extend}}</td>
-			<!-- <td>
-				{% if course.status == 1 or course.status == 3 %}
+			<td>
+				<!-- {% if course.status == 1 or course.status == 3 %}
 				<a href="javascript:void(0)">报名</a>
 				{% else %}
 				<a href="/register_course?cid={{course.cid}}&&username={{user}}">报名</a>
-				{% endif %}
-			</td> -->
+				{% endif %} -->
+				<a href='/contact'>咨询</a>
+			</td>
 		</tr>
 		{% endfor %}
 	</table>

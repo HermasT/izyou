@@ -92,7 +92,7 @@ def course_register():
 			status.append(CourseStatus.getName(course.status))
 			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
 			teachers.append(teacher.name)
-		return render_template('course_register.html', index=1, type=gtype,
+		return render_template('course_register.html', index=5, type=gtype,
 			user=current_user.username, pagination=paginate, status=status, teachers=teachers)
 	else:
 		flash(u'请您登录')

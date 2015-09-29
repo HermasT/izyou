@@ -34,7 +34,7 @@
             <nav class="navbar navbar-default">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a class="navbar-brand navbar-logo" href="#">智游文化</a>
+                        <a class="navbar-brand navbar-logo" href="#">智友文化</a>
                     </div>
 
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -54,6 +54,13 @@
                             {% else %}
                             <li><a class='title-navbar' href="/fanculty">师资介绍</a></li>
                             {% endif %}
+                            {% if user %}
+                                {% if index == 5 %}
+                                <li class='active'><a class='title-navbar' href="/course_register">我要报名</a></li>
+                                {% else %}
+                                <li><a class='title-navbar' href="/course_register">我要报名</a></li>
+                                {% endif %}
+                            {% endif %}
                             {% if index == 4 %}
                             <li class='active'><a class='title-navbar' href="/contact">联系我们</a></li>
                             {% else %}
@@ -63,7 +70,7 @@
                         <ul class="nav navbar-nav navbar-right" align='center'>
                             {% if user %}
                             <li><a class='welcome' href="/user_info?username={{user}}">欢迎{{user}}</a></li>
-                            <li><button id='title_btn_logout' class='btn btn-default navbar-button'>登出</button></li>
+                            <li><button id='title_btn_logout' class='btn btn-default navbar-button'>注销</button></li>
                             {% else %}
                             <li><button id='title_btn_login' class='btn btn-default navbar-button'>登录</button></li>
                             <li><button id='title_btn_register' class='btn btn-default navbar-button'>注册</button></li>
