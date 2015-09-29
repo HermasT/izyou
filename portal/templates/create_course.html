@@ -33,6 +33,25 @@
 
 			<div class="row row-padding">
 			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>课程类型</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<div class="dropdown">
+  						<button id='btn_create_course_gtype' class="btn btn-default dropdown-toggle" type="button" 
+  							data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">请选择课程类型
+    						<span class="caret"></span>
+  						</button>
+					    <ul class="dropdown-menu" aria-labelledby="btn_create_course_gtype">
+					    	{% for gtype in types %}
+						    <li onclick="select_gtype('{{gtype.type}}', '{{gtype.name}}')"><a>{{gtype.name}}</a></li>
+						    {% endfor %}
+					    </ul>
+					</div>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
 				    <span class='group-info'>开始日期</span><strong class='info-nessecary'>*</strong>
 			  	</div>
 			  	<div id='startpicker' class="col-lg-4 input-group date padding-left" align='left'>
@@ -142,6 +161,10 @@
   		minView: 2,
   		forceParse: 0
     });
+    function select_gtype(type, name) {
+    	$("#btn_create_course_gtype").val(type);
+		$("#btn_create_course_gtype").html(name + " <span class='caret'></span>");
+    }
     function select_teacher(tid, name) {
     	$("#btn_create_course_teacher").val(tid);
 		$("#btn_create_course_teacher").html(name + " <span class='caret'></span>");

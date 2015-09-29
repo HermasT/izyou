@@ -54,6 +54,14 @@ class GameType(Enum):
     count = 7
 
     @staticmethod
+    def getAll():
+        return [
+            {'type':1, 'name': '桥牌'},
+            {'type':2, 'name': '数独'},
+            {'type':3, 'name': '围棋'}
+        ]
+
+    @staticmethod
     def getName(type):
         if type == 1:
             return '桥牌'
