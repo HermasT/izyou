@@ -1,7 +1,7 @@
 # coding: utf-8
 import sys, time, math, json, requests, config
 from urllib import urlencode, quote
-from flask import Flask, flash, render_template, redirect, url_for, request, jsonify, g
+from flask import Flask, flash, render_template, redirect, url_for, request, jsonify, g, send_file
 from sqlalchemy import desc, asc
 from flask_bootstrap import Bootstrap, StaticCDN
 from flask_appconfig import AppConfig
@@ -10,6 +10,15 @@ from flask.ext.login import LoginManager, login_user, logout_user, current_user,
 from portal import app, db, lm, mail
 from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus, PayType, Register
 from mail import MailUtil
+import qrcode
+import StringIO
+
+#qr
+@app.route('/qr')
+def qr():
+	img = qrcode.make('sign info')
+	img.save('portal/static/tmp/test.png','PNG')
+	return render_template('qr.html')
 
 # 测试页面
 @app.route('/test')
