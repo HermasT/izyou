@@ -7,6 +7,12 @@ $(document).ready(function() {
 			return;
 		}
 
+		var gtype = document.getElementById("btn_create_course_gtype");
+		if (empty_input(gtype.value)) {
+			$.MsgBox.Alert("非法输入", "请选择课程类型");
+			return;
+		}
+
 		var startdate = document.getElementById("create_course_start");
 		if (empty_input(startdate.value)) {
 			$.MsgBox.Alert("非法输入", "请输入课程开始日期");
@@ -44,6 +50,7 @@ $(document).ready(function() {
 			url:'/rest/create_course',
 		    data: {
 		    	"name": name.value,
+		    	"gtype": gtype.value,
 		    	"start": startdate.value,
 		    	"end": enddate.value,
 		    	"teacher": teacher.value,

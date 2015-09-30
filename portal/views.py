@@ -101,7 +101,7 @@ def course_register():
 			status.append(CourseStatus.getName(course.status))
 			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
 			teachers.append(teacher.name)
-		return render_template('course_register.html', index=1, type=gtype,
+		return render_template('course_register.html', index=5, type=gtype,
 			user=current_user.username, pagination=paginate, status=status, teachers=teachers)
 	else:
 		flash(u'请您登录')
@@ -245,7 +245,7 @@ def course():
 def create_course():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
 		teachers = Teacher.query.order_by(Teacher.tid).all()
-		return render_template('create_course.html', teachers=teachers)
+		return render_template('create_course.html', types=GameType.getAll(), teachers=teachers)
 	else:
 		flash(u'您没有权限访问该页面')
 		return render_template('error.html')
@@ -421,6 +421,7 @@ def api_update_teacher():
 @app.route('/rest/create_course', methods=['GET', 'POST'])
 def api_create_course():
 	name = request.args.get("name")
+	gtype = request.args.get("gtype")
 	start = request.args.get("start")
 	end = request.args.get("end")
 	tid = request.args.get("teacher")
@@ -430,7 +431,7 @@ def api_create_course():
 	extend = request.args.get("extend")
 
 	try:
-		c = Course(name=name, tid=tid, start=start, end=end, count=count, charge=fee, desc=desc, extend=extend)
+		c = Course(name=name, gtype=gtype, tid=tid, start=start, end=end, count=count, charge=fee, desc=desc, extend=extend)
 		db.session.add(c)
 		db.session.commit()
 		return jsonify({'error':0, 'cid': c.cid})
@@ -471,11 +472,9 @@ def api_register_course():
 		course = Course.query.filter(Course.cid==cid).first()
 		user = Users.query.filter(Users.username==username).first()
 		if course is None:
-			flash(u'查找不到与之匹配的课程信息')
-			return render_template('error.html')
+			return jsonify({'error':5, 'cause': u'查找不到与之匹配的课程信息'})
 		elif user is None:
-			flash(u'查找不到报名的用户，请先注册用户')
-			return render_template('error.html')
+			return jsonify({'error':5, 'cause': u'查找不到报名的用户，请先注册用户'})
 		else:
 			operator = current_user.username
 			if paytype == 0 or paytype == str(0):

@@ -4,10 +4,32 @@
     <title></title>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+
+    <style type="text/css" >
+        #toast {   
+            position: fixed;   
+            top: 200px;   
+            left: 50%;   
+            width: 200px;   
+            margin-left: -100px;   
+            border: 1px solid #666;   
+            background-color: #B1BCCF;   
+            padding: 10px 0 ;   
+            text-align:center;   
+            opacity: .9;   
+            -webkit-transition: opacity 0.5s ease-out ;
+            -moz-transition: opacity 0.5s ease-out; 
+            -ms-transition: opacity 0.5s ease-out;  
+            -o-transition: opacity 0.5s ease-out; 
+            transition: opacity 0.5s ease-out;   
+        }
+    </style>
 </head>
 
 <body>
 <div class="container">
+  <button onclick="save()">Toast</button> 
+
   <div class="dropdown">
   <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     Dropdown
@@ -48,12 +70,35 @@
         language: 'zh-CN',
         weekStart: 1,
         todayBtn: 1,
-  autoclose: 1,
-  todayHighlight: 1,
-  startView: 2,
-  minView: 2,
-  forceParse: 0
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
     });
+
+    var intervalCounter = 0;   
+    function hideToast() {     
+        var alert = document.getElementById("toast");   
+        alert.style.opacity = 0;   
+        clearInterval(intervalCounter);   
+    }   
+
+    function drawToast(message) {   
+        var alert = document.getElementById("toast");
+        if (alert == null) {
+          var toastHTML = '<div id="toast" style="border-radius:5px;">' + message + '</div>';
+          document.body.insertAdjacentHTML('beforeEnd', toastHTML);   
+        } else {   
+          alert.style.opacity = .9;
+        }   
+        
+        intervalCounter = setInterval("hideToast()", 1000);   
+    }
+
+    function save() {   
+      drawToast("Toast······");   
+    }
 </script>
 
 </body>

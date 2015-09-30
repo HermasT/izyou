@@ -7,3 +7,5 @@ flask-mail
 requests
 enum
 psycopg2
+pillow
+qrcode
