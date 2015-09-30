@@ -1,0 +1,39 @@
+{% extends "portal_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}智友文化 - qrcode {% endblock %}
+
+{% block content %}
+<style type="text/css">
+	.bold {
+		font-weight: bold;
+	}
+	.contact_list {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}open
+	.contact_title {
+		/*margin-left: 30px;*/
+		color: #000;
+		text-align: right;
+		display: inline-block;
+		width: 80px;
+	}
+	.contact_content {
+		margin-left: 30px;
+		color: #444;
+	}
+</style>
+<div class='container'>
+	<div class="col-lg-12 col-md-12 col-sm-12">
+	<img src = "/static/tmp/test.png">
+	<button>print</button>
+	</div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}
