@@ -2,6 +2,7 @@ flask-appconfig
 flask-wtf
 flask-bootstrap
 flask-sqlalchemy
+sqlalchemy-migrate
 flask-login==0.2.11
 flask-mail
 requests
