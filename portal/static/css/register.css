@@ -19,3 +19,7 @@ input {
   margin-bottom: 15px;
   width: 100%
 }
+.info-nessecary {
+  color: #f00;
+  vertical-align: middle;
+}

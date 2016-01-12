@@ -29,19 +29,6 @@ class UserType(Enum):
     staff = 4
     admin = 65535
 
-# class UType(db.Model):
-#     id = db.Column(Integer, primary_key=True)
-#     name = db.Column(String(16), nullable=True)
-#     cname = db.Column(String(32), nullable=True)
-
-#     def __init__(self, id, name, cname):
-#         self.id = id
-#         self.name = name
-#         self.cname = cname
- 
-#     def __repr__(self):
-#         return "<UserType '{:d}-{:s}-{:s}'>".format(self.id, self.name, self.cname)
-
 # 项目类型
 class GameType(Enum):
     undefined = 0
@@ -78,21 +65,6 @@ class GameType(Enum):
         else:
             return '未知'
 
-# class GType(db.Model):
-#     type = db.Column(Integer, primary_key=True)
-#     name = db.Column(String(16), nullable=True)
-#     cname = db.Column(String(16), nullable=True)
-#     extend = db.Column(String(32), nullable=False)
-
-#     def __init__(self, type, name, cname, extend=''):
-#         self.type = type
-#         self.name = name
-#         self.cname = cname
-#         self.extend = extend
- 
-#     def __repr__(self):
-#         return "<GameType '{:d}-{:s}'>".format(self.type, self.cname)
-
 # 付费类型
 class PayType(Enum):
     undefined = 0
@@ -113,21 +85,22 @@ class PayType(Enum):
             {'type':5, 'name': '其他'}
         ]
 
-
-# class PType(db.Model):
-#     type = db.Column(Integer, primary_key=True)
-#     name = db.Column(String(16), nullable=True)
-#     cname = db.Column(String(16), nullable=True)
-#     extend = db.Column(String(32), nullable=False)
-
-#     def __init__(self, type, name, cname, extend=''):
-#         self.type = type
-#         self.name = name
-#         self.cname = cname
-#         self.extend = extend
- 
-#     def __repr__(self):
-#         return "<GameType '{:d}-{:s}'>".format(self.type, self.cname)
+    @staticmethod
+    def getName(type):
+        if type == 0:
+            return '未支付'
+        elif type == 1:
+            return '现金支付'
+        elif type == 2:
+            return '微信支付'
+        elif type == 3:
+            return '支付宝'
+        elif type == 4:
+            return '在线支付'
+        elif type == 5:
+            return '其他'
+        else:
+            return '未知'
 
 # 性别
 class GenderType(Enum):
@@ -197,10 +170,30 @@ class Users(db.Model):
     def get_crypto_password(password):
         return hashlib.md5(password).hexdigest()
 
+# 学生
+class Student(db.Model):
+    sid = db.Column(Integer, primary_key=True) # uid
+    name = db.Column(String(32), nullable=False) # 姓名
+    birth = db.Column(Date) # 出生日期
+    gender = db.Column(Integer, default=GenderType.undefined) #性别
+    school = db.Column(String(64)) #学校
+    extend = db.Column(String(64), nullable=True)
+
+    def __init__(self, sid, name, birth, gender, school='', extend=''):
+        self.sid = sid
+        self.name = name
+        self.birth = birth
+        self.gender = gender
+        self.school = school
+        self.extend = extend
+ 
+    def __repr__(self):
+        return "<Student({:d}): {:s}>".format(self.sid, self.name)
+
 # 教师
 class Teacher(db.Model):
     tid = db.Column(Integer, primary_key=True)
-    name = db.Column(String(16), nullable=False)
+    name = db.Column(String(32), nullable=False)
     birth = db.Column(Date)
     gender = db.Column(Integer, default=GenderType.undefined)
     gtype = db.Column(Integer)
@@ -258,12 +251,17 @@ class Course(db.Model):
     name = db.Column(String(32), nullable=False)
     gtype = db.Column(Integer, nullable=False)
     tid = db.Column(Integer) # ForeignKey('teacher.tid')
-    start = db.Column(Date)
-    end = db.Column(Date)
-    count = db.Column(Integer)
-    charge = db.Column(Float)
-    status = db.Column(Integer)  #CourseStatus
-    desc = db.Column(String(128))
+    start = db.Column(Date) # 开始日期
+    end = db.Column(Date)  # 结束日期
+    max = db.Column(Integer) # 最大学生人数
+    min = db.Column(Integer) # 最小学生人数
+    audition = db.Column(Integer) # 允许试听次数
+    count = db.Column(Integer) # 课程总计次数
+    peroid = db.Column(Integer) # 课程时长（以分钟计）
+    charge = db.Column(Float) # 课程费用
+    discount = db.Column(Float) # 折扣率（0.9=9折）
+    status = db.Column(Integer)  # CourseStatus
+    desc = db.Column(String(128)) # 课程介绍
     extend = db.Column(String(64))
 
     def __init__(self, name, gtype, tid, start, end, count, charge, desc='', extend=''):
@@ -303,18 +301,21 @@ class Register(db.Model):
     rid = db.Column(Integer, primary_key=True)
     username = db.Column(String(32)) # ForeignKey('users.username')
     cid = db.Column(Integer) # ForeignKey('course.cid')
-    charged = db.Column(Boolean)
+    charged = db.Column(Boolean) # 是否收费
     ptype = db.Column(Integer) # PayType
-    origin = db.Column(Integer)
-    operator = db.Column(String(32))
-    extend = db.Column(String(64))
+    income = db.Column(Float) # 实际收入，处理打折、减免等
+
+    origin = db.Column(Integer) # 记录原始报名的课程
+    status = db.Column(Integer) # 0 = 预报名（未缴费），1 = 报名，2 = 转班，3 = 退费
+    operator = db.Column(String(32)) # 当前操作的用户账号
+    extend = db.Column(String(64)) # 退费记录原因
 
     def __init__(self, username, cid, op, charged=False, ptype=0, extend=''):
         self.username = username
         self.cid = cid
         self.charged = charged
         self.ptype = ptype
-        self.origin = cid
+        self.origin = cid   # 首次报名
         self.operator = op
         self.extend = extend
  
