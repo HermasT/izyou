@@ -5,69 +5,65 @@ sys.path.append(os.path.dirname(__name__))
 from portal import app
 from portal import db
 from portal.models import UserType, GameType, PayType, GenderType
-from portal.models import Users, Teacher, Course, Room, Register#, GType, UType, PType
+from portal.models import Users, Student, Teacher, Course, Room, Orders, OrdersList, ProductType, OrderStatus
 
 if __name__ == '__main__':
 	# 创建数据表
 	db.create_all()
 
-	# # 默认用户初始化
-	# u = Users(username="hermas", email='hermasTang@hotmail.com', 
-	# 	phone='13636539441', password='123456', name='汤时虎', type=UserType.staff)
-	# db.session.add(u)
-	# db.session.commit()
+	# 默认用户初始化
+	u = Users(username="hermas", email='hermasTang@hotmail.com', 
+		phone='13636539441', password='123456', name='汤时虎', type=UserType.staff)
+	db.session.add(u)
+	u = Users(username="test", email='test@qq.com', 
+		phone='18612345678', password='123456', name='测试账号', type=UserType.registered)
+	db.session.add(u)
+	db.session.commit()
 
-	# # 用户类型常量表初始化
-	# db.session.add(UType(UserType.normal, u'normal', u'普通用户'))
-	# db.session.add(UType(UserType.registered, u'registered', u'注册用户'))
-	# db.session.add(UType(UserType.student, u'student', u'学员'))
-	# db.session.add(UType(UserType.fanculty, u'fanculty', u'教工'))
-	# db.session.add(UType(UserType.staff, u'staff', u'工作人员'))
-	# db.session.add(UType(UserType.admin, u'admin', u'管理员'))
-	# db.session.commit()
 
-	# # 项目类型常量表初始化
-	# db.session.add(GType(GameType.undefined, u'undefined', u'未定义'))
-	# db.session.add(GType(GameType.bridge, u'bridge', u'桥牌'))
-	# db.session.add(GType(GameType.sudoku, u'sudoku', u'数独'))
-	# db.session.add(GType(GameType.go, u'go', u'围棋'))
-	# db.session.add(GType(GameType.chess, u'chess', u'国际象棋'))
-	# db.session.add(GType(GameType.cchess, u'cchess', u'中国象棋'))
-	# db.session.add(GType(GameType.miexed, u'miexed', u'混合'))
-	# db.session.commit()
+	# 添加学生 一个学生是一个用户的同时，包含特定的学生信息（以下2个语句必须在事务中执行）
+	u = Users(username=u'student', email=u'student@gmail.com', 
+		phone=u'15187654321', password=u'123456', name=u'测试学生', type=UserType.student)
+	db.session.add(u)
+	s = Student(username=u.username, birth=u'1997-09-11', gender=GenderType.male, school=u'人大附中', extend=u'桥牌特长班')
+	db.session.add(s)
+	db.session.commit()
 
-	# # 项目类型常量表初始化
-	# db.session.add(PType(PayType.undefined, u'undefined', u'未定义'))
-	# db.session.add(PType(PayType.cash, u'cash', u'现金支付'))
-	# db.session.add(PType(PayType.wechat, u'wechat', u'微信支付'))
-	# db.session.add(PType(PayType.alipay, u'alipay', u'支付宝'))
-	# db.session.add(PType(PayType.online, u'online', u'在线支付'))
-	# db.session.add(PType(PayType.others, u'others', u'其他'))
-	# db.session.commit()	
 
-	# 添加讲师
-	# db.session.add(Teacher(name=u'小爪', birth='1984 09-12', gender=GenderType.male, gtype=GameType.bridge, uprice=200.0))
-	# db.session.commit()
+	# 添加讲师 一个讲师是一个用户的同时，包含特定的教师信息（以下2个语句必须在事务中执行）
+	u = Users(username=u'teacher', email=u'teacher@gmail.com', 
+		phone=u'13924681357', password=u'123456', name=u'测试教师', type=UserType.fanculty)
+	db.session.add(u)
+	t = Teacher(username=u.username, birth=u'1984-09-12', gender=GenderType.male, gtype=GameType.bridge, uprice=200.0)
+	db.session.add(t)
+	db.session.commit()
 	
-	# for i in range(1, 18):
-	# 	db.session.add(Teacher(name=u'围棋{0}'.format(i), birth='1982 09-12', gender=GenderType.male, gtype=GameType.bridge, uprice=200.0))
-	# 	db.session.commit()
+	for i in range(1, 18):
+		u = Users(username=u'桥牌{0}'.format(i), email=u'teacher{0}@gmail.com'.format(i), 
+			phone=u'13924681357', password=u'123456', name=u'桥牌教师{0}'.format(i), type=UserType.fanculty)
+		db.session.add(u)
+		t = Teacher(username=u.username, birth=u'1984-09-12', gender=GenderType.male, gtype=GameType.bridge, uprice=200.0)
+		db.session.add(t)
+		db.session.commit()
 
-	# # 添加课程
-	# db.session.add(Course(name=u'桥牌初级班', gtype=GameType.bridge, tid=2, start='2015 10-01', end='2015 12-01', count=10, charge=800.0))
-	# db.session.add(Course(name=u'桥牌高级班', gtype=GameType.bridge, tid=1, start='2015 09-11', end='2015 12-01', count=10, charge=1200.0))
-	# db.session.add(Course(name=u'数独入门班', gtype=GameType.sudoku, tid=3, start='2015 09-11', end='2015 12-01', count=10, charge=800.0))
-	# db.session.commit()
-	# for i in range(1, 8):
-	# 	db.session.add(Course(name=u'围棋入门', gtype=GameType.go, tid=2, start='2015 10-01', end='2015 12-01', count=10, charge=800.0))
-	# 	db.session.add(Course(name=u'数独高级班', gtype=GameType.sudoku, tid=2, start='2015 10-01', end='2015 12-01', count=10, charge=800.0))
-	# 	db.session.add(Course(name=u'桥牌初级班', gtype=GameType.bridge, tid=2, start='2015 10-01', end='2015 12-01', count=10, charge=800.0))
-	# 	db.session.commit()
 
-	# # 添加教室
-	# db.session.add(Room(name=u'信远桥牌俱乐部', location=u'东三环xx路12号', traffic=u'地铁8号线望京站5号口出站即到'))
-	# db.session.commit()
+	# 添加课程
+	c = Course(name=u'桥牌初级班', gtype=GameType.bridge, tid=2, start='2015 10-01', end='2015 12-01', count=10, 
+		period=120, charge=800.0, max_student=32, min_student=4, audition=1, discount=1, desc='', extend='')
+	db.session.add(c)
+	c = Course(name=u'桥牌高级班', gtype=GameType.bridge, tid=1, start='2015 10-01', end='2015 12-01', count=10, 
+		period=120, charge=1200.0, max_student=32, min_student=4, audition=1, discount=1, desc='', extend='')
+	db.session.add(c)
+	db.session.commit()
 
-	# # 添加报名
-	# db.session.add(Register(uid=2, cid=2, charged=True, ptype=PayType.cash))
-	# db.session.commit()
+	# 添加教室
+	db.session.add(Room(name=u'信远桥牌俱乐部', location=u'东三环xx路12号', traffic=u'地铁8号线望京站5号口出站即到'))
+	db.session.commit()
+
+	# 添加订单
+	o = Orders(username=u'student', op=u'hermas', amount=800.0, income=0, 
+		charged=True, status=OrderStatus.ordered, paytype=PayType.cash, extend='')
+	p = OrdersList(ptype=ProductType.course, pid=2, op=u'hermas', count=1, status=0, extend='')
+	db.session.add(o)
+	db.session.add(p)
+	db.session.commit()

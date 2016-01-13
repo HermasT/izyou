@@ -65,6 +65,29 @@ class GameType(Enum):
         else:
             return '未知'
 
+# 产品线
+class ProductType(Enum):
+    undefined = 0
+    course = 1
+    problem = 2
+
+    @staticmethod
+    def getAll():
+        return [
+            {'type':0, 'name': '未定义'},
+            {'type':1, 'name': '课程'},
+            {'type':2, 'name': '题库'}
+        ]
+
+    @staticmethod
+    def getName(type):
+        if type == 1:
+            return '课程'
+        elif type == 2:
+            return '题库'
+        else:
+            return '未定义'
+
 # 付费类型
 class PayType(Enum):
     undefined = 0
@@ -100,7 +123,38 @@ class PayType(Enum):
         elif type == 5:
             return '其他'
         else:
-            return '未知'
+            return '未定义'
+
+# 订单状态
+class OrderStatus(Enum):
+    undefined = 0
+    order = 1
+    ordered = 2
+    cancelled = 3
+    finished = 4
+
+    @staticmethod
+    def getAll():
+        return [
+            {'type':0, 'name': '未定义'},
+            {'type':1, 'name': '未支付'},
+            {'type':2, 'name': '已支付'},
+            {'type':3, 'name': '已取消'},
+            {'type':4, 'name': '已完成'}
+        ]
+
+    @staticmethod
+    def getName(type):
+        if type == 1:
+            return '未支付'
+        elif type == 2:
+            return '已支付'
+        elif type == 3:
+            return '已取消'
+        elif type == 4:
+            return '已完成'
+        else:
+            return '未定义'
 
 # 性别
 class GenderType(Enum):
@@ -133,12 +187,12 @@ def load_user(username):
 
 class Users(db.Model):
     uid = db.Column(db.Integer, primary_key=True)
-    username = db.Column(String(32), unique=True, nullable=False)
-    password = db.Column(String(32), nullable=False)
-    phone = db.Column(String(16), nullable=False)
-    email = db.Column(String(64), nullable=False)
-    name = db.Column(String(32), nullable=True)
-    type = db.Column(Integer, default=UserType.normal)
+    username = db.Column(String(32), unique=True, nullable=False) # 用户名
+    password = db.Column(String(32), nullable=False) # 密码密文
+    phone = db.Column(String(16), nullable=False) # 手机号
+    email = db.Column(String(64), nullable=False) # 邮箱（后期可选）
+    name = db.Column(String(32), nullable=True) # 姓名
+    type = db.Column(Integer, default=UserType.normal) # 用户类别
 
     def __init__(self, username, password, phone, email, name, type=UserType.normal):
         self.username = username
@@ -149,7 +203,7 @@ class Users(db.Model):
         self.type = type;
         
     def __repr__(self):
-        return "<User '{:s}-{:s}-{:s}-{:s}''>".format(self.username, self.email, self.password, self.phone)
+        return "<User 'uid={:d}-{:s}-{:s}-{:s}-{:s}''>".format(self.uid, self.username, self.email, self.password, self.phone)
 
     def is_authenticated(self):
         return True
@@ -172,28 +226,27 @@ class Users(db.Model):
 
 # 学生
 class Student(db.Model):
-    sid = db.Column(Integer, primary_key=True) # uid
-    name = db.Column(String(32), nullable=False) # 姓名
+    sid = db.Column(Integer, primary_key=True) 
+    username = db.Column(String(32), unique=True, nullable=False) # ForeignKey('Users.username')
     birth = db.Column(Date) # 出生日期
-    gender = db.Column(Integer, default=GenderType.undefined) #性别
-    school = db.Column(String(64)) #学校
+    gender = db.Column(Integer, default=GenderType.undefined) # 性别
+    school = db.Column(String(64)) # 学校
     extend = db.Column(String(64), nullable=True)
 
-    def __init__(self, sid, name, birth, gender, school='', extend=''):
-        self.sid = sid
-        self.name = name
+    def __init__(self, username, birth, gender, school='', extend=''):
+        self.username = username
         self.birth = birth
         self.gender = gender
         self.school = school
         self.extend = extend
  
     def __repr__(self):
-        return "<Student({:d}): {:s}>".format(self.sid, self.name)
+        return "<Student({:d}): {:s}>".format(self.sid, self.username)
 
 # 教师
 class Teacher(db.Model):
     tid = db.Column(Integer, primary_key=True)
-    name = db.Column(String(32), nullable=False)
+    username = db.Column(String(32), unique=True, nullable=False) # ForeignKey('Users.username')
     birth = db.Column(Date)
     gender = db.Column(Integer, default=GenderType.undefined)
     gtype = db.Column(Integer)
@@ -201,8 +254,8 @@ class Teacher(db.Model):
     desc = db.Column(String(128))
     extend = db.Column(String(64), nullable=True)
 
-    def __init__(self, name, birth, gtype, gender=GenderType.undefined, uprice=0.0, desc='', extend=''):
-        self.name = name
+    def __init__(self, username, birth, gtype, gender=GenderType.undefined, uprice=0.0, desc='', extend=''):
+        self.username = username
         self.birth = birth
         self.gender = gender
         self.gtype = gtype
@@ -211,7 +264,7 @@ class Teacher(db.Model):
         self.extend = extend
  
     def __repr__(self):
-        return "<Teacher({:d}): {:s}>".format(self.tid, self.name)
+        return "<Teacher({:d}): {:s}>".format(self.tid, self.username)
 
 # 课程
 class CourseStatus(Enum):
@@ -253,25 +306,31 @@ class Course(db.Model):
     tid = db.Column(Integer) # ForeignKey('teacher.tid')
     start = db.Column(Date) # 开始日期
     end = db.Column(Date)  # 结束日期
-    max = db.Column(Integer) # 最大学生人数
-    min = db.Column(Integer) # 最小学生人数
+    max_student = db.Column(Integer) # 最大学生人数
+    min_student = db.Column(Integer) # 最小学生人数
     audition = db.Column(Integer) # 允许试听次数
     count = db.Column(Integer) # 课程总计次数
-    peroid = db.Column(Integer) # 课程时长（以分钟计）
+    period = db.Column(Integer) # 课程时长（以分钟计）
     charge = db.Column(Float) # 课程费用
     discount = db.Column(Float) # 折扣率（0.9=9折）
     status = db.Column(Integer)  # CourseStatus
     desc = db.Column(String(128)) # 课程介绍
     extend = db.Column(String(64))
 
-    def __init__(self, name, gtype, tid, start, end, count, charge, desc='', extend=''):
+    def __init__(self, name, gtype, tid, start, end, count, period, charge, 
+                max_student=65536, min_student=1, audition=0, discount=1, desc='', extend=''):
         self.name = name
         self.gtype = gtype;
         self.tid = tid
         self.start = start
         self.end = end
         self.count = count
+        self.period = period
         self.charge = charge
+        self.max_student = max_student
+        self.min_student = min_student
+        self.audition = audition
+        self.discount = discount
         self.status = CourseStatus.applying
         self.desc = desc
         self.extend = extend
@@ -296,28 +355,50 @@ class Room(db.Model):
     def __repr__(self):
         return "<Room: {:s}>".format(self.name)
 
-# 报名
-class Register(db.Model):
-    rid = db.Column(Integer, primary_key=True)
-    username = db.Column(String(32)) # ForeignKey('users.username')
-    cid = db.Column(Integer) # ForeignKey('course.cid')
+# 订单
+class Orders(db.Model):
+    orderid = db.Column(Integer, primary_key=True)
+    username = db.Column(String(32)) # ForeignKey('users.username') 下单的用户名（用户）
     charged = db.Column(Boolean) # 是否收费
-    ptype = db.Column(Integer) # PayType
-    income = db.Column(Float) # 实际收入，处理打折、减免等
-
-    origin = db.Column(Integer) # 记录原始报名的课程
-    status = db.Column(Integer) # 0 = 预报名（未缴费），1 = 报名，2 = 转班，3 = 退费
-    operator = db.Column(String(32)) # 当前操作的用户账号
+    paytype = db.Column(Integer) # 付费类型
+    amount = db.Column(Float) # 应收账款（产品价格累计）
+    income = db.Column(Float) # 实收账款（处理打折、减免等）
+    status = db.Column(Integer) # 订单状态 OrderStatus
+    operator = db.Column(String(32)) # ForeignKey('users.username') 操作的用户名（工作人员）
     extend = db.Column(String(64)) # 退费记录原因
 
-    def __init__(self, username, cid, op, charged=False, ptype=0, extend=''):
+    def __init__(self, username, op, amount, income=0, charged=False, 
+                status=OrderStatus.undefined, paytype=PayType.undefined, extend=''):
         self.username = username
-        self.cid = cid
         self.charged = charged
-        self.ptype = ptype
-        self.origin = cid   # 首次报名
+        self.paytype = paytype
+        self.status = status
+        self.amount = amount
+        if (income == 0):
+            self.income = amount
+        else:
+            self.income = income
         self.operator = op
         self.extend = extend
  
     def __repr__(self):
-        return "<Register{:s}: {:s}报名了{:s}>".format(self.rid, self.username, self.cid)
+        return "<Order{:s}: {:s}>".format(self.orderid, self.username)
+
+# 订单产品列表 一张订单中允许同时购买多个产品
+class OrdersList(db.Model):
+    orderid = db.Column(Integer, primary_key=True)
+    ptype = db.Column(Integer) # 产品类型
+    pid = db.Column(Integer) # 产品编号
+    count = db.Column(Integer) # 产品数量
+    status = db.Column(Integer) # 产品状态 0 = 正常，1 = 退费
+    operator = db.Column(String(32)) # 当前操作的用户账号
+    extend = db.Column(String(64)) # 退费记录原因
+
+    def __init__(self, ptype, pid, op, count=1, status=0, extend=''):
+        self.pid = pid
+        self.ptype = ptype
+        self.count = count
+        self.operator = op
+        self.status = status
+        self.extend = extend
+ 

@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from flask.ext.mail import Mail
 from flask.ext.mail import Message
 from threading import Thread
