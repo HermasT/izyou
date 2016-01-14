@@ -1,35 +1,33 @@
 {% extends "portal_base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
 {% import "bootstrap/fixes.html" as fixes %}
 
-{% block title %}智友文化 - qrcode {% endblock %}
+{% block title %}智益加 - 打印听课证 {% endblock %}
 
 {% block content %}
-<style type="text/css">
-	.bold {
-		font-weight: bold;
+<script type="text/javascript">  
+	function printdiv() {
+		// 保存页面的原始内容
+		var save = document.body.innerHTML;
+
+		// 获取打印内容，生成打印页面
+		var data = document.getElementById("div_print").innerHTML;
+		document.body.innerHTML = "<html><head><title></title></head><body>" + data + "</body>";  
+		window.print();
+
+		// 恢复原始页面内容
+		document.body.innerHTML = save;  
+		return false;
 	}
-	.contact_list {
-		margin-top: 10px;
-		margin-bottom: 10px;
-	}open
-	.contact_title {
-		/*margin-left: 30px;*/
-		color: #000;
-		text-align: right;
-		display: inline-block;
-		width: 80px;
-	}
-	.contact_content {
-		margin-left: 30px;
-		color: #444;
-	}
-</style>
+</script>
+
 <div class='container'>
-	<div class="col-lg-12 col-md-12 col-sm-12">
-	<img src = "/static/tmp/test.png">
-	<button>print</button>
+	<div id="div_print">
+		<!-- 将需要的打印内容排放在这里 -->
+		<img src = "/static/tmp/test.png">
+		<h1>The Div content which you want to print</h1>
 	</div>
+	
+	<input type="button" class='btn btn-primary' onClick="printdiv('div_print');" value="打印听课证">
 </div>
 {% endblock %}
 
