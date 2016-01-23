@@ -99,8 +99,10 @@ def course_register():
 		teachers = []
 		for course in paginate.items:
 			status.append(CourseStatus.getName(course.status))
-			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
-			teachers.append(teacher.name)
+			# 采用多表联合查询
+			q = db.session.query(Users.name).join(Teacher, Teacher.username==Users.username) \
+					.filter(Teacher.tid==course.tid).first()
+			teachers.append(q.name)
 		return render_template('course_register.html', index=5, type=gtype,
 			user=current_user.username, pagination=paginate, status=status, teachers=teachers)
 	else:
