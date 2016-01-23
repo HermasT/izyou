@@ -1,0 +1,61 @@
+{% extends "portal_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}智益加 - 师资介绍 {% endblock %}
+
+{% block content %}
+<style type='text/css'>
+	p {
+		text-indent:2em;
+	}
+
+	.bold {
+		font-weight: bold;
+	}
+
+	.indent {
+		text-indent: 4em;
+	}
+	.aligncenter { 
+		clear: both; 
+		display: block; 
+		margin:auto; 
+	} 
+</style>
+
+<div id='sudoku' class='container'>
+	<div class="col-lg-12 col-md-12 col-sm-12 well">
+	  	<h3>什么是桥牌？</h3>
+	  	<p>桥牌（bridge）是四人一桌，两人一组，以52张牌为道具的智力运动。桥牌有完备的比赛规则，计分方法和道德礼仪规范要求。</p>
+	  	<img class='aligncenter' src="/static/img/bridge1.png" alt="桥牌">
+		<br/>
+
+		<p>作为一项多门类学科融汇为一体的智谋较量运动，桥牌充满了哲理性和科学性，参与者需要运用周密的逻辑推理，进行判断分析，并和同伴通力合作，运用恰当的战略战术。简言之，桥牌是大脑的智力体操，是高雅公平的竞技，是搭档沟通的艺术。</p>
+		<img class='aligncenter' src="/static/img/bridge2.png" alt="桥牌">
+		<br/>
+
+		<p>桥牌是绅士运动，也是一种社交手段，故而深受高端人士喜爱。桥牌是我国改革开放的导师邓小平所喜爱的休闲活动；也已经成为商业巨子沃伦·巴菲特和比尔·盖茨每年股东大会后的社交项目。桥牌的思维方式，特别紧扣风险投入与产出回报这种主题，也使得桥牌成为一种在全世界投资圈所流行的智力运动。</p>
+		<img class='aligncenter' src="/static/img/bridge3.png" alt="桥牌">
+		<br/>
+
+		<h3>为什么学桥牌？</h3>
+		<p>桥牌可以锻炼一个人在面对问题时，从多个角度进行分析和逻辑思维能力，同时善于抓住细节，心思缜密、考虑全面，从而提高处理问题的能力，提高一个人的整体素质。</p>
+		<img class='aligncenter' src="/static/img/bridge4.png" alt="桥牌">
+	    <br/>
+		
+		<p>桥牌是智力运动中唯一一个与搭档或者团队合作的项目，不仅可以培养一个人如何成为一名优秀的团队合作选手，而且在和搭档以及团队的沟通中不断互相进步。</p>
+		<img class='aligncenter' src="/static/img/bridge5.png" alt="桥牌">
+		<br/>
+		
+		<p>桥牌是一项世界性的运动，学生不仅可以参加世界的比赛和以桥牌为媒介的国际交流活动，而且对于有出国留学志向的学生，桥牌是非常好的社交和更好融入国际社会的工具。你将会得到许多来自世界的新朋友。</p>
+		<img class='aligncenter' src="/static/img/bridge6.png" alt="桥牌">
+		<br/>
+	</div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

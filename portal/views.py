@@ -75,6 +75,16 @@ def index():
 	except:
 		return render_template('index.html', index=1, user=None)
 
+# 桥牌介绍
+@app.route('/bridge_detail', methods = ['GET'])
+def bridge_detail():
+	try:
+		username = current_user.username
+		return render_template('bridge_detail.html', user=username)
+	except:
+		return render_template('bridge_detail.html', user=None)
+
+# 我要报名
 @app.route('/course_register', methods = ['GET', 'POST'])
 @login_required
 def course_register():
@@ -135,6 +145,10 @@ def contact():
 		return render_template('contact.html', index=4, user=username)
 	except:
 		return render_template('contact.html', index=4, user=None)
+
+
+
+
 
 # 后台管理
 @app.route('/admin', methods=['GET', 'POST'])
