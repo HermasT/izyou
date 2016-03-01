@@ -1,0 +1,276 @@
+{% extends "portal_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}智益加 - 围棋介绍 {% endblock %}
+
+{% block content %}
+<style type='text/css'>
+	p {
+		text-indent:2em;
+	}
+
+	div {
+		text-indent:2em;
+	}
+
+	span {
+		text-indent:2em;
+	}
+
+	td{
+		text-align:left;
+	}
+
+
+	.redAndBold{
+		color: red;
+		font-weight: bold;
+	}
+
+	.bold {
+		font-weight: bold;
+	}
+
+	.normalIndent{
+		text-indent: 0em;
+	}
+
+	.indent {
+		text-indent: 4em;
+	}
+	.aligncenter { 
+		clear: both; 
+		display: block; 
+		margin:auto; 
+	} 
+</style>
+
+<div id='go' class='container'>
+	<div class="col-lg-12 col-md-12 col-sm-12 well">
+	  	<h3>什么是围棋？</h3>
+	  	<img class='aligncenter' src="/static/img/weiqi/weiqi1.png" alt="围棋">
+		<br/>
+	  	<p>围棋使用方形格状棋盘及黑白二色圆形棋子进行对弈，棋盘上有纵横各19条直线将棋盘分成361个交叉点，棋子走在交叉点上，双方交替行棋，落子后不能移动，以围地多者为胜。中国古代围棋是黑白双方在对角星位处各摆放两子（对角星布局），由白棋先行。现代围棋由日本发展而来，取消了座子规则，黑先白后，使围棋的变化更加复杂多变。</p>
+
+	  	<h3>为什么要学习围棋？</h3>
+	  	<img class='aligncenter' src="/static/img/weiqi/weiqi2.png" alt="围棋">
+		<br/>
+		<p><span style="font-weight: bold;" >开发智力get√</span>。围棋是开发智力最好的选择。世界上的益智游戏一共有1000多类，只有1个是电脑还无法打败人脑的，那就是围棋。</p>
+
+		<img class='aligncenter' src="/static/img/weiqi/weiqi3.png" alt="围棋">
+		<br/>
+		<p><span style="font-weight: bold;" >创性思维培养get√</span>。围棋的过程是独特的思维的过程，每一手棋都要经过大脑不断的思考与检验，是从形象思维到逻辑思维不断转换跳跃的过程，在这种跳跃间逐步实现对儿童创性思维的培养。</p>
+		
+		<img class='aligncenter' src="/static/img/weiqi/weiqi4.png" alt="围棋">
+		<p><span style="font-weight: bold;" >专注精神培养get√</span>。学习围棋有利于集中儿童的注意力。围棋盘上始终都充满了紧张激烈的战斗，任何时候都不能有注意力的分散和松懈</p>
+		<br/>
+
+		<div style="color: red;font-weight: bold;">
+			去哪里学习围棋？
+		</div>
+		<div style="color: red;font-weight: bold;">
+			智力运动学习首选智益加！这里是智力运动精英的聚集地！
+		</div>
+		<img class='aligncenter' src="/static/img/weiqi/weiqi5.png" alt="围棋">
+	    <br/>
+	    <p>
+	    	一、<span style="font-weight: bold;" >机构牛！</span>融合所有智力运动的培训机构国内仅此一家，在这里可以学习和接触最多的智力项目。
+	    </p>
+	    <p>
+	    	二、<span style="font-weight: bold;" >团队牛！</span>智益加各项目负责人均来自北大、清华，有最先进的教学理念与最好的教学方法。
+	    </p>
+	    <p>
+	    	三、<span style="font-weight: bold;" >老师牛！</span>智益加教师团队全部来自一线选手，自己通过多年训练达到国内顶尖水准，因此可以帮助学生快速提升，避免学生浪费学习时间。
+	    </p>
+	    <p>
+	    	四、<span style="font-weight: bold;" >课程牛！</span>智益加课程内容全部由团队自主研发，学习内容最实用、最科学、最有时效性。此外所有项目均采取不到20人的小班授课，教师会关注每位学生的成长。
+	    </p>
+		
+		<div style="font-weight: bold;">
+			点击进入
+		</div>
+		<div style="font-weight: bold;">
+			<a style=" color:black;" href="/sudoku_detail">智益加2016年春季数独课程介绍</a>
+
+		</div>
+		<div style="font-weight: bold;">
+			<a style=" color:black;" href="/bridge_detail">智益加2016年春季桥牌课程介绍</a>
+		</div>
+		<div style="font-weight: bold;">
+			<a style=" color:black;" href="#">智益加2016年春季中国象棋课程介绍</a>
+		</div>
+
+		<br />
+		<p style="color:red;">围棋教师团队介绍</p>
+		<img class='aligncenter' src="/static/img/weiqi/weiqi6.png" alt="薛磊">
+		<p>
+			<span class="bold">薛磊</span>：职业四段。原国家围棋少年队成员、前北京大学围棋队队长。亚洲大学生围棋锦标赛团体冠军，个人亚军；巴黎围棋公开赛个人亚军获得者。考入北大之后，薛磊一直在为围棋文化的发展普及而努力，曾代表中国围棋协会出访美国围棋大会，创办北京市大学生围棋联赛，是中国围棋职业棋手转型的成功典范。薛磊认为，围棋，不仅是竞技体育，也是文化的传承和逻辑的熏陶。所以，他致力于提高围棋教师的职业素质，建立科学系统的教学体系，并且从多元文化角度让学生体会到围棋知识和价值的传递。
+		</p>
+		<img class='aligncenter' src="/static/img/weiqi/weiqi7.png" alt="袁硕">
+		<p>
+			<span class="bold">袁硕</span>：业余5段，北京科技大学围棋队队长。第十五届世界大学生业余围棋混双赛第6名。从小一直学习围棋的袁硕，对围棋有发自内心的热爱。在大学期间，他也积极参加大学间的种种围棋推广活动。围棋对于他来说不仅仅是棋盘棋子，更像是一个朋友，他希望通过他的双手，让更多的人能够爱上围棋，从学习围棋中感受到快乐。
+		</p>
+
+		<span class="redAndBold">智益加智力运动中心地址：</span><br />
+		<span class="bold">海淀区知春路银网中心B座6层（地铁四号线海淀黄庄站东200米路北）</span>
+		<br /><br />
+		<span class="redAndBold">智益加围棋春季课程安排：</span><br />
+		<span class="bold">启蒙班：面向6-10岁、围棋零基础的学生；</span><br />
+		<span>课程时间：3月5日起连续15周，每周2小时 </span><br />
+		<span>开班人数：8-12人</span><br />
+		<table class="normalIndent" >
+			<tr>
+				<td style="vertical-align:top">课程目的：</td>
+				<td>1. 掌握基本围棋规则，在15次课程的学习后达到业余10k左右水平。<br />
+					2. 培养良好的人文素养。<br />
+					3. 激发围棋兴趣，使围棋不是一门课程，而是一项爱好。
+				</td>
+			</tr>
+		</table>
+		<br />
+		<table style="	text-indent:1em;" border="1px">
+			<tr>
+				<td style="text-align:center;text-indent:0em;">启蒙班课次</td>
+				<td style="text-align:center;">教学内容</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>围棋概念与行棋规范，学习知识点：棋子的气</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>提子、吃子与逃子</td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>连接、断</td>
+			</tr>
+			<tr>
+				<td>4</td>
+				<td>打吃及打吃的方向</td>
+			</tr>
+			<tr>
+				<td>5</td>
+				<td>断吃、双叫吃、目的概念</td>
+			</tr>
+			<tr>
+				<td>6</td>
+				<td>提子、禁着点、接不归</td>
+			</tr>
+			<tr>
+				<td>7</td>
+				<td>提子、禁着点、接不归</td>
+			</tr>
+			<tr>
+				<td>8</td>
+				<td>倒扑、对杀、活棋</td>
+			</tr>
+			<tr>
+				<td>9</td>
+				<td>破眼、围空</td>
+			</tr>
+			<tr>
+				<td>10</td>
+				<td>棋子下在几线好</td>
+			</tr>
+			<tr>
+				<td>11</td>
+				<td>打吃的方向、尖、虎</td>
+			</tr>
+			<tr>
+				<td>12</td>
+				<td>冲断、避开双打吃、1线的接不归</td>
+			</tr>
+			<tr>
+				<td>13</td>
+				<td>征吃和枷、一线的倒扑</td>
+			</tr>
+			<tr>
+				<td>14</td>
+				<td>对杀、做活</td>
+			</tr>
+			<tr>
+				<td>15</td>
+				<td>布局、中盘、官子的基本，尝试下完一整盘棋</td>
+			</tr>
+		</table>
+		<br />
+
+		<span>具体班次:</span>
+		<table style="	text-indent:1em;" border="1px">
+			<tr>
+				<td style="text-indent:0em;">序号</td>
+				<td style="text-indent:1em;">时间</td>
+				<td style="text-indent:1em;">地点</td>
+				<td style="text-align:center;">授课老师</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>每周六10:20-12:20</td>
+				<td>银网大厦教学点2教室</td>
+				<td>袁硕</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>每周日10:20-12:20</td>
+				<td>银网大厦教学点2教室</td>
+				<td>袁硕</td>
+			</tr>
+		</table>
+		<span>其他时间可攒班，8人开课。</span>
+		<br /><br />
+
+		<span class="normalIndent"><span class="bold">课程费用：</span>15次课，每次280元</span>
+		<br /><br />
+
+		<span class="normalIndent bold">开业优惠：</span>
+		<span class="normalIndent">前3次免费体验，280元×12次=3360元</span><br />
+		<span class="normalIndent">两人同报折上8折：2688元</span><br />
+		<span class="normalIndent">三人以上同报折上7折：2352元</span>
+		<br /><br />
+
+		<span class="bold" >分享到微信朋友圈集齐20个赞并在报名时出示，再减100元！</span>
+		<br /><br />
+
+		<span class="redAndBold">问与答</span><br />
+		<span>Q：什么时间，在哪可以报名？</span><br />
+		<span>
+			A：家长可以先加入智益加的咨询微信群或者QQ群（见下图），并且用微信预报名，在2月1日之后家长可以选择到我们的教室交费报名，或者联系我们并使用支付宝进行报名。
+		</span>
+		<br /><br />
+
+		<span>Q：家长是否可以旁听？</span><br />
+		<span>A：我们非常欢迎家长一起旁听课程，无论家长是否有围棋基础。</span>
+		<br /><br />
+
+		<span>Q：学生学完一学期，还有兴趣，想要继续学习，提高段位和参加竞赛怎么办？</span><br />
+		<span>A：智益加极具能力的教学团队将会给在智力运动方面有兴趣的学生提供广阔的发展空间。我们将会在之后学期开设进阶课程，非常欢迎有兴趣的学生继续学习，老生还会享受更多优惠哦！</span>
+		<br /><br />
+
+		<span class="bold">任何问题，报名信息请咨询：</span><br />
+		<span>薛老师 13699273050</span><br />
+		<span>刘老师 </span>
+		<br /><br />
+
+		<span class="bold">咨询微信群（2月3日之前有效）：</span><br />
+		<img class='' style="width:185px;height:185px;" src="/static/img/weiqi/weiqi8.png" alt="围棋">
+		<br /><br />
+
+		<span class="bold">咨询QQ群（群号515440943）：</span><br />
+		<img class='' style="width:185px;height:185px;" src="/static/img/weiqi/weiqi9.png" alt="围棋">
+		<br /><br />
+
+		<span>联系地址（2月1日起欢迎来访）：海淀区知春路银网中心B座6层（地铁四号线海淀黄庄站东200米路北）</span>
+		<br /><br />
+
+		<span class="redAndBold">快来智益加学习一项智力运动吧！</span>
+
+	</div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

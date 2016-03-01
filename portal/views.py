@@ -84,6 +84,33 @@ def bridge_detail():
 	except:
 		return render_template('bridge_detail.html', user=None)
 
+# 围棋介绍
+@app.route('/go_detail', methods = ['GET'])
+def go_detail():
+	try:
+		username = current_user.username
+		return render_template('go_detail.html', user=username)
+	except:
+		return render_template('go_detail.html', user=None)
+
+# 数独介绍
+@app.route('/sudoku_detail', methods = ['GET'])
+def sudoku_detail():
+	try:
+		username = current_user.username
+		return render_template('sudoku_detail.html', user=username)
+	except:
+		return render_template('sudoku_detail.html', user=None)	
+
+# 象棋介绍
+@app.route('/chineseCheese_detail', methods = ['GET'])
+def chineseCheese_detail():
+	try:
+		username = current_user.username
+		return render_template('chineseCheese_detail.html', user=username)
+	except:
+		return render_template('chineseCheese_detail.html', user=None)		
+
 # 我要报名
 @app.route('/course_register', methods = ['GET', 'POST'])
 @login_required

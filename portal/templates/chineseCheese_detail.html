@@ -1,0 +1,409 @@
+{% extends "portal_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}智益加 - 中国象棋介绍 {% endblock %}
+
+{% block content %}
+<style type='text/css'>
+	p {
+		text-indent:2em;
+	}
+
+	div {
+		text-indent:2em;
+	}
+
+	span {
+		text-indent:2em;
+	}
+
+	td{
+		text-align:left;
+	}
+
+
+	.redAndBold{
+		color: red;
+		font-weight: bold;
+	}
+
+	.bold {
+		font-weight: bold;
+	}
+
+	.normalIndent{
+		text-indent: 0em;
+	}
+
+	.indent {
+		text-indent: 4em;
+	}
+	.aligncenter { 
+		clear: both; 
+		display: block; 
+		margin:auto; 
+	} 
+</style>
+
+<div id='sudoku' class='container'>
+	<div class="col-lg-12 col-md-12 col-sm-12 well">
+	  	<h3>什么是象棋？</h3>
+	  	<img class='aligncenter' src="/static/img/xiangqi/xiangqi1.png" alt="象棋">
+	  	<p>象棋是世界智力运动会的正式比赛项目之一。在中国，象棋有着极高的普及率，无论是知识精英还是市井百姓，几乎都会下象棋，你甚至很难在人群中找到一个没听说过“马走日、相走田”的人。保守估计，我国至少有3-4亿人掌握象棋的基本走法。而在这其中，绝大多数人的水平都处在入门阶段。这也就意味着一个正常孩子经过两到三个学期的正规学习，就可以站在30%人的肩膀之上。</p>
+		<br/>
+
+		<h3>为什么要学习象棋？</h3>
+		<img class='aligncenter' src="/static/img/xiangqi/xiangqi2.png" alt="象棋">
+		<p><span style="font-weight: bold;" >将领气质培养get√</span>。象棋的本质是模拟战争，而棋手所扮演的角色就是一名战场的总指挥。在学习象棋的过程中，孩子将逐渐磨练出领导者的能力和气质——逻辑思维能力、专注力和判断力，独立决策的信心和勇气，以及他们面对挫折时的抗压能力。这将会是他们在未来人生中一笔宝贵的财富。</p>
+		<br/>
+
+		<img class='aligncenter' src="/static/img/xiangqi/xiangqi3.png" alt="象棋">
+		<p><span style="font-weight: bold;" >社会哲理浅读get√</span>。一马当先、弃车保帅、马后炮、一着不慎满盘皆输……古老的象棋蕴含着深刻的哲理，深刻的哲理又与我们实际的社会生活有着千丝万缕的联系。这个脱胎于中国本土的智力运动，无论是表面的基本技术还是精神内核都倒映着中国社会。孩子注定将走向社会，不妨通过象棋先给他看看社会的缩影。</p>
+		
+		<img class='aligncenter' src="/static/img/xiangqi/xiangqi4.png" alt="象棋">
+		<p><span style="font-weight: bold;" >以棋会友，结识新朋友get√</span>。在未来，绿色、健康的社交终将回归。在这个“主要看气质”的时代，以棋会友一定会是一个不错的选择。象棋有着最广泛的群众基础，对于孩子来讲，学习象棋、了解象棋，其实也等于拿到了一把打通成人世界的钥匙。</p>
+		<br/>
+
+		<div style="color: red;font-weight: bold;">
+			去哪里学习象棋？
+		</div>
+		<div style="color: red;font-weight: bold;">
+			智力运动学习首选智益加！这里是智力运动精英的聚集地！
+		</div>
+		<img class='aligncenter' src="/static/img/xiangqi/xiangqi5.png" alt="象棋">
+	    <br/>
+	    <p>
+	    	一、<span style="font-weight: bold;" >机构牛！</span>融合所有智力运动的培训机构国内仅此一家，在这里可以学习和接触最多的智力项目。
+	    </p>
+	    <p>
+	    	二、<span style="font-weight: bold;" >团队牛！</span>智益加各项目负责人均来自北大、清华，有最先进的教学理念与最好的教学方法。
+	    </p>
+	    <p>
+	    	三、<span style="font-weight: bold;" >老师牛！</span>智益加教师团队全部来自一线选手，自己通过多年训练达到国内顶尖水准，因此可以帮助学生快速提升，避免学生浪费学习时间。
+	    </p>
+	    <p>
+	    	四、<span style="font-weight: bold;" >课程牛！</span>智益加课程内容全部由团队自主研发，学习内容最实用、最科学、最有时效性。此外所有项目均采取不到20人的小班授课，教师会关注每位学生的成长。
+	    </p>
+		
+		<div style="font-weight: bold;">
+			点击进入
+		</div>
+		<div style="font-weight: bold;">
+			<a style=" color:black;" href="/sudoku_detail">智益加2016年春季数独课程介绍</a>
+
+		</div>
+		<div style="font-weight: bold;">
+			<a style=" color:black;" href="/bridge_detail">智益加2016年春季围棋课程介绍/a>
+		</div>
+		<div style="font-weight: bold;">
+			<a style=" color:black;" href="#">智益加2016年春季中国象棋课程介绍</a>
+		</div>
+
+		<br />
+		<p style="color:red;">中国象棋教师团队介绍</p>
+		<img class='aligncenter' src="/static/img/xiangqi/xiangqi6.png" alt="杨晛">
+		<p>
+			<span class="bold">杨晛</span>：棋协大师，本科、研究生就均读于北京大学。1997-2003年连续七次进入全国少年赛前八名，2000年获得北京市等级赛亚军，2001年代表北京象棋队获得全国团体赛第六名。2005年进入北京大学，先后任北京大学象棋队队长，北京大学棋牌队总队长。曾在人大附中等学校任教，具有丰富的教学经验。
+		</p>
+		<img class='aligncenter' src="/static/img/xiangqi/xiangqi7.png" alt="任刚">
+		<p>
+			<span class="bold">任刚</span>：棋协大师，本科、研究生就均读于北京大学。师从孙耀先、方士庆、王国栋、张强、洪磊鑫等北京市诸多象棋名手。多次获得全国少年赛前六名，曾代表象棋队参加全国团体赛。2009年获得“威凯杯”全国象棋一级棋士赛冠军，2008、2015年北京市等级赛冠军。大学期间,曾担任北京大学中国象棋队队长， 并在多所北京市中小学进行教学工作。
+		</p>
+
+		<span class="redAndBold">智益加智力运动中心地址：</span><br />
+		<span class="bold">海淀区知春路银网中心B座6层（地铁四号线海淀黄庄站东200米路北）</span>
+		<br /><br />
+		<span class="redAndBold">智益加围棋春季课程安排：</span><br />
+		<span class="bold">初级入门班：</span><span>面向8-10岁零基础或或仅掌握简单走子规则的学生</span><br />
+		<span>课程时间：3月5日起连续15周，每周2小时 </span><br />
+		<span>开班人数：10-16人</span><br />
+		<table class="normalIndent" >
+			<tr>
+				<td style="vertical-align:top">课程目的：</td>
+				<td>1. 使学员能够正确理解、认知象棋文化，掌握基本的象棋技术，激发学生对于象棋的兴趣。<br />
+					2. 同时，培养孩子的思维能力和专注力。<br />
+				</td>
+			</tr>
+		</table>
+		<br />
+
+		<span class="bold">具体课程简介：</span><br />
+		<table style="	text-indent:1em;" border="1px">
+			<tr>
+				<td style="text-align:center;text-indent:0em;">课次</td>
+				<td style="text-align:center;">教学内容</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>基本礼仪规范，走子方法，子力价值</td>
+				<td>桥牌的基本概念、术语和发展史</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>记录方法和简单术语  走子和吃子练习</td>
+				<td>桥牌叫牌打牌所需基础知识</td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>车的基本杀法（上）——白脸将杀等</td>
+				<td>1NT开叫及无将做庄</td>
+			</tr>
+			<tr>
+				<td>4</td>
+				<td>车的基本杀法（下）——双车错等</td>
+				<td>一阶高花开叫相关知识和防守入门</td>
+			</tr>
+			<tr>
+				<td>5</td>
+				<td>马的基本杀法（上）——卧槽马等</td>
+				<td>一阶低花开叫相关知识和做庄计划</td>
+			</tr>
+			<tr>
+				<td>6</td>
+				<td>马的基本杀法（下）——双马饮泉等</td>
+				<td>争叫和简要飞牌入门</td>
+			</tr>
+			<tr>
+				<td>7</td>
+				<td>炮的基本杀法（上）——重炮杀等</td>
+				<td>阻击叫相关知识，出牌方向综述</td>
+			</tr>
+			<tr>
+				<td>8</td>
+				<td>炮的基本杀法（下）——炮碾丹砂等</td>
+				<td>强开叫相关知识，防守信号入门</td>
+			</tr>
+			<tr>
+				<td>9</td>
+				<td>基本杀法的组合应用</td>
+				<td>飞牌知识深入，争叫后的应叫变化</td>
+			</tr>
+			<tr>
+				<td>10</td>
+				<td>布局基本原理及基本类型</td>
+				<td>满贯叫牌介绍，桥路和次序</td>
+			</tr>
+			<tr>
+				<td>11</td>
+				<td>列手炮布局简介</td>
+			</tr>
+			<tr>
+				<td>12</td>
+				<td>顺手炮布局简介</td>
+			</tr>
+			<tr>
+				<td>13</td>
+				<td>复习课 学生实战对弈总结</td>
+			</tr>
+			<tr>
+				<td>14</td>
+				<td>中局战术入门（1）</td>
+			</tr>
+			<tr>
+				<td>15</td>
+				<td>中局战术入门（2）</td>
+			</tr>
+		</table>
+		<span>具体课程可能会根据实际教学进度微调，以实际教学为准。</span>
+		<br />
+
+		<span>具体班次:</span>
+		<table style="	text-indent:1em;" border="1px">
+			<tr>
+				<td style="text-indent:0em;">序号</td>
+				<td style="text-indent:1em;">时间</td>
+				<td style="text-indent:1em;">地点</td>
+				<td style="text-align:center;">授课老师</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>每周六15:50-17:50</td>
+				<td>银网大厦教学点2教室</td>
+				<td>每周六15:50-17:50</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>每周日13:30-15:30</td>
+				<td>银网大厦教学点2教室</td>
+				<td>杨晛</td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>每周日15:50-17:50</td>
+				<td>银网大厦教学点2教室</td>
+				<td>杨晛</td>
+			</tr>
+		</table>
+		<span>其他时间可攒班，10人开课。</span>
+		<br /><br />
+
+		<span class="normalIndent"><span class="bold">课程费用：</span>15次课，每次240元</span>
+		<br /><br />
+
+		<span class="normalIndent bold">开业优惠：</span>
+		<span class="normalIndent">前3次免费体验，240元×12次=2880元</span><br />
+		<span class="normalIndent">两人同报折上8折：2304元</span><br />
+		<span class="normalIndent">三人以上同报折上7折：2016元</span>
+		<br /><br />
+
+		<span class="bold">初级提高班：</span><span>面向8-12岁，有自学基础或短期参加过其他机构的入门培训的学生</span><br />
+		<span>课程时间：3月5日起连续15周，每周2小时 </span><br />
+		<span>开班人数：10-16人</span><br />
+		<table class="normalIndent" >
+			<tr>
+				<td style="vertical-align:top">课程目的：</td>
+				<td>1. 保持儿童对于象棋的兴趣，全面提高儿童的开、中、残局能力。<br />
+					2. 优秀的学员在学期完成后将可以与普通成人爱好者对抗。<br />
+				</td>
+			</tr>
+		</table>
+		<br />
+
+		<span class="bold">具体课程简介：</span><br />
+		<table style="	text-indent:1em;" border="1px">
+			<tr>
+				<td style="text-align:center;text-indent:0em;">课次</td>
+				<td style="text-align:center;">教学内容</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>基本礼仪规范，基本杀法复习</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>布局专题：顺手炮简介（1）</td>
+			</tr>
+			<tr>
+				<td>3</td>
+				<td>布局专题：顺手炮简介（2）</td>
+			</tr>
+			<tr>
+				<td>4</td>
+				<td>布局专题：顺手炮简介（3）</td>
+			</tr>
+			<tr>
+				<td>5</td>
+				<td>中局基本战术（1）</td>
+			</tr>
+			<tr>
+				<td>6</td>
+				<td>中局基本战术（2）</td>
+			</tr>
+			<tr>
+				<td>7</td>
+				<td>中局基本战术（3）</td>
+			</tr>
+			<tr>
+				<td>8</td>
+				<td>残局基本定式及中局向残局的过渡</td>
+			</tr>
+			<tr>
+				<td>9</td>
+				<td>总结课：学生实战对弈总结</td>
+			</tr>
+			<tr>
+				<td>10</td>
+				<td>布局专题：中炮过河车对屏风马简介（1）</td>
+			</tr>
+			<tr>
+				<td>11</td>
+				<td>布局专题：中炮过河车对屏风马简介（2）</td>
+			</tr>
+			<tr>
+				<td>12</td>
+				<td>布局专题：中炮过河车对屏风马简介（3）</td>
+			</tr>
+			<tr>
+				<td>13</td>
+				<td>名家中局实战技巧（1）</td>
+			</tr>
+			<tr>
+				<td>14</td>
+				<td>名家中局实战技巧（2）</td>
+			</tr>
+			<tr>
+				<td>15</td>
+				<td>布局常见骗招与对策</td>
+			</tr>
+		</table>
+		<span>具体课程可能会根据实际教学进度微调，以实际教学为准。</span>
+		<br />
+
+		<span>具体班次:</span>
+		<table style="	text-indent:1em;" border="1px">
+			<tr>
+				<td style="text-indent:0em;">序号</td>
+				<td style="text-indent:1em;">时间</td>
+				<td style="text-indent:1em;">地点</td>
+				<td style="text-align:center;">授课老师</td>
+			</tr>
+			<tr>
+				<td>1</td>
+				<td>每周六8:00-10:00</td>
+				<td>银网大厦教学点1教室</td>
+				<td>任刚</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td>每周日8:00-10:00</td>
+				<td>银网大厦教学点1教室</td>
+				<td>杨晛</td>
+			</tr>
+		</table>
+		<span>其他时间可攒班，10人开课。</span>
+		<br /><br />
+
+		<span class="normalIndent"><span class="bold">课程费用：</span>15次课，每次300元</span>
+		<br /><br />
+
+		<span class="normalIndent bold">开业优惠：</span>
+		<span class="normalIndent">前3次免费体验，300元×12次=3600元</span><br />
+		<span class="normalIndent">两人同报折上8折：2880元</span><br />
+		<span class="normalIndent">三人以上同报折上7折：2520元</span>
+		<br /><br />
+
+		<span class="bold" >分享到微信朋友圈集齐20个赞并在报名时出示，再减100元！</span>
+		<br /><br />
+
+		<span class="redAndBold">问与答</span><br />
+		<span>Q：什么时间，在哪可以报名？</span><br />
+		<span>
+			A：家长可以先加入智益加的咨询微信群或者QQ群（见下图），并且用微信预报名，在2月1日之后家长可以选择到我们的教室交费报名，或者联系我们并使用支付宝进行报名。
+		</span>
+		<br /><br />
+
+		<span>Q：家长是否可以旁听？</span><br />
+		<span>A：我们非常欢迎家长一起旁听课程。</span>
+		<br /><br />
+
+		<span>Q：学生学完一学期，还有兴趣，想要继续学习，提高段位和参加竞赛怎么办？</span><br />
+		<span>A：智益加极具能力的教学团队将会给在智力运动方面有兴趣的学生提供广阔的发展空间。我们将会在之后学期开设进阶课程，非常欢迎有兴趣的学生继续学习，老生还会享受更多优惠哦！</span>
+		<br /><br />
+
+		<span class="bold">任何问题，报名信息请咨询：</span><br />
+		<span>杨老师 </span><br />
+		<span>刘老师 </span>
+		<br /><br />
+
+		<span class="bold">咨询微信群（2月3日之前有效）：</span><br />
+		<img class='' style="width:185px;height:185px;" src="/static/img/xiangqi/xiangqi8.png" alt="象棋">
+		<br /><br />
+
+		<span class="bold">咨询QQ群（群号515440943）：</span><br />
+		<img class='' style="width:185px;height:185px;" src="/static/img/xiangqi/xiangqi9.png" alt="象棋">
+		<br /><br />
+
+		<span>联系地址（2月1日起欢迎来访）：海淀区知春路银网中心B座6层（地铁四号线海淀黄庄站东200米路北）</span>
+		<br /><br />
+
+		<span class="redAndBold">快来智益加学习一项智力运动吧！</span>
+
+	</div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}
