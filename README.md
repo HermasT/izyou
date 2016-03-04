@@ -9,8 +9,8 @@ $ pip intall flask-login==0.2.11
 
 ###create database izyou via psql client
 
-###install python connector pyscopg2
-$ pip install pyscopg2
+###install python connector for mysql (/etc/my.cnf)
+$ pip install mysql-python
 
 ###create tables and initial data for database izyou
 $ python db_setup.py
