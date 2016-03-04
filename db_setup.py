@@ -12,13 +12,13 @@ if __name__ == '__main__':
 	db.create_all()
 
 	# 默认用户初始化
-	# u = Users(username="hermas", email='hermasTang@hotmail.com', 
-	# 	phone='13636539441', password='123456', name='汤时虎', type=UserType.staff)
-	# db.session.add(u)
-	# u = Users(username="test", email='test@qq.com', 
-	# 	phone='18612345678', password='123456', name='测试账号', type=UserType.registered)
-	# db.session.add(u)
-	# db.session.commit()
+	u = Users(username="hermas", email='hermasTang@hotmail.com', 
+	 	phone='13636539441', password='123456', name='汤时虎', type=UserType.staff)
+	db.session.add(u)
+	u = Users(username="test", email='test@qq.com', 
+		phone='18612345678', password='123456', name='测试账号', type=UserType.registered)
+	db.session.add(u)
+	db.session.commit()
 
 
 	# 添加学生 一个学生是一个用户的同时，包含特定的学生信息（以下2个语句必须在事务中执行）
