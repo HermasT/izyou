@@ -103,13 +103,13 @@ def sudoku_detail():
 		return render_template('sudoku_detail.html', user=None)	
 
 # 象棋介绍
-@app.route('/chineseCheese_detail', methods = ['GET'])
-def chineseCheese_detail():
+@app.route('/xiangqi_detail', methods = ['GET'])
+def xiangqi_detail():
 	try:
 		username = current_user.username
-		return render_template('chineseCheese_detail.html', user=username)
+		return render_template('xiangqi_detail.html', user=username)
 	except:
-		return render_template('chineseCheese_detail.html', user=None)		
+		return render_template('xiangqi_detail.html', user=None)		
 
 # 我要报名
 @app.route('/course_register', methods = ['GET', 'POST'])
