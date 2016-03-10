@@ -25,7 +25,7 @@ class UserType(Enum):
     normal = 0
     registered = 1
     student = 2
-    fanculty = 3
+    faculty = 3
     staff = 4
     admin = 65535
 
@@ -35,9 +35,9 @@ class GameType(Enum):
     bridge = 1
     sudoku = 2
     go = 3
-    chess = 4
-    cchess = 5
-    miexed = 6
+    xiangqi = 4
+    chess = 5
+    mixed = 6
     count = 7
 
     @staticmethod
@@ -45,7 +45,8 @@ class GameType(Enum):
         return [
             {'type':1, 'name': '桥牌'},
             {'type':2, 'name': '数独'},
-            {'type':3, 'name': '围棋'}
+            {'type':3, 'name': '围棋'},
+            {'type':4, 'name': '象棋'}
         ]
 
     @staticmethod
@@ -57,7 +58,7 @@ class GameType(Enum):
         elif type == 3:
             return '围棋'
         elif type == 4:
-            return '中国象棋'
+            return '象棋'
         elif type == 5:
             return '国际象棋'
         elif type == 6:
