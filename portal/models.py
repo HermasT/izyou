@@ -193,6 +193,7 @@ class Users(db.Model):
     phone = db.Column(String(16), nullable=False) # 手机号
     email = db.Column(String(64), nullable=False) # 邮箱（后期可选）
     name = db.Column(String(32), nullable=True) # 姓名
+    active = db.Column(Boolean, default=False, nullable=False) # 是否激活, false：未激活， true：激活； 未激活状态无法登录
     type = db.Column(Integer, default=UserType.normal) # 用户类别
 
     def __init__(self, username, password, phone, email, name, type=UserType.normal):
@@ -201,16 +202,17 @@ class Users(db.Model):
         self.phone = phone
         self.email = email
         self.name = name
+        self.active = False
         self.type = type;
         
     def __repr__(self):
-        return "<User 'uid={:d}-{:s}-{:s}-{:s}-{:s}''>".format(self.uid, self.username, self.email, self.password, self.phone)
+        return "<User 'uid={:d}-{:s}-{:s}-{:s}-{:s}-{:b}''>".format(self.uid, self.username, self.email, self.password, self.phone, self.active)
 
     def is_authenticated(self):
         return True
 
     def is_active(self):
-        return True
+        return self.active
 
     def is_anonymous(self):
         return False
@@ -220,6 +222,12 @@ class Users(db.Model):
 
     def is_privileged(self, level):
         return self.type >= level
+
+    # 激活用户
+    def do_active(self):
+        self.active = True
+        db.session.add(self)
+        db.session.commit()
 
     @staticmethod
     def get_crypto_password(password):
