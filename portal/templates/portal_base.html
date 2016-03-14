@@ -7,7 +7,7 @@
         <meta http-equiv="Content-Language" content="zh-cn"/>
         <Meta http-equiv="Content-Script-Type" Content="text/javascript">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <meta name="keywords" content="智力运动 智力游戏 文化传播 桥牌 围棋 数独 教育培训">
+        <meta name="keywords" content="智力运动 智力游戏 文化传播 桥牌 围棋 数独 象棋 教育培训">
 
         {%- block head %}
         <title>{% block title %}{% endblock title %}</title>
@@ -17,7 +17,7 @@
 
         {%- block styles %}
         <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="shortcut icon" href="{{url_for('static', filename='favicon.ico')}}">
         {%- endblock styles %}
         {%- endblock head %}
     </head>
@@ -30,64 +30,54 @@
 
         {% block body -%}
         {% block navbar %}
-        <div class='container'>
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand navbar-logo" href="#">智益加</a>
-                    </div>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+            <div class="navbar-header">
+                <img class="navbar-logo" alt="智益加" src="/static/img/logo.png">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#navbar-collapse-login" aria-expanded="true">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
 
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav">
-                            {% if index == 1 %}
-                            <li class='active'><a class='title-navbar' href="/index">首页</a></li>
-                            {% else %}
-                            <li><a class='title-navbar' href="/index">首页</a></li>
-                            {% endif %}
-                            {% if index == 2 %}
-                            <li class='active'><a class='title-navbar' href="/about">关于我们</a></li>
-                            {% else %}
-                            <li><a class='title-navbar' href="/about">关于我们</a></li>
-                            {% endif %}
-                            {% if index == 3 %}
-                            <li class='active'><a class='title-navbar' href="/fanculty">师资介绍</a></li>
-                            {% else %}
-                            <li><a class='title-navbar' href="/fanculty">师资介绍</a></li>
-                            {% endif %}
-                            {% if user %}
-                                {% if index == 5 %}
-                                <li class='active'><a class='title-navbar' href="/course_register">我要报名</a></li>
-                                {% else %}
-                                <li><a class='title-navbar' href="/course_register">我要报名</a></li>
-                                {% endif %}
-                            {% endif %}
-                            {% if index == 4 %}
-                            <li class='active'><a class='title-navbar' href="/contact">联系我们</a></li>
-                            {% else %}
-                            <li><a class='title-navbar' href="/contact">联系我们</a></li>
-                            {% endif %}
-                        </ul>
-                        <!--<ul class="nav navbar-nav navbar-right" align='center'>
-                            {% if user %}
-                            <li><a class='welcome' href="/user_info?username={{user}}">欢迎{{user}}</a></li>
-                            <li><button id='title_btn_logout' class='btn btn-default navbar-button'>注销</button></li>
-                            {% else %}
-                            <li><button id='title_btn_login' class='btn btn-default navbar-button'>登录</button></li>
-                            <li><button id='title_btn_register' class='btn btn-default navbar-button'>注册</button></li>
-                            {% endif %}
-                        </ul>-->
-                    </div>
-                </div>
-            </nav>
+            <div class="collapse navbar-collapse" id="navbar-collapse-login">
+                <ul class="nav navbar-nav navbar-right" align='center'>
+                    {% if user %}
+                    <li><a class='welcome' href="/user_info?username={{user}}">欢迎{{user}}</a></li>
+                    <li><button id='title_btn_logout' class='btn btn-default navbar-button'>注销</button></li>
+                    {% else %}
+                    <li><button id='title_btn_login' class='btn btn-default navbar-button'>登录</button></li>
+                    <li><button id='title_btn_register' class='btn btn-default navbar-button'>注册</button></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
+        </nav>
         {%- endblock navbar %}
         {% block content -%}
         {%- endblock content %}
 
-        <div class='container'>
-            <br/><br/><hr/>
-            <div class='bottom'>Copyright©智益加（北京）教育科技有限公司 京ICP备16009294</div>
+        <div style="background-color:#414b4f;color:#fff">
+            <!-- <br/>
+            <div class="col-sm-3 col-md-3 col-lg-4">
+                <span>QQ: 智益加智力运动（群号515440943）</span>
+            </div>
+            <div class="col-sm-3 col-md-4">
+                <span>微信公众号: 智益加智力运动</span>
+            </div>
+            <div class="col-sm-3 col-md-4">
+                <span>电话：010-82518790</span>
+            </div>
+            <br/>
+            <hr style="height:1px;border-top:1px solid #666;" /> -->
+            <br/>
+            <div class='bottom'>Copyright@智益加（北京）教育科技有限公司</div>
+            <br/>
         </div>
+
         {% block scripts %}
         <script src="/static/js/custom_common.js"></script>
         {%- endblock scripts %}
