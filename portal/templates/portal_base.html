@@ -31,30 +31,30 @@
         {% block body -%}
         {% block navbar %}
         <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container-fluid">
-            <div class="navbar-header">
-                <img class="navbar-logo" alt="智益加" src="/static/img/logo.png">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#navbar-collapse-login" aria-expanded="true">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-            </div>
+            <div class="container-fluid content-body">
+                <div class="navbar-header">
+                    <img class="navbar-logo" alt="智益加" src="/static/img/logo.png">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#navbar-collapse-login" aria-expanded="true">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                </div>
 
-            <div class="collapse navbar-collapse" id="navbar-collapse-login">
-                <ul class="nav navbar-nav navbar-right" align='center'>
-                    {% if user %}
-                    <li><a class='welcome' href="/user_info?username={{user}}">欢迎{{user}}</a></li>
-                    <li><button id='title_btn_logout' class='btn btn-default navbar-button'>注销</button></li>
-                    {% else %}
-                    <li><button id='title_btn_login' class='btn btn-default navbar-button'>登录</button></li>
-                    <li><button id='title_btn_register' class='btn btn-default navbar-button'>注册</button></li>
-                    {% endif %}
-                </ul>
+                <div class="collapse navbar-collapse" id="navbar-collapse-login">
+                    <ul class="nav navbar-nav navbar-right" align='center'>
+                        {% if user %}
+                        <li><a class='welcome' href="/user_info?username={{user}}">欢迎{{user}}</a></li>
+                        <li><button id='title_btn_logout' class='btn btn-default navbar-button'>注销</button></li>
+                        {% else %}
+                        <li><button id='title_btn_login' class='btn btn-default navbar-button'>登录</button></li>
+                        <li><button id='title_btn_register' class='btn btn-default navbar-button'>注册</button></li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
-        </div>
         </nav>
         {%- endblock navbar %}
         {% block content -%}
@@ -74,7 +74,7 @@
             <br/>
             <hr style="height:1px;border-top:1px solid #666;" /> -->
             <br/>
-            <div class='bottom'>Copyright@智益加（北京）教育科技有限公司</div>
+            <div class='copyright'>Copyright@智益加（北京）教育科技有限公司</div>
             <br/>
         </div>
 

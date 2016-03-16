@@ -43,6 +43,20 @@ body {
 	width: 100%;
 }
 
+.fullscreen {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    clear: both;
+    margin:auto;
+}
+
+.content-body {
+	max-width: 1200px;
+	clear: both;
+	margin: auto;
+}
+
 .title-navbar {
 	width: 96px;
 	display: block;
@@ -64,7 +78,8 @@ body {
 	margin: 8px;
 }
 
-.bottom {
+.copyright {
+	font-size: 10px;
 	color: #fff;
 	text-align: center;
 	z-index: 999;

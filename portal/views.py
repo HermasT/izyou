@@ -127,7 +127,16 @@ def xiangqi_detail():
 		username = current_user.username
 		return render_template('xiangqi_detail.html', user=username)
 	except:
-		return render_template('xiangqi_detail.html', user=None)		
+		return render_template('xiangqi_detail.html', user=None)
+
+# 所有课程
+@app.route('/all_courses', methods = ['GET'])
+def all_courses():
+	try:
+		username = current_user.username
+		return render_template('courses.html', user=username)
+	except:
+		return render_template('courses.html', user=None)
 
 # 我要报名
 @app.route('/course_register', methods = ['GET', 'POST'])
@@ -192,10 +201,6 @@ def contact():
 		return render_template('contact.html', index=4, user=None)
 
 
-
-
-
-# 后台管理
 @app.route('/admin', methods=['GET', 'POST'])
 @login_required
 def admin():
