@@ -132,11 +132,22 @@ def xiangqi_detail():
 # 所有课程
 @app.route('/all_courses', methods = ['GET'])
 def all_courses():
+	gtype = request.args.get("type", GameType.bridge)
+	template = 'bridge_course.html'
+	if int(gtype) == GameType.bridge:
+		template = 'bridge_course.html'
+	elif int(gtype) == GameType.sudoku:
+		template = 'sudoku_course.html'
+	elif int(gtype) == GameType.go:
+		template = 'go_course.html'
+	elif int(gtype) == GameType.xiangqi:
+		template = 'xiangqi_course.html'
+
 	try:
 		username = current_user.username
-		return render_template('courses.html', user=username)
+		return render_template(template, user=username)
 	except:
-		return render_template('courses.html', user=None)
+		return render_template(template, user=None)
 
 # 我要报名
 @app.route('/course_register', methods = ['GET', 'POST'])
@@ -187,9 +198,9 @@ def about():
 def fanculty():
 	try:
 		username = current_user.username
-		return render_template('fanculty.html', index=3, user=username)
+		return render_template('faculty.html', index=3, user=username)
 	except:
-		return render_template('fanculty.html', index=3, user=None)
+		return render_template('faculty.html', index=3, user=None)
 
 # 联系我们
 @app.route('/contact', methods=['GET', 'POST'])

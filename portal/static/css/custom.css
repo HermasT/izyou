@@ -144,3 +144,131 @@ body {
 	margin-left: 20px;
 	font-weight: bold;
 }
+
+.td-title {
+	text-align:center;
+}
+.table-caption {
+	background-color:#f39800;
+	color:#fff;
+	text-align:center;
+}
+.table-footmark {
+	padding-top: -15px;
+	margin-top: -15px;
+}
+
+/* iphone 4S/5S */
+@media (max-width: 374px) {
+  	.page_title {
+	  	padding-top: 30px;
+	  	color: #00a0e9;
+	  	font-size: 18px;
+	}
+	.summary-detail {
+		font-size: 11px;
+	}
+  	.table-content {
+  		font-size: 8px;
+  	}
+  	.td-content {
+		text-indent:0em;
+	}
+	.table-caption {
+		font-size: 12px;
+	}
+	.btn-register {
+		width: 100%;
+		height: 40px;
+	}
+	.td-targets {
+		margin-left:-40px;
+	}
+}
+/* iphone 6S/6S+ */
+@media (min-width: 375px) and (max-width: 767px) {
+  	.page_title {
+	  	padding-top: 30px;
+	  	color: #00a0e9;
+	  	font-size: 18px;
+	}
+  	.table-content {
+  		font-size: 10px;
+  	}
+  	.td-content {
+		text-indent:0em;
+	}
+	.table-caption {
+		font-size: 16px;
+	}
+	.btn-register {
+		width: 100%;
+		height: 40px;
+	}
+	.td-targets {
+		margin-left:-40px;
+	}
+}
+/* ipad portait & pc */
+@media (min-width: 768px) and (max-width: 991px) {
+  	.page_title {
+	  	padding-top: 30px;
+	  	color: #00a0e9;
+	  	font-size: 20px;
+	}
+  	.table-content {
+  		font-size: 16px;
+  	}
+  	.td-content {
+		text-indent:2em;
+	}
+	.table-caption {
+		font-size: 18px;
+	}
+	.btn-register {
+		width: 240px;
+		height: 40px;
+	}
+}
+/* ipad & pc */
+@media (min-width: 992px) and (max-width: 1199px) {
+  	.page_title {
+	  	padding-top: 30px;
+	  	color: #00a0e9;
+	  	font-size: 20px;
+	}
+  	.table-content {
+  		font-size: 16px;
+  	}
+  	.td-content {
+		text-indent:2em;
+	}
+	.table-caption {
+		font-size: 18px;
+	}
+	.btn-register {
+		width: 240px;
+		height: 40px;
+	}
+}
+@media (min-width: 1200px) {
+	.page_title {
+		padding-top: 60px;
+		color: #00a0e9;
+		font-size: 24px;
+	}
+	.table-content {
+		font-size: 18px;
+	}
+	.td-content {
+		text-indent:2em;
+		margin-left:2em;
+	}
+	.table-caption {
+		font-size: 20px;
+	}
+	.btn-register {
+		width: 240px;
+		height: 50px;
+	}
+}
