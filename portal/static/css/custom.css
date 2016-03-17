@@ -160,10 +160,11 @@ body {
 
 /* iphone 4S/5S */
 @media (max-width: 374px) {
-  	.page_title {
-	  	padding-top: 30px;
+  	.page-title {
+	  	padding-top: 20px;
+	  	padding-bottom: 10px;
 	  	color: #00a0e9;
-	  	font-size: 18px;
+	  	font-size: 16px;
 	}
 	.summary-detail {
 		font-size: 11px;
@@ -187,8 +188,9 @@ body {
 }
 /* iphone 6S/6S+ */
 @media (min-width: 375px) and (max-width: 767px) {
-  	.page_title {
+  	.page-title {
 	  	padding-top: 30px;
+	  	padding-bottom: 10px;
 	  	color: #00a0e9;
 	  	font-size: 18px;
 	}
@@ -211,7 +213,7 @@ body {
 }
 /* ipad portait & pc */
 @media (min-width: 768px) and (max-width: 991px) {
-  	.page_title {
+  	.page-title {
 	  	padding-top: 30px;
 	  	color: #00a0e9;
 	  	font-size: 20px;
@@ -232,7 +234,7 @@ body {
 }
 /* ipad & pc */
 @media (min-width: 992px) and (max-width: 1199px) {
-  	.page_title {
+  	.page-title {
 	  	padding-top: 30px;
 	  	color: #00a0e9;
 	  	font-size: 20px;
@@ -252,10 +254,13 @@ body {
 	}
 }
 @media (min-width: 1200px) {
-	.page_title {
+	.page-title {
 		padding-top: 60px;
 		color: #00a0e9;
-		font-size: 24px;
+		font-size: 30px;
+	}
+	.page-content {
+
 	}
 	.table-content {
 		font-size: 18px;
