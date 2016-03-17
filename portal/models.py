@@ -1,5 +1,5 @@
 # coding: utf-8
-import json, hashlib, enum, time
+import sys, os, json, hashlib, enum, time, binascii
 import sqlalchemy.sql as sasql
 from sqlalchemy import exc, event, create_engine, schema, Column, ForeignKey, select, func
 from sqlalchemy.pool import QueuePool, Pool
@@ -194,19 +194,21 @@ class Users(db.Model):
     email = db.Column(String(64), nullable=False) # 邮箱（后期可选）
     name = db.Column(String(32), nullable=True) # 姓名
     active = db.Column(Boolean, default=False, nullable=False) # 是否激活, false：未激活， true：激活； 未激活状态无法登录
+    salt = db.Column(String(64), nullable=False) # 安全登录
     type = db.Column(Integer, default=UserType.normal) # 用户类别
 
     def __init__(self, username, password, phone, email, name, type=UserType.normal):
         self.username = username
-        self.password= Users.get_crypto_password(password)
+        self.salt = binascii.hexlify(os.urandom(16))
+        self.password = Users.get_crypto_password(password, self.salt)
         self.phone = phone
         self.email = email
         self.name = name
         self.active = False
-        self.type = type;
+        self.type = type
         
     def __repr__(self):
-        return "<User 'uid={:d}-{:s}-{:s}-{:s}-{:s}-{:b}''>".format(self.uid, self.username, self.email, self.password, self.phone, self.active)
+        return "<User 'uid={:d}-{:s}-{:s}-{:s}-{:s}-{:b}''>".format(self.uid, self.username, self.salt, self.password, self.phone, self.active)
 
     def is_authenticated(self):
         return True
@@ -229,9 +231,12 @@ class Users(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def get_crypto_password(self):
+        return hashlib.md5(self.password + u.salt).hexdigest()
+
     @staticmethod
-    def get_crypto_password(password):
-        return hashlib.md5(password).hexdigest()
+    def get_crypto_password(password, salt):
+        return hashlib.md5(password + salt).hexdigest()
 
 # 学生
 class Student(db.Model):

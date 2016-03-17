@@ -23,7 +23,6 @@ def qr():
 # 测试页面
 @app.route('/test')
 def test():
-
 	message = MailUtil.buildMessage('test subject', sender=config.MAIL_USERNAME, recipients=['ssc8447467@126.com'], body='test body')
 	mailthread = MailUtil(message)
 	mailthread.start()
@@ -32,9 +31,7 @@ def test():
 # 用户激活
 @app.route('/user_active')
 def user_active():
-	# 激活用户
 	uid = request.args.get("uid")
-	
 	user = Users.query.filter(Users.uid == uid).first()
 
 	if not user:
@@ -43,7 +40,6 @@ def user_active():
 	else:
 		user.do_active();
 
-	#print 'user', user
 	return render_template('index.html', index=1, user=user.username)
 
 # 异常
@@ -415,12 +411,9 @@ def api_login():
     password = request.args.get("password")
 
     u = Users.query.filter_by(username=username).first()
-
-    print 'u', u
-
     if not u:
         return jsonify({'error':1, 'cause':'用户名不存在'})
-    elif u.password != Users.get_crypto_password(password):
+    elif u.password != u.get_crypto_password():
         return jsonify({'error':2, 'cause':'密码不正确'})
     elif u.active != True:
     	return jsonify({'error':3, 'cause':'用户未激活'})
