@@ -30,7 +30,8 @@ def test():
 	# message = MailUtil.buildMessage('test subject', sender=config.MAIL_USERNAME, recipients=['ssc8447467@126.com'], body='test body')
 	# mailthread = MailUtil(message)
 	# mailthread.start()
-	return render_template('test.html')
+	# return render_template('test.html')
+	return render_template('dynamic_title.html')
 
 # 用户激活
 @app.route('/user_active')
