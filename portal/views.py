@@ -10,6 +10,7 @@ from flask.ext.login import LoginManager, login_user, logout_user, current_user,
 from portal import app, db, lm, mail
 from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus, PayType, Orders, OrdersList
 from mail import MailUtil
+from sms import SmsUtil
 import qrcode
 import StringIO
 
@@ -23,9 +24,12 @@ def qr():
 # 测试页面
 @app.route('/test')
 def test():
-	message = MailUtil.buildMessage('test subject', sender=config.MAIL_USERNAME, recipients=['ssc8447467@126.com'], body='test body')
-	mailthread = MailUtil(message)
-	mailthread.start()
+	# SmsUtil.requestCode('18516595221')
+	# SmsUtil.verifyCode('18516595221', '916838')
+
+	# message = MailUtil.buildMessage('test subject', sender=config.MAIL_USERNAME, recipients=['ssc8447467@126.com'], body='test body')
+	# mailthread = MailUtil(message)
+	# mailthread.start()
 	return render_template('test.html')
 
 # 用户激活
