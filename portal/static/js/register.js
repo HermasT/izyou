@@ -41,6 +41,14 @@ function is_valid_email(email) {
 }
 
 $(document).ready(function() {
+	$("#cb_terms").change(function(){
+		if ($("#cb_terms").is(":checked")) {
+			$("#btn_register").removeClass('disabled');
+		} else {
+			$("#btn_register").addClass('disabled');
+		}
+	});
+
 	$("#btn_register").bind("click", function() {
 		var username = document.getElementById("iusername");
 	    var password = document.getElementById("ipassword");
