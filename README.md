@@ -1,4 +1,4 @@
-izyou project
+izyo pro
 ===============
 
 ###dependcies
@@ -20,17 +20,17 @@ $ python db_setup.py
 ## debug deploy
 $ python main.py
 
-#### release deploy, with nginx + uwsgi
-$ sudo vi nginx/conf
-    
+### release deploy, with nginx + uwsgi
+$ sudo vi /etc/nginx/nginx.conf
+### add server config, notice the address difference:    
     server {
-        listen       8000;
-        
+        listen       80;
+        server_name zhiyijia.cn www.zhiyijia.cn zhyjia.com www.zhyjia.com;
 	location / {
             include uwsgi_params;
-            uwsgi_pass  127.0.0.1:5000;
+            uwsgi_pass  127.0.0.1:8080;
         }
    }
+### uwsgi_pass needs to be same as the nohup uwsgi socket and the port in main.py
 
-##### nohup uwsgi --socket 127.0.0.1:5000 --wsgi-file main.py --callable app --processes 4 -H mentalgames &
-
+$ nohup uwsgi --socket 127.0.0.1:8080 --wsgi-file main.py --callable app --processes 4 -H mentalgames &
