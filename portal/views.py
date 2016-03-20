@@ -84,6 +84,11 @@ def logout():
 def register():
     return render_template('register.html')
 
+# 重置密码
+@app.route('/reset_password', methods=['GET'])
+def reset_password():
+	return render_template('reset_password.html')
+
 # 首页
 @app.route('/', methods=("GET", "POST"))
 @app.route('/index', methods = ['GET', 'POST'])
@@ -424,6 +429,23 @@ def api_login():
         return jsonify({'error':3, 'cause':'密码不正确'})
     else:
     	login_user(u, remember=True)
+        return jsonify({'error':0, 'next': request.args.get('next')})
+
+@app.route('/rest/reset_password', methods=['GET'])
+def api_reset_password():
+    username = request.args.get("username")
+    password = request.args.get("password")
+    password = request.args.get("password")
+
+    u = Users.query.filter_by(username=username).first()
+    if not u:
+        return jsonify({'error':1, 'cause':'用户名不存在'})
+    elif u.active != True:
+        return jsonify({'error':2, 'cause':'用户未激活'})
+    elif u.password != Users.get_crypto_password(password, u.salt):
+        return jsonify({'error':3, 'cause':'密码不正确'})
+    else:
+        login_user(u, remember=True)
         return jsonify({'error':0, 'next': request.args.get('next')})
 
 @app.route('/after_login', methods=['GET'])

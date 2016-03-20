@@ -1,5 +1,48 @@
+// 空值
 function empty_input(value) {
 	return (value == null || value == "");
+}
+
+// 合法的用户名  数字、字母、下划线组成的6-30位字符串
+function is_valid_username(username) {
+    var pattern = /^(\w){6,30}$/;
+    if (pattern.test(username)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// 合法的密码  数字、字母、下划线组成的6-18位字符串
+function is_valid_password(password) {
+    var pattern=/^(\w){6,18}$/;
+    if (pattern.test(password)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// 合法的手机号（弱校验） 1xxbbbbcccc
+function is_valid_phone(phone) {
+    var pattern = /^1\d{10}$/;
+    console.log(phone);
+    console.log(pattern.test(phone));
+    if (pattern.test(phone)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// 合法的邮箱地址  xxx@yyy.zzz
+function is_valid_email(email) {
+    var pattern=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    if (pattern.test(email)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 (function ($) {

@@ -1,0 +1,52 @@
+{% block doc -%}
+<!DOCTYPE html>
+<html lang='zh-CN'>
+{%- block html %}
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Language" content="zh-cn"/>
+        <Meta http-equiv="Content-Script-Type" Content="text/javascript">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="keywords" content="智益加 智力运动 智力游戏 文化传播 桥牌 围棋 数独 象棋 教育培训">
+
+        {%- block head %}
+        <title>{% block title %}{% endblock title %}</title>
+
+        {%- block metas %}
+        {%- endblock metas %}
+
+        {%- block styles %}
+        <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+        <link rel="shortcut icon" href="{{url_for('static', filename='favicon.ico')}}">
+        {%- endblock styles %}
+        {%- endblock head %}
+    </head>
+
+    <body{% block body_attribs %}{% endblock body_attribs %}>
+        <script src="/static/jquery.min.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        <script src="/static/js/custom_common.js"></script>
+        <link href="/static/css/custom.css" rel="stylesheet">
+
+        {% block body -%}
+        {% block navbar %}
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid content-body">
+                <div class="navbar-header">
+                    <a href='/index'><img class="navbar-logo" alt="智益加" src="/static/img/logo.png"></a>
+                </div>
+            </div>
+        </nav>
+        {%- endblock navbar %}
+        {% block content -%}
+        {%- endblock content %}
+
+        {% block scripts %}
+        <script src="/static/js/custom_common.js"></script>
+        {%- endblock scripts %}
+        {%- endblock body %}
+    </body>
+{%- endblock html %}
+</html>
+{% endblock doc -%}

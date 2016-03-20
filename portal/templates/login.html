@@ -1,33 +1,35 @@
-<!DOCTYPE html>
-<html lang='zh-CN'>
-  <head>
-    <title>用户登录</title>
+{% extends "account_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+{% block title %}智益加 - 用户登录{% endblock %}
 
-    <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
-    <link href="/static/css/login.css" rel="stylesheet">
-  </head>
+{% block content %}
+<link href="/static/css/login.css" rel="stylesheet">
 
-  <body>
-    <div class='container'>
-      <div class='sign-form'>
-        {% include 'flash.html' %}
-        <h4 class='sign-form-heading' align='center'>用户登录</h4>
-        <hr class='sign-padding'/>
-        <input id='iusername' type='text' class='form-control' placeholder='请输入您的用户名' required/>
-        <input id='ipassword' type='password' class='form-control' placeholder='请输入您的密码' required/>
-        <input id='inext' type='hidden' class='form-control' value="{{next}}"/>
-        <div>
-          <button id='blogin' type='submit' class='btn btn-primary login-button'>登录</button>
-          <button id='bregister' type='submit' class='btn btn-default login-button'>注册</button>
-          <span align='right'><a id='forget_password' class='sign-reset' href='/reset_password'>忘记密码</a></span>
-      </div>
-    </div>
+<div class='container'>
+  <div class='sign-form'>
+    {% include 'flash.html' %}
+    <h4 class='sign-form-heading' align='center'>用户登录</h4>
+    <hr class='sign-padding'/>
+    <input id='iusername' type='text' class='form-control' placeholder='请输入您的用户名' required/>
+    <input id='ipassword' type='password' class='form-control' placeholder='请输入您的密码' required/>
+    <input id='inext' type='hidden' class='form-control' value="{{next}}"/>
+    <div>
+      <button id='blogin' type='submit' class='btn btn-primary login-button'>登录</button>
+      <button id='bregister' type='submit' class='btn btn-default login-button'>注册</button>
+      <span align='right'>
+        <a id='forget_password' class='sign-reset' href='/reset_password'>忘记密码?</a>
+      </span>
+  </div>
+</div>
+{% endblock %}
 
-    <script src="/static/jquery.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-    <script src="/static/js/custom_common.js"></script>
-    <script src="/static/js/login.js"></script>
-  </body>
-</html>
+{% block scripts %}
+<script src="/static/js/login.js"></script>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}
