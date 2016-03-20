@@ -231,9 +231,6 @@ class Users(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def get_crypto_password(self):
-        return hashlib.md5(self.password + u.salt).hexdigest()
-
     @staticmethod
     def get_crypto_password(password, salt):
         return hashlib.md5(password + salt).hexdigest()

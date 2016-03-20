@@ -418,10 +418,10 @@ def api_login():
     u = Users.query.filter_by(username=username).first()
     if not u:
         return jsonify({'error':1, 'cause':'用户名不存在'})
-    elif u.password != u.get_crypto_password():
-        return jsonify({'error':2, 'cause':'密码不正确'})
     elif u.active != True:
-    	return jsonify({'error':3, 'cause':'用户未激活'})
+        return jsonify({'error':2, 'cause':'用户未激活'})
+    elif u.password != Users.get_crypto_password(password, u.salt):
+        return jsonify({'error':3, 'cause':'密码不正确'})
     else:
     	login_user(u, remember=True)
         return jsonify({'error':0, 'next': request.args.get('next')})
