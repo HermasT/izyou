@@ -70,7 +70,7 @@ def before_request():
 def login():
     if g.user is not None and g.user.is_authenticated():
         return redirect(url_for('index'))
-    return render_template('login.html', next=request.args.get('next', ''))
+    return render_template('login.html', username=request.args.get('username'), next=request.args.get('next', ''))
 
 # 登出
 @app.route('/logout')
@@ -518,7 +518,7 @@ def api_verify_sms_code():
 	result_dict = json.loads(result)
 	if (result_dict['error'] == 0):
 		username = request.values.get("username")
-		user = Users.query.filter(Users.username == username).first()
+		user = Users.query.filter_by(username=username).first()
 		if not user:
 			return json.dumps({"error": 500, "cause": '当前用户不存在'})
 		else:

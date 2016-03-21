@@ -94,8 +94,7 @@
                 if (data["error"] > 0) {
                   $.MsgBox.Alert("验证失败", data["cause"]);
                 } else {
-                  window.location.href = "/login";
-                  // window.location.href = "/login?username=" + username;
+                  window.location.href = "/login?username=" + username;
                 }
               },
               error: function() {

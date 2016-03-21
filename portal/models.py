@@ -208,7 +208,7 @@ class Users(db.Model):
         self.type = type
         
     def __repr__(self):
-        return "<User 'uid={:d}-{:s}-{:s}-{:s}-{:s}-{:b}''>".format(self.uid, self.username, self.salt, self.password, self.phone, self.active)
+        return self.username
 
     def is_authenticated(self):
         return True
