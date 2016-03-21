@@ -84,10 +84,21 @@ def logout():
 def register():
     return render_template('register.html')
 
+# 账号激活（手机）
+@app.route('/active', methods=['GET'])
+def active():
+	user = request.args.get("user")
+	return render_template('user_active.html', user=user)
+
 # 重置密码
 @app.route('/reset_password', methods=['GET'])
 def reset_password():
 	return render_template('reset_password.html')
+
+# 使用协议
+@app.route('/terms', methods=['GET'])
+def terms():
+	return render_template('terms.html')
 
 # 首页
 @app.route('/', methods=("GET", "POST"))
@@ -156,7 +167,7 @@ def all_courses():
 		return render_template(template, user=None)
 
 # 我要报名
-@app.route('/course_register', methods = ['GET', 'POST'])
+@app.route('/course_register', methods = ['GET'])
 @login_required
 def course_register():
 	if current_user is not None and current_user.is_privileged(UserType.registered):
@@ -190,23 +201,23 @@ def course_register():
 		flash(u'请您登录')
 		return render_template('error.html')
 		
-# 关于
-@app.route('/about', methods=['GET', 'POST'])
-def about():
-	try:
-		username = current_user.username
-		return render_template('about.html', index=2, user=username)
-	except:
-		return render_template('about.html', index=2, user=None)
+# # 关于
+# @app.route('/about', methods=['GET'])
+# def about():
+# 	try:
+# 		username = current_user.username
+# 		return render_template('about.html', index=2, user=username)
+# 	except:
+# 		return render_template('about.html', index=2, user=None)
 
-# 师资
-@app.route('/fanculty', methods=['GET', 'POST'])
-def fanculty():
-	try:
-		username = current_user.username
-		return render_template('faculty.html', index=3, user=username)
-	except:
-		return render_template('faculty.html', index=3, user=None)
+# # 师资
+# @app.route('/faculty', methods=['GET', 'POST'])
+# def faculty():
+# 	try:
+# 		username = current_user.username
+# 		return render_template('faculty.html', index=3, user=username)
+# 	except:
+# 		return render_template('faculty.html', index=3, user=None)
 
 # 联系我们
 @app.route('/contact', methods=['GET', 'POST'])
@@ -461,10 +472,16 @@ def api_register():
     email = request.args.get("email")
     name = request.args.get("name")
 
-    #姓名， 手机号， 邮箱 3个字段做匹配判断
+    # 用户名、手机号、邮箱 3个字段做匹配判断
     u = Users.query.filter_by(username=username).first()
+    p = Users.query.filter_by(phone=phone).first()
+    # e = Users.query.filter_by(email=email).first()
     if u:
     	return jsonify({'error':3, 'cause':'用户名已存在'})
+    elif p:
+        return jsonify({'error':4, 'cause':'手机号已被注册'})
+    # elif e:
+    # 	return jsonify({'error':5, 'cause':'邮箱已被注册'})
     else:
 	    r = Users(username=username, password=password, phone=phone, email=email, name=name)
 	    try :
@@ -472,7 +489,27 @@ def api_register():
 		    db.session.commit()
 		    return jsonify({'error':0})
 	    except:
-		    return jsonify({'error':4, 'cause': '数据库操作失败'})
+		    return jsonify({'error':6, 'cause': '数据库操作失败'})
+
+@app.route('/rest/request_code', methods=['POST'])
+def api_request_sms_code():
+	phone = request.values.get("phone")
+	return SmsUtil.requestCode(phone)
+
+@app.route('/rest/verify_code', methods=['POST'])
+def api_verify_sms_code():
+	mobile = request.values.get("phone")
+	code = request.values.get("code")
+	result = SmsUtil.verifyCode(mobile, code)
+	result_dict = json.loads(result)
+	if (result_dict['error'] == 0):
+		username = request.values.get("username")
+		user = Users.query.filter(Users.username == username).first()
+		if not user:
+			return json.dumps({"error": 500, "cause": '当前用户不存在'})
+		else:
+			user.do_active();
+	return result
 
 @app.route('/rest/add_teacher', methods=['GET', 'POST'])
 def api_add_teacher():

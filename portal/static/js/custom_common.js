@@ -26,8 +26,6 @@ function is_valid_password(password) {
 // 合法的手机号（弱校验） 1xxbbbbcccc
 function is_valid_phone(phone) {
     var pattern = /^1\d{10}$/;
-    console.log(phone);
-    console.log(pattern.test(phone));
     if (pattern.test(phone)) {
         return true;
     } else {
@@ -39,6 +37,16 @@ function is_valid_phone(phone) {
 function is_valid_email(email) {
     var pattern=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     if (pattern.test(email)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// 合法的验证码  4位以上全是数字
+function is_valid_code(code) {
+    var pattern = /[0-9]{4}[0-9]*$/;
+    if (pattern.test(code)) {
         return true;
     } else {
         return false;

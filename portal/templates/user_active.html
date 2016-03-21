@@ -1,0 +1,119 @@
+{% extends "account_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}智益加 - 账号激活{% endblock %}
+
+{% block content %}
+<link href="/static/css/register.css" rel="stylesheet">
+<style type="text/css">
+  .hidden {
+    display: none;
+
+  }
+</style>
+<div class='container'>
+  <div class='register-form'>
+    <h4 class='register-form-heading' align='center'>账号激活</h4>
+    <hr class='register-padding'/>
+      <input id='iusername' type='text' class='form-control hidden' value="{{user}}" disabled/>
+      <div class="input-group">
+        <input id='iphone' type="text" class="form-control no-padding" placeholder="输入手机号">
+        <span class="input-group-btn">
+          <button id='btn_get_code' class="btn btn-primary padding-top" type="button">获取验证码</button>
+        </span>
+      </div>
+      <input id='iverify' type='text' class='form-control' placeholder='输入验证码' required/>
+
+      <hr class='register-padding'/>
+      <button id='btn_verify_code' type='submit' class='btn btn-primary register-button full'>提交验证</button>
+</div>
+
+<script src="/static/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/custom_common.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+
+      $("#btn_get_code").bind("click", function() {
+        var username = document.getElementById("iusername").value;
+        var phone = document.getElementById("iphone").value;
+        if (!is_valid_phone(phone)) {
+          $.MsgBox.Alert("非法输入", "手机号码不合法");
+          return;
+        }
+
+        $.ajax({
+          url:'/rest/request_code',
+            data: {"phone":phone},
+            type: 'post',
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+              if (data["error"] > 0) {
+                $.MsgBox.Alert("获取失败", data["cause"]);
+              }
+            },
+            error: function() {
+                $.MsgBox.Alert("获取失败", "请求失败，请稍候重试");
+            }
+        })
+
+        // 1分钟内只允许请求一次
+        var timeout = 60;
+        $("#btn_get_code").addClass('disabled');
+        var timer = setInterval(function() {
+          timeout--;
+          if (timeout <= 0) {
+            clearInterval(timer);
+            $("#btn_get_code").removeClass('disabled');
+            $("#btn_get_code").html('获取验证码');
+          } else {
+            $("#btn_get_code").html(timeout + '秒后重新发送');
+          }
+        }, 
+        1000);
+      });
+
+      $("#btn_verify_code").bind("click", function() {
+        var username = document.getElementById("iusername").value;
+        var phone = document.getElementById("iphone").value;
+        var code = document.getElementById("iverify").value;
+
+        if (!is_valid_phone(phone)) {
+          $.MsgBox.Alert("非法输入", "手机号码不合法");
+        } else if (!is_valid_code(code)) {
+          $.MsgBox.Alert("非法输入", "验证码是4位以上的数字");
+        } else {
+          $.ajax({
+            url:'/rest/verify_code',
+              data: {"username":username, "code":code, "phone":phone},
+              type: 'post',
+              cache: false,
+              dataType: 'json',
+              success: function(data) {
+                if (data["error"] > 0) {
+                  $.MsgBox.Alert("验证失败", data["cause"]);
+                } else {
+                  window.location.href = "/login";
+                  // window.location.href = "/login?username=" + username;
+                }
+              },
+              error: function() {
+                  $.MsgBox.Alert("验证失败", "请求失败，请稍候重试");
+              }
+          })
+        }
+      });
+    })
+</script>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

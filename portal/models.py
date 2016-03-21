@@ -190,9 +190,9 @@ class Users(db.Model):
     uid = db.Column(db.Integer, primary_key=True)
     username = db.Column(String(32), unique=True, nullable=False) # 用户名
     password = db.Column(String(32), nullable=False) # 密码密文
-    phone = db.Column(String(16), nullable=False) # 手机号
-    email = db.Column(String(64), nullable=False) # 邮箱（后期可选）
-    name = db.Column(String(32), nullable=True) # 姓名
+    phone = db.Column(String(16), unique=True, nullable=False) # 手机号
+    email = db.Column(String(64), nullable=True) # 邮箱（后期可选）
+    name = db.Column(String(32), nullable=False) # 姓名
     active = db.Column(Boolean, default=False, nullable=False) # 是否激活, false：未激活， true：激活； 未激活状态无法登录
     salt = db.Column(String(64), nullable=False) # 安全登录
     type = db.Column(Integer, default=UserType.normal) # 用户类别

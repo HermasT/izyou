@@ -79,7 +79,7 @@ $(document).ready(function() {
 			    	if (data["error"] > 0) {
 			    		$.MsgBox.Alert("注册失败", data["cause"]);
 			    	} else {
-			    		window.location.href = "/login";
+			    		window.location.href = "/active?user=" + username.value;
 			    	}
 			    },
 			    error: function() {
