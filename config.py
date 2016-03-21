@@ -18,12 +18,12 @@ SQLALCHEMY_DATABASE_URI = 'mysql://root@localhost/izyou'
 #WHOOSH_BASE = os.path.join(basedir, 'search.db')
 
 # mail server
-MAIL_SERVER = 'smtp.qq.com'
+MAIL_SERVER = 'smtp.mxhichina.com'
 MAIL_PORT = 25
-MAIL_USE_TLS = True
+MAIL_USE_TLS = False
 MAIL_USE_SSL = False
-MAIL_USERNAME = 'your-qq-account'
-MAIL_PASSWORD = 'your-qq-password'
+MAIL_USERNAME = 'contact@zhiyijia.cn'
+MAIL_PASSWORD = 'ZhiYJ262510~~'
 
 # sms rest api
 LC_APP_ID = '4ipytcknqxezwia4z6wj3e38h477ngevocrfc18apy1hmc5e'
@@ -33,7 +33,7 @@ LC_REQUEST_SMS_CODE_API = 'https://api.leancloud.cn/1.1/requestSmsCode'
 LC_VERIFY_SMS_CODE_API = 'https://api.leancloud.cn/1.1/verifySmsCode'
 
 # administrator
-#ADMINS = ['you@example.com']
+ADMINS = ['tangshihu@zhiyijia.cn']
 
 # pagination
 PAGE_ITEMS = 10

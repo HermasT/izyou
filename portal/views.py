@@ -27,7 +27,7 @@ def test():
 	# SmsUtil.requestCode('18516595221')
 	# SmsUtil.verifyCode('18516595221', '916838')
 
-	# message = MailUtil.buildMessage('test subject', sender=config.MAIL_USERNAME, recipients=['ssc8447467@126.com'], body='test body')
+	# message = MailUtil.buildMessage('test subject', sender=config.MAIL_USERNAME, recipients=['hermasTang@hotmail.com'], body='test body')
 	# mailthread = MailUtil(message)
 	# mailthread.start()
 	# return render_template('test.html')
