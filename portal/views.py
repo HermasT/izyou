@@ -86,8 +86,16 @@ def register():
 # 账号激活（手机）
 @app.route('/active', methods=['GET'])
 def active():
-	user = request.args.get("user")
-	return render_template('user_active.html', user=user)
+	username = request.args.get("user")
+	user = Users.query.filter(Users.username == username).first()
+	if not user:
+		flash(u'您访问的页面不存在')
+		return render_template('error.html')
+	elif user.active == True:
+		flash(u'您尝试激活的账号已处于激活状态')
+		return redirect(url_for('index'))
+	else:
+		return render_template('user_active.html', user=user)
 
 # 重置密码
 @app.route('/reset_password', methods=['GET'])
