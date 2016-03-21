@@ -38,7 +38,6 @@ def test():
 def user_active():
 	uid = request.args.get("uid")
 	user = Users.query.filter(Users.uid == uid).first()
-
 	if not user:
 		flash(u'您访问的页面不存在')
 		return render_template('error.html')
@@ -442,22 +441,29 @@ def api_login():
     	login_user(u, remember=True)
         return jsonify({'error':0, 'next': request.args.get('next')})
 
-@app.route('/rest/reset_password', methods=['GET'])
+@app.route('/rest/reset_password', methods=['POST'])
 def api_reset_password():
-    username = request.args.get("username")
-    password = request.args.get("password")
-    password = request.args.get("password")
+    username = request.values.get("username")
+    password = request.values.get("password")
+    phone = request.values.get("phone")
+    code = request.values.get("code")
 
     u = Users.query.filter_by(username=username).first()
     if not u:
         return jsonify({'error':1, 'cause':'用户名不存在'})
-    elif u.active != True:
-        return jsonify({'error':2, 'cause':'用户未激活'})
-    elif u.password != Users.get_crypto_password(password, u.salt):
-        return jsonify({'error':3, 'cause':'密码不正确'})
+    elif u.phone != phone:
+        return jsonify({'error':2, 'cause':'输入手机号与绑定手机号不一致'})
     else:
-        login_user(u, remember=True)
-        return jsonify({'error':0, 'next': request.args.get('next')})
+    	result = SmsUtil.verifyCode(phone, code)
+    	result_dict = json.loads(result)
+    	if (result_dict['error'] == 0):
+			try:
+				u.reset_password(password)
+				return jsonify({"error":0})
+			except:
+				return jsonify({"error": 500, "cause": '更新数据库操作失败'})
+    	else:
+    		return jsonify({"error":result_dict['error'], "cause":result_dict['cause']})
 
 @app.route('/after_login', methods=['GET'])
 def after_login():

@@ -231,6 +231,13 @@ class Users(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    # 重置密码
+    def reset_password(self, password):
+        self.salt = binascii.hexlify(os.urandom(16))
+        self.password = Users.get_crypto_password(password, self.salt)
+        db.session.add(self)
+        db.session.commit()
+
     @staticmethod
     def get_crypto_password(password, salt):
         return hashlib.md5(password + salt).hexdigest()

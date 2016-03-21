@@ -26,4 +26,5 @@ class SmsUtil():
             return json.dumps({"error": 0})
         else:
             fb = result.json()
+            # return json.dumps({"error": 0})
             return json.dumps({"error": result.status_code, "bizcode":fb['code'], "cause": fb['error']})
