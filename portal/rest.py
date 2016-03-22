@@ -58,14 +58,13 @@ def after_login():
 	next = request.args.get('next')
 	return redirect(next or url_for('index'))
 
-@app.route('/rest/register', methods=['GET'])
+@app.route('/rest/register', methods=['POST'])
 def api_register():
-    username = request.args.get("username")
-    password = request.args.get("password")
-    phone = request.args.get("phone")
-    email = request.args.get("email")
-    name = request.args.get("name")
-    print username
+    username = request.values.get("username")
+    password = request.values.get("password")
+    phone = request.values.get("phone")
+    email = request.values.get("email")
+    name = request.values.get("name")
 
     # 用户名、手机号、邮箱 3个字段做匹配判断
     u = Users.query.filter_by(username=username).first()

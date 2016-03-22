@@ -30,7 +30,7 @@ $(document).ready(function() {
 				url:'/rest/register',
 			    data: {"username" :username.value, "password": password.value, 
 			    	"phone": phone.value, "email": email.value, "name": name.value},
-			    type: 'get',
+			    type: 'post',
 			    cache: false,
 			    dataType: 'json',
 			    success: function(data) {

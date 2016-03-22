@@ -12,7 +12,7 @@ RECAPTCHA_PUBLIC_KEY = '6Lfol9cSAAAAADAkodaYl9wvQCwBMr3qGR_PPHcw'
 # connect string for rds mysql server
 SQLALCHEMY_DATABASE_URI = 'mysql://izyou:ZYJizyou@rdsvdk0918cl7z915n71.mysql.rds.aliyuncs.com/izyou'
 # connect string for local mysql server
-#SQLALCHEMY_DATABASE_URI = 'mysql://root@localhost/izyou'
+SQLALCHEMY_DATABASE_URI = 'mysql://root@localhost/izyou'
 
 #SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 #WHOOSH_BASE = os.path.join(basedir, 'search.db')
