@@ -33,4 +33,4 @@ $ sudo vi /etc/nginx/nginx.conf
    }
 ### uwsgi_pass needs to be same as the nohup uwsgi socket and the port in main.py
 
-$ nohup uwsgi --socket 127.0.0.1:8080 --wsgi-file main.py --callable app --processes 4 -H mentalgames &
+$ nohup uwsgi --socket 127.0.0.1:8080 --wsgi-file main.py --callable app --processes 1 -H mentalgames &
