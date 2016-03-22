@@ -2,7 +2,7 @@
 import sys, time, math, json, requests, config
 from urllib import urlencode, quote
 from flask import Flask, flash, redirect, url_for, request, jsonify, send_file
-from sqlalchemy import desc, asc
+from sqlalchemy import desc, asc, or_, not_
 from flask_bootstrap import Bootstrap, StaticCDN
 from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -15,10 +15,10 @@ from sms import SmsUtil
 # REST APIs
 @app.route('/rest/login', methods=['GET'])
 def api_login():
-    username = request.args.get("username")
+    account = request.args.get("username")
     password = request.args.get("password")
 
-    u = Users.query.filter_by(username=username).first()
+    u = Users.query.filter(or_(Users.username==account, Users.phone==account, Users.email==account)).first()
     if not u:
         return jsonify({'error':1, 'cause':'用户名不存在'})
     elif u.active != True:
@@ -70,13 +70,13 @@ def api_register():
     # 用户名、手机号、邮箱 3个字段做匹配判断
     u = Users.query.filter_by(username=username).first()
     p = Users.query.filter_by(phone=phone).first()
-    # e = Users.query.filter_by(email=email).first()
+    e = Users.query.filter_by(email=email).first()
     if u:
     	return jsonify({'error':3, 'cause':'用户名已存在'})
     elif p:
         return jsonify({'error':4, 'cause':'手机号已被注册'})
-    # elif e:
-    # 	return jsonify({'error':5, 'cause':'邮箱已被注册'})
+    elif e:
+        return jsonify({'error':5, 'cause':'邮箱已被注册'})
     else:
 	    r = Users(username=username, password=password, phone=phone, email=email, name=name)
 	    try :
