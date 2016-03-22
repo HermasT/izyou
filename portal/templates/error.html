@@ -1,19 +1,51 @@
-<!DOCTYPE html>
-<html lang='zh-CN'>
-  <head>
-    <title>智友文化 - 错误</title>
+{% extends "account_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
-    <link href="/static/css/error.css" rel="stylesheet">
-  </head>
+{% block title %}智益加 - 错误{% endblock %}
 
-  <body>
-    <div class='container'>
-      	<div class='error-form'>
-          <p style='text-align:center'><img src="/static/error.jpg"></p>
-        	{% include 'flash.html' %}
-    	  </div>
+{% block content %}
+<style type="text/css">
+  .error-icon {
+    margin-top: 30px;
+  }
+  .error-title {
+    font-size: 48px;
+    color: #545454;
+  }
+  .error-detail {
+    font-size: 24px;
+    color: #707070;
+  }
+  .error-padding {
+    padding-top: 30px;
+    text-align: center;
+  }
+</style>
+<div class='container'>
+  <div class='row'>
+    <div class="col-sm-3 col-md-6 col-lg-6">
+        <div class="thumbnail error-icon">
+          <img class='img-responsive' src="/static/img/error.png">
+        </div>
     </div>
-  </body>
-</html>
+    <div class="col-sm-3 col-md-6 col-lg-6">
+          <div class="caption error-padding">
+            <p class='error-title'>对不起</p>
+            {% if message %}
+            <p class='error-detail'>{{message}}</p>
+            {% endif %}
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

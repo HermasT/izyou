@@ -1,7 +1,7 @@
 # coding: utf-8
 import sys, time, math, json, requests, config
 from urllib import urlencode, quote
-from flask import Flask, flash, render_template, redirect, url_for, request, jsonify, g, send_file
+from flask import Flask, flash, render_template, redirect, url_for, request, jsonify, g, send_file, abort
 from sqlalchemy import desc, asc
 from flask_bootstrap import Bootstrap, StaticCDN
 from flask_appconfig import AppConfig
@@ -32,26 +32,26 @@ def user_active():
 	uid = request.args.get("uid")
 	user = Users.query.filter(Users.uid == uid).first()
 	if not user:
-		flash(u'您访问的页面不存在')
-		return render_template('error.html')
+		abort(404)
 	else:
 		user.do_active();
 
 	return render_template('index.html', index=1, username=user.username)
 
 # 异常
+@app.errorhandler(403)
+def internal_error(error):
+	return render_template('error.html', message='您没有权限访问该页面')
+
 @app.errorhandler(404)
 def internal_error(error):
-	flash(u'未找到页面')
-	return render_template('error.html')
-    # return render_template('404.html'), 404
+	return render_template('error.html', message='您访问的页面不存在')
 
 @app.errorhandler(500)
 def internal_error(error):
 	flash(u'服务器发生了错误')
 	db.session.rollback()
-	return render_template('error.html')
-	# return render_template('500.html'), 500
+	return render_template('error.html', message='服务器发生了错误')
 
 # 注入
 @app.before_request
@@ -86,10 +86,9 @@ def active():
 	username = request.args.get("username")
 	user = Users.query.filter(Users.username == username).first()
 	if not user:
-		flash(u'您访问的页面不存在')
-		return render_template('error.html')
+		abort(404)
 	elif user.active == True:
-		flash(u'您尝试激活的账号已处于激活状态')
+		# flash(u'您尝试激活的账号已处于激活状态')
 		app.logger.warning('your account is active')
 		return redirect(url_for('index'))
 	else:
@@ -203,8 +202,7 @@ def course_register():
 		return render_template('course_register.html', index=5, type=gtype,
 			username=current_user.username, pagination=paginate, status=status, teachers=teachers)
 	else:
-		flash(u'请您登录')
-		return render_template('error.html')
+		return render_template('error.html', message='请您登录')
 
 # 联系我们
 @app.route('/contact', methods=['GET', 'POST'])
@@ -221,8 +219,7 @@ def admin():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
 		return render_template('admin.html', username=current_user.username)
 	else:
-		flash(u'您没有权限访问该页面')
-		return render_template('error.html')
+		abort(403)
 
 # 师资管理
 @app.route('/teacher', methods=['GET', 'POST'])
@@ -244,8 +241,7 @@ def teacher():
 			teachers.append(teacher)
 		return render_template('teacher.html', username=current_user.username, index=2, pagination=paginate)
 	else:
-		flash(u'您没有权限访问该页面')
-		return render_template('error.html')
+		abort(403)
 
 @app.route('/add_teacher', methods=['GET', 'POST'])
 @login_required
@@ -253,8 +249,7 @@ def add_teacher():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
 		return render_template('add_teacher.html', username=current_user.username, types=GameType.getAll())
 	else:
-		flash(u'您没有权限访问该页面')
-		return render_template('error.html')
+		abort(403)
 
 @app.route('/search_teacher', methods=['GET', 'POST'])
 @login_required
@@ -273,12 +268,10 @@ def search_teacher():
 				teachers.append(teacher)
 			return render_template('search_teacher.html', username=current_user.username, teachers=teachers)
 		except Exception , e:
- 			print e
-			flash(u'查询失败')
-			return render_template('error.html')
+			# app.logger.error(e)
+			return render_template('error.html', message='查询失败')
 	else:
-		flash(u'您没有权限访问该页面')
-		return render_template('error.html')
+		abort(403)
 
 @app.route('/update_teacher', methods=['GET', 'POST'])
 @login_required
@@ -288,14 +281,12 @@ def update_teacher():
 		teacher = Teacher.query.filter(Teacher.tid==tid).first()
 
 		if teacher is None:
-			flash(u'查找不到与之匹配的讲师')
-			return render_template('error.html')
+			return render_template('error.html', message='查找不到与之匹配的讲师')
 		else:
 			return render_template('update_teacher.html', username=current_user.username, teacher=teacher, types=GameType.getAll(),
 				genderName=GenderType.getName(teacher.gender), gname=GameType.getName(teacher.gtype))
 	else:
-		flash(u'您没有权限访问该页面')
-		return render_template('error.html')
+		abort(403)
 
 # 课程管理
 @app.route('/course', methods=['GET', 'POST'])
@@ -319,8 +310,7 @@ def course():
 			teachers.append(teacher.name)
 		return render_template('course.html', index=3, username=current_user.username, pagination=paginate, status=status, teachers=teachers)
 	else:
-		flash(u'您没有权限访问该页面')
-		return render_template('error.html')
+		abort(403)
 
 @app.route('/create_course', methods=['GET', 'POST'])
 @login_required
@@ -330,8 +320,7 @@ def create_course():
 		print teachers
 		return render_template('create_course.html', username=current_user.username, types=GameType.getAll(), teachers=teachers)
 	else:
-		flash(u'您没有权限访问该页面')
-		return render_template('error.html')
+		abort(403)
 
 @app.route('/search_course', methods=['GET', 'POST'])
 @login_required
@@ -350,11 +339,9 @@ def search_course():
 				teachers.append(teacher.name)
 			return render_template('search_course.html', username=current_user.username, courses=result, status=status, teachers=teachers)
 		except:
-			flash(u'查询失败')
-			return render_template('error.html')
+			return render_template('error.html', message='查询失败')
 	else:
-		flash(u'您没有权限访问该页面')
-		return render_template('error.html')
+		abort(403)
 
 @app.route('/update_course', methods=['GET', 'POST'])
 @login_required
@@ -364,8 +351,7 @@ def update_course():
 		course = Course.query.filter(Course.cid==cid).first()
 		print course
 		if course is None:
-			flash(u'查找不到与之匹配的课程')
-			return render_template('error.html')
+			return render_template('error.html', message='查找不到与之匹配的课程')
 		else:
 			status = CourseStatus.getName(course.status)
 			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
@@ -373,8 +359,7 @@ def update_course():
 			return render_template('update_course.html', username=current_user.username, course=course, 
 				tname=teacher.name, teachers=allteachers, status=status, allstatus=CourseStatus.getAll())
 	else:
-		flash(u'您没有权限访问该页面')
-		return render_template('error.html')
+		abort(403)
 
 @app.route('/register_course',methods=['GET', 'POST'])
 @login_required
@@ -386,19 +371,16 @@ def register_course():
 		course = Course.query.filter(Course.cid==cid).first()
 		user = Users.query.filter(Users.username==username).first()
 		if course is None:
-			flash(u'查找不到与之匹配的课程')
-			return render_template('error.html')
+			return render_template('error.html', message='查找不到与之匹配的课程')
 		elif user is None:
-			flash(u'查找不到与之匹配的用户')
-			return render_template('error.html')
+			return render_template('error.html', message='查找不到与之匹配的用户')
 		else:
 			status = CourseStatus.getName(course.status)
 			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
 			allteachers = Teacher.query.order_by(Teacher.tid).all()
 			return render_template('register_course.html', username=current_user.username, course=course, pays=PayType.getAll())
 	else:
-		flash(u'您没有权限访问该页面')
-		return render_template('error.html')
+		abort(403)
 
 # 教室管理
 @app.route('/room', methods=['GET', 'POST'])
@@ -411,5 +393,4 @@ def room():
 		paginate = Room.query.paginate(int(page), config.PAGE_ITEMS, False)
 		return render_template('room.html', username=current_user.username, pagination=paginate)
 	else:
-		flash(u'您没有权限访问该页面')
-		return render_template('error.html')
+		abort(403)
