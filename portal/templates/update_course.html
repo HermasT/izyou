@@ -84,7 +84,7 @@
   						</button>
 					    <ul class="dropdown-menu" aria-labelledby="btn_update_course_teacher">
 					    	{% for teacher in teachers %}
-						    <li onclick="select_teacher('{{teacher.tid}}', '{{teacher.name}}')"><a>{{teacher.name}}</a></li>
+						    <li onclick="select_teacher('{{teacher.tid}}', '{{teacher.username}}')"><a>{{teacher.username}}</a></li>
 						    {% endfor %}
 					    </ul>
 					</div>

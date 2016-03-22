@@ -362,22 +362,24 @@ class CourseDetail(db.Model):
     detailName = db.Column(String(32), nullable=False)  #具体课程内容概要
     cid = db.Column(Integer, nullable=False) #ForeignKey('Course.cid')
     rid = db.Column(Integer) # ForeignKey('Room.rid')
+    fullAddress = db.Column(String(64), nullable=False) #冗余字段， 展示班次时使用
     startTime = db.Column(Date) # 单次课程开始时间
     endTime = db.Column(Date)  # 单次课程结束时间
     courseIndex = db.Column(Integer, nullable=False) #同一个课程下的多个详情排序
     extend = db.Column(String(64))
 
-    def __init__(self, detailName, cid, rid, startTime, endTime, courseIndex, extend=''):
+    def __init__(self, detailName, cid, rid, fullAddress, startTime, endTime, courseIndex, extend=''):
         self.detailName = detailName
         self.cid = cid;
         self.rid = rid
+        self.fullAddress = fullAddress
         self.startTime = startTime
         self.endTime = endTime
         self.courseIndex = courseIndex
         self.extend = extend
  
     def __repr__(self):
-        return "<CourseDetail{:d}:{:d}:{:d}:{:d}: {:s}>".format(self.detialID, self.cid, seld.rid, self.courseIndex, self.detailName)
+        return "<CourseDetail{:d}:{:d}:{:d}:{:d}: {:s}:{:s}>".format(self.detialID, self.cid, self.rid, self.courseIndex, self.detailName, self.fullAddress)
 
 #课程上课学生
 class CourseStudent(db.Model):

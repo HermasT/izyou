@@ -8,13 +8,41 @@ from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from portal import app, db, lm, mail
-from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus, PayType, Orders, OrdersList
+from models import Users, Teacher, Room, Course, CourseDetail, CourseStudent, UserType, GenderType, GameType, CourseStatus, PayType, Orders, OrdersList
 from mail import MailUtil
 from sms import SmsUtil
 
 # 测试页面
 @app.route('/test')
 def test():
+
+	# 初始化课程详情数据
+	coureDetail = CourseDetail(detailName = 'c1内容概要', cid = 2, rid = 1, fullAddress = '', startTime = '2016-4-4 13:00:00', endTime = '2016-4-4 14:00:00', courseIndex = 0, extend = '')
+	db.session.add(coureDetail)
+
+	coureDetail = CourseDetail(detailName = 'c1桥牌的基本概念、术语和发展史', cid = 2, rid = 1, fullAddress = '', startTime = '2016-4-4 13:00:00', endTime = '2016-4-4 14:00:00', courseIndex = 1, extend = '')
+	db.session.add(coureDetail)
+
+	coureDetail = CourseDetail(detailName = 'c1桥牌叫牌打牌所需基础知识', cid = 2, rid = 1, fullAddress = '', startTime = '2016-4-4 13:00:00', endTime = '2016-4-4 14:00:00', courseIndex = 2, extend = '')
+	db.session.add(coureDetail)
+
+	coureDetail = CourseDetail(detailName = 'c11NT开叫及无将做庄', cid = 2, rid = 1, fullAddress = '', startTime = '2016-4-4 13:00:00', endTime = '2016-4-4 14:00:00', courseIndex = 3, extend = '')
+	db.session.add(coureDetail)
+
+	coureDetail = CourseDetail(detailName = 'c1一阶高花开叫相关知识和防守入门', cid = 2, rid = 1, fullAddress = '', startTime = '2016-4-4 13:00:00', endTime = '2016-4-4 14:00:00', courseIndex = 4, extend = '')
+	db.session.add(coureDetail)
+
+	coureDetail = CourseDetail(detailName = 'c1一阶低花开叫相关知识和做庄计划', cid = 2, rid = 1, fullAddress = '', startTime = '2016-4-4 13:00:00', endTime = '2016-4-4 14:00:00', courseIndex = 5, extend = '')
+	db.session.add(coureDetail)
+
+	coureDetail = CourseDetail(detailName = 'c1争叫和简要飞牌入门', cid = 2, rid = 1, fullAddress = '', startTime = '2016-4-4 13:00:00', endTime = '2016-4-4 14:00:00', courseIndex = 6, extend = '')
+	db.session.add(coureDetail)
+
+	coureDetail = CourseDetail(detailName = 'c1阻击叫相关知识，出牌方向综述', cid = 2, rid = 1, fullAddress = '', startTime = '2016-4-4 13:00:00', endTime = '2016-4-4 14:00:00', courseIndex = 7, extend = '')
+	db.session.add(coureDetail)
+
+	db.session.commit()
+
 	# SmsUtil.requestCode('18516595221')
 	# SmsUtil.verifyCode('18516595221', '916838')
 
@@ -162,11 +190,50 @@ def all_courses():
 	elif int(gtype) == GameType.xiangqi:
 		template = 'xiangqi_course.html'
 
+	# 可以报名的课程
+	courses = Course.query.filter(Course.gtype==gtype, Course.status<2).order_by(desc(Course.start)).all()
+	# 课程老师名称
+	teachers = []
+	# 课程班次
+	courseSchedules = [];
+	if courses is not None:
+		for c in courses:
+			schedules = CourseDetail.query.filter(CourseDetail.cid == c.cid).order_by(CourseDetail.courseIndex).all()
+			if schedules is not None:
+				courseSchedules.append(schedules)
+			else:
+				courseSchedules.append([])
+
+			teacher = Teacher.query.filter(Teacher.tid == c.tid).first();
+			teachers.append(teacher.username)
+	else:
+		courses = []			
+
 	try:
 		username = current_user.username
-		return render_template(template, username=username)
+		return render_template(template, username=username, courses = courses, courseSchedules = courseSchedules, teachers = teachers)
 	except:
 		return render_template(template, username=None)
+
+ #我要报名
+@app.route('/course_userregister', methods = ['GET'])
+@login_required
+def course_userregister():
+	if current_user is not None and current_user.is_privileged(UserType.registered):
+		cid = request.args.get('cid')
+		course = Course.query.filter(Course.cid==cid).first()
+
+		if course is None:
+			return render_template('error.html', message='查找不到与之匹配的课程')
+		else:
+			status = CourseStatus.getName(course.status)
+			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
+			allteachers = Teacher.query.order_by(Teacher.tid).all()
+			studentCount =  CourseStudent.query.filter(CourseStudent.cid == cid).count()
+			return render_template('register_usercourse.html', username=current_user.username, course=course, studentCount=studentCount, pays=PayType.getAll())
+	else:
+		return render_template('error.html', message='请您登录')
+
 
 # 我要报名
 @app.route('/course_register', methods = ['GET'])
@@ -196,7 +263,7 @@ def course_register():
 			# 采用多表联合查询
 			q = db.session.query(Users.name).join(Teacher, Teacher.username==Users.username) \
 					.filter(Teacher.tid==course.tid).first()
-			teachers.append(q.name)
+			teachers.append(q.username)
 		return render_template('course_register.html', index=5, type=gtype,
 			username=current_user.username, pagination=paginate, status=status, teachers=teachers)
 	else:
@@ -210,3 +277,9 @@ def course_register():
 # 		return render_template('contact.html', index=4, username=username)
 # 	except:
 # 		return render_template('contact.html', index=4, username=None)
+
+
+#这里是action的辅助方法
+def loadCourseSchedule():
+	pass
+

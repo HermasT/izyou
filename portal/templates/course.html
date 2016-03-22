@@ -60,7 +60,7 @@
 				{% if course.status == 1 or course.status == 3 %}
 				<a href="javascript:void(0)">报名</a>
 				{% else %}
-				<a href="/register_course?cid={{course.cid}}&&username={{user.username}}">报名</a>
+				<a href="/register_course?cid={{course.cid}}&&username={{username}}">报名</a>
 				{% endif %}
 				&nbsp;&nbsp;<a href="/update_course?cid={{course.cid}}">编辑</a>
 			</td>

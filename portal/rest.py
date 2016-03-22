@@ -165,12 +165,15 @@ def api_create_course():
 	desc = request.args.get("desc")
 	extend = request.args.get("extend")
 
+	print 'name', name, 'gjgj'
+
 	try:
-		c = Course(name=name, gtype=gtype, tid=tid, start=start, end=end, count=count, charge=fee, desc=desc, extend=extend)
+		c = Course(name=name, gtype=gtype, tid=tid, start=start, end=end, count=count, period = 0, charge=fee, desc=desc, extend=extend)
 		db.session.add(c)
 		db.session.commit()
 		return jsonify({'error':0, 'cid': c.cid})
-	except:
+	except Exception, ex:
+		print ex
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
 @app.route('/rest/update_course', methods=['GET', 'POST'])
@@ -216,9 +219,13 @@ def api_register_course():
 				charged = False
 			else:
 				charged = True
-			register = Register(username=username, cid=cid, op=operator, charged=charged, ptype=paytype, extend=extend)
-			db.session.add(register)
+			# register = Register(username=username, cid=cid, op=operator, charged=charged, ptype=paytype, extend=extend)
+			# db.session.add(register)
+			order = Orders(username = username, operator=operator, charged=charged, paytype=paytype, extend=extend)
+			db.session.add(order)
+
 			db.session.commit()
 			return jsonify({'error':0, 'rid': register.rid})
-	except:
+	except Exception , e:
+		print e
 		return jsonify({'error':4, 'cause': '数据库操作失败'})

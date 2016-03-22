@@ -107,7 +107,7 @@ def course():
 		for course in paginate.items:
 			status.append(CourseStatus.getName(course.status))
 			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
-			teachers.append(teacher.name)
+			teachers.append(teacher.username)
 		return render_template('course.html', index=3, username=current_user.username, pagination=paginate, status=status, teachers=teachers)
 	else:
 		abort(403)
@@ -157,7 +157,7 @@ def update_course():
 			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
 			allteachers = Teacher.query.order_by(Teacher.tid).all()
 			return render_template('update_course.html', username=current_user.username, course=course, 
-				tname=teacher.name, teachers=allteachers, status=status, allstatus=CourseStatus.getAll())
+				tname=teacher.username, teachers=allteachers, status=status, allstatus=CourseStatus.getAll())
 	else:
 		abort(403)
 

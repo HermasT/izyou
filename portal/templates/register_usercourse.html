@@ -1,0 +1,93 @@
+{% extends "admin_base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}
+智友文化 - 课程报名
+{% endblock %}
+
+{% block content %}
+<div class='container'>
+	<div class="panel panel-default">
+	  	<div class="panel-heading" >
+	  		<a class='custom_index' href="javascript:history.back(-1)">返回</a>
+	  		<span class='custom_title' align='center'>课程报名</span>
+	  	</div>
+	  	<div class="panel-body">
+			<div class="row row-padding">
+	  			<div class="col-lg-1" align='right'>
+				    <span class='group-info'>课程名称</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='register_course_name' data-cid="{{course.cid}}" type="text" class="form-control" readonly value='{{course.name}}'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding" style="display: none;" >
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>用户姓名</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='register_user_name' type="text" value="{{username}}" class="form-control"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>已报名人数</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='register_user_name' type="text" class="form-control" readonly value='{{studentCount}}'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>支付类型</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<div class="dropdown">
+  						<button id='btn_register_course_paytype' class="btn btn-default dropdown-toggle" type="button" 
+  							data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">请选择支付类型
+    						<span class="caret"></span>
+  						</button>
+					    <ul class="dropdown-menu" aria-labelledby="btn_register_course_paytype">
+					    	{% for pay in pays %}
+						    <li onclick="select_pay('{{pay.type}}', '{{pay.name}}')"><a>{{pay.name}}</a></li>
+						    {% endfor %}
+					    </ul>
+					</div>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>备注</span><strong style="visibility:hidden">*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='register_course_extend' type="text" class="form-control"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'></div>
+				<div class="col-lg-2">
+					<button id='btn_register_course' class='btn btn-primary full'>提交</button>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="/static/js/register_usercourse.js"></script>
+<script type="text/javascript">
+    function select_pay(type, name) {
+    	$("#btn_register_course_paytype").val(type);
+		$("#btn_register_course_paytype").html(name + " <span class='caret'></span>");
+    }
+</script>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}
