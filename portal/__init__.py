@@ -68,7 +68,7 @@ app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.INFO)
 app.logger.warning('izyou startup')
 
-from portal import views, models, rest
+from portal import views, models, admin, rest
 
 # if __name__ == '__main__':
 #     app.run(host="0.0.0.0", port=8000, debug=True)
