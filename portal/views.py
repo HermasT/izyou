@@ -83,7 +83,7 @@ def register():
 # 账号激活（手机）
 @app.route('/active', methods=['GET'])
 def active():
-	username = request.args.get("user")
+	username = request.args.get("username")
 	user = Users.query.filter(Users.username == username).first()
 	if not user:
 		flash(u'您访问的页面不存在')

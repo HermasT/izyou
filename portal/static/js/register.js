@@ -37,7 +37,7 @@ $(document).ready(function() {
 			    	if (data["error"] > 0) {
 			    		$.MsgBox.Alert("注册失败", data["cause"]);
 			    	} else {
-			    		window.location.href = "/active?user=" + username.value;
+			    		window.location.href = "/active?username=" + username.value;
 			    	}
 			    },
 			    error: function() {
