@@ -63,7 +63,11 @@ def before_request():
 def login():
     if g.user is not None and g.user.is_authenticated():
         return redirect(url_for('index'))
-    return render_template('login.html', username=request.args.get('username'), next=request.args.get('next', ''))
+    username=request.args.get('username')
+    if username:
+        return render_template('login.html', username=request.args.get('username'), next=request.args.get('next', ''))
+    else:
+        return render_template('login.html', username='', next=request.args.get('next', ''))
 
 # 登出
 @app.route('/logout')
@@ -86,6 +90,7 @@ def active():
 		return render_template('error.html')
 	elif user.active == True:
 		flash(u'您尝试激活的账号已处于激活状态')
+		app.logger.warning('your account is active')
 		return redirect(url_for('index'))
 	else:
 		return render_template('user_active.html', user=user)
