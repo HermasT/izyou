@@ -37,7 +37,7 @@ def user_active():
 	else:
 		user.do_active();
 
-	return render_template('index.html', index=1, user=user.username)
+	return render_template('index.html', index=1, username=user.username)
 
 # 异常
 @app.errorhandler(404)
@@ -93,7 +93,7 @@ def active():
 		app.logger.warning('your account is active')
 		return redirect(url_for('index'))
 	else:
-		return render_template('user_active.html', user=user)
+		return render_template('user_active.html', username=user.username)
 
 # 重置密码
 @app.route('/reset_password', methods=['GET'])
@@ -111,45 +111,45 @@ def terms():
 def index():
 	try:
 		username = current_user.username
-		return render_template('index.html', index=1, user=username)
+		return render_template('index.html', index=1, username=username)
 	except:
-		return render_template('index.html', index=1, user=None)
+		return render_template('index.html', index=1, username=None)
 
 # 桥牌介绍
 @app.route('/bridge_detail', methods = ['GET'])
 def bridge_detail():
 	try:
 		username = current_user.username
-		return render_template('bridge_detail.html', user=username)
+		return render_template('bridge_detail.html', username=username)
 	except:
-		return render_template('bridge_detail.html', user=None)
+		return render_template('bridge_detail.html', username=None)
 
 # 围棋介绍
 @app.route('/go_detail', methods = ['GET'])
 def go_detail():
 	try:
 		username = current_user.username
-		return render_template('go_detail.html', user=username)
+		return render_template('go_detail.html', username=username)
 	except:
-		return render_template('go_detail.html', user=None)
+		return render_template('go_detail.html', username=None)
 
 # 数独介绍
 @app.route('/sudoku_detail', methods = ['GET'])
 def sudoku_detail():
 	try:
 		username = current_user.username
-		return render_template('sudoku_detail.html', user=username)
+		return render_template('sudoku_detail.html', username=username)
 	except:
-		return render_template('sudoku_detail.html', user=None)	
+		return render_template('sudoku_detail.html', username=None)	
 
 # 象棋介绍
 @app.route('/xiangqi_detail', methods = ['GET'])
 def xiangqi_detail():
 	try:
 		username = current_user.username
-		return render_template('xiangqi_detail.html', user=username)
+		return render_template('xiangqi_detail.html', username=username)
 	except:
-		return render_template('xiangqi_detail.html', user=None)
+		return render_template('xiangqi_detail.html', username=None)
 
 # 所有课程
 @app.route('/all_courses', methods = ['GET'])
@@ -167,9 +167,9 @@ def all_courses():
 
 	try:
 		username = current_user.username
-		return render_template(template, user=username)
+		return render_template(template, username=username)
 	except:
-		return render_template(template, user=None)
+		return render_template(template, username=None)
 
 # 我要报名
 @app.route('/course_register', methods = ['GET'])
@@ -201,7 +201,7 @@ def course_register():
 					.filter(Teacher.tid==course.tid).first()
 			teachers.append(q.name)
 		return render_template('course_register.html', index=5, type=gtype,
-			user=current_user.username, pagination=paginate, status=status, teachers=teachers)
+			username=current_user.username, pagination=paginate, status=status, teachers=teachers)
 	else:
 		flash(u'请您登录')
 		return render_template('error.html')
@@ -211,15 +211,15 @@ def course_register():
 def contact():
 	try:
 		username = current_user.username
-		return render_template('contact.html', index=4, user=username)
+		return render_template('contact.html', index=4, username=username)
 	except:
-		return render_template('contact.html', index=4, user=None)
+		return render_template('contact.html', index=4, username=None)
 
 @app.route('/admin', methods=['GET', 'POST'])
 @login_required
 def admin():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
-		return render_template('admin.html')
+		return render_template('admin.html', username=current_user.username)
 	else:
 		flash(u'您没有权限访问该页面')
 		return render_template('error.html')
@@ -242,7 +242,7 @@ def teacher():
 			teacher.gender = GenderType.getName(teacher.gender)
 			teacher.gtype = GameType.getName(teacher.gtype)
 			teachers.append(teacher)
-		return render_template('teacher.html', index=2, pagination=paginate)
+		return render_template('teacher.html', username=current_user.username, index=2, pagination=paginate)
 	else:
 		flash(u'您没有权限访问该页面')
 		return render_template('error.html')
@@ -251,7 +251,7 @@ def teacher():
 @login_required
 def add_teacher():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
-		return render_template('add_teacher.html')
+		return render_template('add_teacher.html', username=current_user.username, types=GameType.getAll())
 	else:
 		flash(u'您没有权限访问该页面')
 		return render_template('error.html')
@@ -264,15 +264,16 @@ def search_teacher():
 		name = request.args.get("name")
 		try:
 			pattern = '%' + name + '%'	# 支持模糊查询
-			result = Teacher.query.filter(Teacher.name.like(pattern)).order_by(Teacher.tid).all()
+			result = Teacher.query.filter(Teacher.username.like(pattern)).order_by(Teacher.tid).all()
 
 			teachers = []
 			for teacher in result:
 				teacher.gender = GenderType.getName(teacher.gender)
 				teacher.gtype = GameType.getName(teacher.gtype)
 				teachers.append(teacher)
-			return render_template('search_teacher.html', teachers=teachers)
-		except:
+			return render_template('search_teacher.html', username=current_user.username, teachers=teachers)
+		except Exception , e:
+ 			print e
 			flash(u'查询失败')
 			return render_template('error.html')
 	else:
@@ -285,11 +286,12 @@ def update_teacher():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
 		tid = request.args.get('tid')
 		teacher = Teacher.query.filter(Teacher.tid==tid).first()
+
 		if teacher is None:
 			flash(u'查找不到与之匹配的讲师')
 			return render_template('error.html')
 		else:
-			return render_template('update_teacher.html', teacher=teacher, 
+			return render_template('update_teacher.html', username=current_user.username, teacher=teacher, types=GameType.getAll(),
 				genderName=GenderType.getName(teacher.gender), gname=GameType.getName(teacher.gtype))
 	else:
 		flash(u'您没有权限访问该页面')
@@ -315,7 +317,7 @@ def course():
 			status.append(CourseStatus.getName(course.status))
 			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
 			teachers.append(teacher.name)
-		return render_template('course.html', index=3, user=current_user, pagination=paginate, status=status, teachers=teachers)
+		return render_template('course.html', index=3, username=current_user.username, pagination=paginate, status=status, teachers=teachers)
 	else:
 		flash(u'您没有权限访问该页面')
 		return render_template('error.html')
@@ -325,7 +327,8 @@ def course():
 def create_course():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
 		teachers = Teacher.query.order_by(Teacher.tid).all()
-		return render_template('create_course.html', types=GameType.getAll(), teachers=teachers)
+		print teachers
+		return render_template('create_course.html', username=current_user.username, types=GameType.getAll(), teachers=teachers)
 	else:
 		flash(u'您没有权限访问该页面')
 		return render_template('error.html')
@@ -345,7 +348,7 @@ def search_course():
 				status.append(CourseStatus.getName(course.status))
 				teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
 				teachers.append(teacher.name)
-			return render_template('search_course.html', courses=result, status=status, teachers=teachers)
+			return render_template('search_course.html', username=current_user.username, courses=result, status=status, teachers=teachers)
 		except:
 			flash(u'查询失败')
 			return render_template('error.html')
@@ -367,7 +370,7 @@ def update_course():
 			status = CourseStatus.getName(course.status)
 			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
 			allteachers = Teacher.query.order_by(Teacher.tid).all()
-			return render_template('update_course.html', course=course, 
+			return render_template('update_course.html', username=current_user.username, course=course, 
 				tname=teacher.name, teachers=allteachers, status=status, allstatus=CourseStatus.getAll())
 	else:
 		flash(u'您没有权限访问该页面')
@@ -392,7 +395,7 @@ def register_course():
 			status = CourseStatus.getName(course.status)
 			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
 			allteachers = Teacher.query.order_by(Teacher.tid).all()
-			return render_template('register_course.html', course=course, pays=PayType.getAll())
+			return render_template('register_course.html', username=current_user.username, course=course, pays=PayType.getAll())
 	else:
 		flash(u'您没有权限访问该页面')
 		return render_template('error.html')
@@ -406,7 +409,7 @@ def room():
 		if page < 1:
 			page = 1
 		paginate = Room.query.paginate(int(page), config.PAGE_ITEMS, False)
-		return render_template('room.html', pagination=paginate)
+		return render_template('room.html', username=current_user.username, pagination=paginate)
 	else:
 		flash(u'您没有权限访问该页面')
 		return render_template('error.html')

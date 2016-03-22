@@ -46,8 +46,8 @@
 
                 <div class="collapse navbar-collapse" id="navbar-collapse-login">
                     <ul class="nav navbar-nav navbar-right" align='center'>
-                        {% if user %}
-                        <li><a class='welcome' href="/user_info?username={{user}}">欢迎{{user}}</a></li>
+                        {% if username %}
+                        <li><a class='welcome' href="/user_info?username={{username}}">欢迎{{username}}</a></li>
                         <li><button id='title_btn_logout' class='btn btn-default navbar-button'>注销</button></li>
                         {% else %}
                         <li><button id='title_btn_login' class='btn btn-default navbar-button'>登录</button></li>

@@ -119,11 +119,12 @@ def api_add_teacher():
 		uprice = 0.0
 
 	try:
-		t = Teacher(name=name, birth=birth, gender=gender, gtype=gtype, uprice=uprice, desc=desc, extend=extend)
+		t = Teacher(username=name, birth=birth, gender=gender, gtype=gtype, uprice=uprice, desc=desc, extend=extend)
 		db.session.add(t)
 		db.session.commit()
 		return jsonify({'error':0, 'tid': t.tid})
-	except:
+	except Exception , e:
+ 		print e
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
 @app.route('/rest/update_teacher', methods=['GET', 'POST'])

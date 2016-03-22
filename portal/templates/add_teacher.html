@@ -75,9 +75,11 @@
     						<span class="caret"></span>
   						</button>
 					    <ul class="dropdown-menu" aria-labelledby="group_type_dropdown">
-						    <li id='gtype_1'><a href="#">桥牌</a></li>
-						    <li id='gtype_2'><a href="#">数独</a></li>
-						    <li id='gtype_3'><a href="#">围棋</a></li>
+
+					    	{% for gameType in types %}
+						    <li id='gtype_{{gameType.type}}'><a href="#">{{gameType.name}}</a></li>
+						    {% endfor %}
+
 					    </ul>
 					</div>
 			  	</div>
