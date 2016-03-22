@@ -10,12 +10,12 @@ from flask.ext.login import LoginManager, login_user, logout_user, current_user,
 from portal import app, db, lm, mail
 from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus, PayType, Orders, OrdersList
 
-# 管理后台
+# 后台管理
 @app.route('/admin', methods=['GET', 'POST'])
 @login_required
 def admin():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
-		return render_template('admin.html', username=current_user.username)
+		return render_template('admin.html', username=current_user.username, index=1)
 	else:
 		abort(403)
 
@@ -45,7 +45,7 @@ def teacher():
 @login_required
 def add_teacher():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
-		return render_template('add_teacher.html', username=current_user.username, types=GameType.getAll())
+		return render_template('add_teacher.html', username=current_user.username, index=2, types=GameType.getAll())
 	else:
 		abort(403)
 
@@ -54,7 +54,9 @@ def add_teacher():
 def search_teacher():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
 		# 由于使用站内搜索功能时结果集一般很少，为简单起见不再支持分页
-		name = request.args.get("name")
+		name = request.args.get("username")
+		if name == '':
+			return render_template('error.html', message='请输入查询的教师用户名')
 		try:
 			pattern = '%' + name + '%'	# 支持模糊查询
 			result = Teacher.query.filter(Teacher.username.like(pattern)).order_by(Teacher.tid).all()

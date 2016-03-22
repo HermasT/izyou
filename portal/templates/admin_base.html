@@ -3,7 +3,12 @@
 <html lang='zh-CN'>
 {%- block html %}
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Language" content="zh-cn"/>
+        <Meta http-equiv="Content-Script-Type" Content="text/javascript">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="keywords" content="智益加 智力运动 智力游戏 文化传播 桥牌 围棋 数独 象棋 教育培训">
         
         {%- block head %}
         <title>{% block title %}{% endblock title %}</title>
@@ -25,49 +30,47 @@
 
         {% block body -%}
         {% block navbar %}
-        <div class='container'>
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand navbar-logo" href="#">智益加</a>
-                    </div>
-
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav">
-                            {% if index == 1 %}
-                            <li class='active'><a class='title-navbar' href="/index">首页</a></li>
-                            {% else %}
-                            <li><a class='title-navbar' href="/index">首页</a></li>
-                            {% endif %}
-                            {% if index == 2 %}
-                            <li class='active'><a class='title-navbar' href="/teacher">师资管理</a></li>
-                            {% else %}
-                            <li><a class='title-navbar' href="/teacher">师资管理</a></li>
-                            {% endif %}
-                            {% if index == 3 %}
-                            <li class='active'><a class='title-navbar' href="/course">课程管理</a></li>
-                            {% else %}
-                            <li><a class='title-navbar' href="/course">课程管理</a></li>
-                            {% endif %}
-                            {% if index == 4 %}
-                            <li class='active'><a class='title-navbar' href="/user">用户管理</a></li>
-                            {% else %}
-                            <li><a class='title-navbar' href="/user">用户管理</a></li>
-                            {% endif %}
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right" align='center'>
-                            {% if username %}
-                            <li><a class='welcome' href="/user_info?username={{username}}">欢迎{{username}}</a></li>
-                            <li><button id='title_btn_logout' class='btn btn-default navbar-button'>注销</button></li>
-                            {% else %}
-                            <li><button id='title_btn_login' class='btn btn-default navbar-button'>登录</button></li>
-                            <li><button id='title_btn_register' class='btn btn-default navbar-button'>注册</button></li>
-                            {% endif %}
-                        </ul>
-                    </div>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid content-body">
+                <div class="navbar-header">
+                    <a href='/index'><img class="navbar-logo" alt="智益加" src="/static/img/logo.png"></a>
                 </div>
-            </nav>
-        </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        {% if index == 1 %}
+                        <li class='active'><a class='title-navbar' href="/admin">后台管理</a></li>
+                        {% else %}
+                        <li><a class='title-navbar' href="/admin">后台管理</a></li>
+                        {% endif %}
+                        {% if index == 2 %}
+                        <li class='active'><a class='title-navbar' href="/teacher">师资管理</a></li>
+                        {% else %}
+                        <li><a class='title-navbar' href="/teacher">师资管理</a></li>
+                        {% endif %}
+                        {% if index == 3 %}
+                        <li class='active'><a class='title-navbar' href="/course">课程管理</a></li>
+                        {% else %}
+                        <li><a class='title-navbar' href="/course">课程管理</a></li>
+                        {% endif %}
+                        {% if index == 4 %}
+                        <li class='active'><a class='title-navbar' href="/user">用户管理</a></li>
+                        {% else %}
+                        <li><a class='title-navbar' href="/user">用户管理</a></li>
+                        {% endif %}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right" align='center'>
+                        {% if username %}
+                        <li><a class='welcome' href="/user_info?username={{username}}">欢迎{{username}}</a></li>
+                        <li><button id='title_btn_logout' class='btn btn-default navbar-button'>注销</button></li>
+                        {% else %}
+                        <li><button id='title_btn_login' class='btn btn-default navbar-button'>登录</button></li>
+                        <li><button id='title_btn_register' class='btn btn-default navbar-button'>注册</button></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
         {%- endblock navbar %}
         {% block content -%}
         {%- endblock content %}

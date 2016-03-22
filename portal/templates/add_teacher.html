@@ -2,18 +2,12 @@
 {% import "bootstrap/fixes.html" as fixes %}
 
 {% block title %}
-智友文化 - 新增讲师
+智益加 - 新增教师
 {% endblock %}
 
 {% block content %}
-<!-- <link href="/static/css/custom.css" rel="stylesheet"> -->
-
 <div class='container'>
 	<div class="panel panel-default">
-	  	<div class="panel-heading" >
-	  		<a class='custom_index' href="javascript:history.back(-1)">返回</a>
-	  		<span class='custom_title' align='center'>新增讲师</span>
-	  	</div>
 	  	<div class="panel-body">
 			<div class="row row-padding">
 	  			<div class="col-lg-1" align='right'>
@@ -26,10 +20,10 @@
 
 			<div class="row row-padding">
 			  	<div class="col-lg-1" align='right'>
-				    <span class='group-info'>姓名</span><strong class='info-nessecary'>*</strong>
+				    <span class='group-info'>用户名</span><strong class='info-nessecary'>*</strong>
 			  	</div>
 				<div class="col-lg-5" align='left'>
-					<input id='add_teacher_name' type="text" class="form-control" placeholder='输入讲师名称'></input>
+					<input id='add_teacher_name' type="text" class="form-control" placeholder='选择注册的用户名'></input>
 			  	</div>
 			</div>
 
@@ -59,8 +53,6 @@
 						    <li id='gender_female'><a href="#">女</a></li>
 					    </ul>
 					</div>
-
-
 			  	</div>
 			</div>
 
@@ -75,11 +67,9 @@
     						<span class="caret"></span>
   						</button>
 					    <ul class="dropdown-menu" aria-labelledby="group_type_dropdown">
-
 					    	{% for gameType in types %}
 						    <li id='gtype_{{gameType.type}}'><a href="#">{{gameType.name}}</a></li>
 						    {% endfor %}
-
 					    </ul>
 					</div>
 			  	</div>
