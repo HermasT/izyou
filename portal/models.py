@@ -29,6 +29,21 @@ class UserType(Enum):
     staff = 4
     admin = 65535
 
+    @staticmethod
+    def getName(type):
+        if type == UserType.registered:
+            return '注册用户'
+        elif type == UserType.student:
+            return '学员'
+        elif type == UserType.faculty:
+            return '教师'
+        elif type == UserType.staff:
+            return '员工'
+        elif type == UserType.admin:
+            return '管理员'
+        else:
+            return '普通用户'
+
 # 项目类型
 class GameType(Enum):
     undefined = 0
@@ -51,17 +66,17 @@ class GameType(Enum):
 
     @staticmethod
     def getName(type):
-        if type == 1:
+        if type == GameType.bridge:
             return '桥牌'
-        elif type == 2:
+        elif type == GameType.sudoku:
             return '数独'
-        elif type == 3:
+        elif type == GameType.go:
             return '围棋'
-        elif type == 4:
+        elif type == GameType.xiangqi:
             return '象棋'
-        elif type == 5:
+        elif type == GameType.chess:
             return '国际象棋'
-        elif type == 6:
+        elif type == GameType.mixed:
             return '混合'
         else:
             return '未知'
@@ -82,9 +97,9 @@ class ProductType(Enum):
 
     @staticmethod
     def getName(type):
-        if type == 1:
+        if type == ProductType.course:
             return '课程'
-        elif type == 2:
+        elif type == ProductType.problem:
             return '题库'
         else:
             return '未定义'
@@ -111,17 +126,17 @@ class PayType(Enum):
 
     @staticmethod
     def getName(type):
-        if type == 0:
+        if type == PayType.undefined:
             return '未支付'
-        elif type == 1:
+        elif type == PayType.cash:
             return '现金支付'
-        elif type == 2:
+        elif type == PayType.wechat:
             return '微信支付'
-        elif type == 3:
+        elif type == PayType.alipay:
             return '支付宝'
-        elif type == 4:
+        elif type == PayType.online:
             return '在线支付'
-        elif type == 5:
+        elif type == PayType.others:
             return '其他'
         else:
             return '未定义'
@@ -146,13 +161,13 @@ class OrderStatus(Enum):
 
     @staticmethod
     def getName(type):
-        if type == 1:
+        if type == OrderStatus.order:
             return '未支付'
-        elif type == 2:
+        elif type == OrderStatus.ordered:
             return '已支付'
-        elif type == 3:
+        elif type == OrderStatus.cancelled:
             return '已取消'
-        elif type == 4:
+        elif type == OrderStatus.finished:
             return '已完成'
         else:
             return '未定义'
@@ -174,9 +189,9 @@ class GenderType(Enum):
 
     @staticmethod
     def getName(type):
-        if type == 1:
+        if type == GenderType.male:
             return '男'
-        elif type == 2:
+        elif type == GenderType.female:
             return '女'
         else:
             return '未知'
@@ -195,7 +210,12 @@ class Users(db.Model):
     name = db.Column(String(32), nullable=False) # 姓名
     active = db.Column(Boolean, default=False, nullable=False) # 是否激活, false：未激活， true：激活； 未激活状态无法登录
     salt = db.Column(String(64), nullable=False) # 安全登录
+    block = db.Column(Boolean, default=False, nullable=False) # 是否封禁
     type = db.Column(Integer, default=UserType.normal) # 用户类别
+    birth = db.Column(Date) # 出生日期
+    gender = db.Column(Integer, default=GenderType.undefined) # 性别
+    desc = db.Column(String(64), nullable=True) # 基本信息
+    extend = db.Column(String(64), nullable=True) # 扩展信息
 
     def __init__(self, username, password, phone, email, name, type=UserType.normal):
         self.username = username
@@ -205,6 +225,7 @@ class Users(db.Model):
         self.email = email
         self.name = name
         self.active = False
+        self.block = False
         self.type = type
         
     def __repr__(self):
@@ -225,6 +246,12 @@ class Users(db.Model):
     def is_privileged(self, level):
         return self.type >= level
 
+    # 封禁/解封
+    def do_forbid(self, block):
+        self.block = block
+        db.session.add(self)
+        db.session.commit()
+
     # 激活用户
     def do_active(self):
         self.active = True
@@ -238,6 +265,15 @@ class Users(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    # 更新信息
+    def update_info(self, birth, gender, desc='', extend=''):
+        self.birth = birth
+        self.gender = gender
+        self.desc = desc
+        self.extend = extend
+        db.session.add(self)
+        db.session.commit()
+
     @staticmethod
     def get_crypto_password(password, salt):
         return hashlib.md5(password + salt).hexdigest()
@@ -246,17 +282,17 @@ class Users(db.Model):
 class Student(db.Model):
     sid = db.Column(Integer, primary_key=True) 
     username = db.Column(String(32), unique=True, nullable=False) # ForeignKey('Users.username')
-    birth = db.Column(Date) # 出生日期
-    gender = db.Column(Integer, default=GenderType.undefined) # 性别
-    school = db.Column(String(64)) # 学校
-    extend = db.Column(String(64), nullable=True)
+    # birth = db.Column(Date) # 出生日期
+    # gender = db.Column(Integer, default=GenderType.undefined) # 性别
+    # school = db.Column(String(64)) # 学校
+    # extend = db.Column(String(64), nullable=True)
 
     def __init__(self, username, birth, gender, school='', extend=''):
         self.username = username
-        self.birth = birth
-        self.gender = gender
-        self.school = school
-        self.extend = extend
+        # self.birth = birth
+        # self.gender = gender
+        # self.school = school
+        # self.extend = extend
  
     def __repr__(self):
         return "<Student({:d}): {:s}>".format(self.sid, self.username)

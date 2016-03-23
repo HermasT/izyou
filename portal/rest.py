@@ -85,6 +85,33 @@ def api_register():
 	    except:
 		    return jsonify({'error':6, 'cause': '数据库操作失败'})
 
+@app.route('/rest/active_user', methods=['POST'])
+def api_active_user():
+	uid = request.values.get("uid")
+	user = Users.query.filter_by(uid=uid).first()
+	if not user:
+		abort(404)
+	else:
+		try:
+			user.do_active()
+			return json.dumps({'error':0})
+		except:
+			return json.dumps({'error':1, 'cause':'更新失败'})
+
+@app.route('/rest/forbid_user', methods=['POST'])
+def api_forbid_user():
+	uid = request.values.get("uid")
+	block = request.values.get("block", 0)
+	user = Users.query.filter_by(uid=uid).first()
+	if not user:
+		abort(404)
+	else:
+		try:
+			user.do_forbid(block)
+			return json.dumps({'error':0})
+		except:
+			return json.dumps({'error':1, 'cause':'更新失败'})
+
 @app.route('/rest/request_code', methods=['POST'])
 def api_request_sms_code():
 	phone = request.values.get("phone")

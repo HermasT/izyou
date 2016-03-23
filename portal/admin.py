@@ -2,7 +2,7 @@
 import sys, time, math, json, requests, config
 from urllib import urlencode, quote
 from flask import Flask, flash, render_template, redirect, url_for, request, jsonify, g, send_file, abort
-from sqlalchemy import desc, asc
+from sqlalchemy import desc, asc, or_
 from flask_bootstrap import Bootstrap, StaticCDN
 from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -20,7 +20,7 @@ def admin():
 		abort(403)
 
 # 师资管理
-@app.route('/teacher', methods=['GET', 'POST'])
+@app.route('/teacher', methods=['GET'])
 @login_required
 def teacher():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
@@ -41,7 +41,7 @@ def teacher():
 	else:
 		abort(403)
 
-@app.route('/add_teacher', methods=['GET', 'POST'])
+@app.route('/add_teacher', methods=['GET'])
 @login_required
 def add_teacher():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
@@ -49,7 +49,7 @@ def add_teacher():
 	else:
 		abort(403)
 
-@app.route('/search_teacher', methods=['GET', 'POST'])
+@app.route('/search_teacher', methods=['GET'])
 @login_required
 def search_teacher():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
@@ -73,7 +73,7 @@ def search_teacher():
 	else:
 		abort(403)
 
-@app.route('/update_teacher', methods=['GET', 'POST'])
+@app.route('/update_teacher', methods=['GET'])
 @login_required
 def update_teacher():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
@@ -182,8 +182,63 @@ def register_course():
 	else:
 		abort(403)
 
+# 用户管理
+@app.route('/user', methods=['GET'])
+@login_required
+def user():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		page = request.args.get("page", 1)
+		if page < 1:
+			page = 1
+		paginate = Users.query.order_by(Users.uid).paginate(int(page), config.PAGE_ITEMS, False)
+
+		users = []
+		for user in paginate.items:
+			user.gender = GenderType.getName(user.gender)
+			user.type = UserType.getName(user.type)
+			users.append(user)
+		return render_template('user.html', username=current_user.username, index=4, pagination=paginate)
+	else:
+		abort(403)
+
+@app.route('/userinfo', methods=['GET'])
+@login_required
+def userinfo():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		username = request.args.get("username")
+		if not username:
+			abort(404)
+		else:
+			return render_template('userinfo.html', username=current_user.username, index=4)
+	else:
+		abort(403)
+
+@app.route('/search_user', methods=['GET'])
+@login_required
+def search_user():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		# 由于使用站内搜索功能时结果集一般很少，为简单起见不再支持分页
+		name = request.args.get("username")
+		if name == '':
+			return render_template('error.html', message='请输入查询的用户名')
+		try:
+			pattern = '%' + name + '%'	# 支持模糊查询
+			result = Users.query.filter(
+				or_(Users.username.like(pattern), Users.phone.like(pattern), Users.email.like(pattern))).order_by(Users.uid).all()
+			users = []
+			for user in result:
+				user.gender = GenderType.getName(user.gender)
+				user.type = UserType.getName(user.type)
+				users.append(user)
+			return render_template('search_user.html', username=current_user.username, users=result, index=4)
+		except Exception , e:
+			# app.logger.error(e)
+			return render_template('error.html', message='查询失败')
+	else:
+		abort(403)
+
 # 教室管理
-@app.route('/room', methods=['GET', 'POST'])
+@app.route('/room', methods=['GET'])
 @login_required
 def room():
 	if current_user is not None and current_user.is_privileged(UserType.staff):

@@ -1,0 +1,156 @@
+{% extends "admin_base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}
+智益加 - 管理后台
+{% endblock %}
+
+{% block content %}
+<div class='container'>
+	<div class="panel panel-default">
+	  	<div class="panel-body">
+		  	<div class="col-lg-4">
+			      <input id='search_user_name' type="text" class="form-control" placeholder="用户名/手机号/邮箱"></input>
+		  	</div>
+		  	<div class="col-lg-2" align='center'>
+		  	  	<button id='search_user' class="btn btn-default full" type="button" onclick='search_user()'>查找</button>
+		  	</div>
+		</div>
+	</div>
+
+	<br/>
+	<table class="table table-striped table-bordered table-hover padding-top">
+		<tr class='info' align="center">
+			<td>#</td>
+			<td>用户名</td>
+			<td>手机号</td>
+			<td>邮箱</td>
+			<td>出生年月</td>
+			<td>性别</td>
+			<td>类别</td>
+			<td>是否激活</td>
+			<td>是否被封</td>
+			<td>基本信息</td>
+			<td>其他</td>
+			<td width="140px"></td>
+		</tr>
+		{% for user in pagination.items %}
+		<tr align="center">
+			<td>{{user.uid}}</td>
+			<td>{{user.username}}</td>
+			<td>{{user.phone}}</td>
+			<td>{{user.email}}</td>
+			<td>{{user.birth}}</td>
+			<td>{{user.gender}}</td>
+			<td>{{user.type}}</td>
+			<td id='ua-{{user.uid}}'>{{user.active}}</td>
+			<td id='ub-{{user.uid}}'>{{user.block}}</td>
+			<td>{{user.desc}}</td>
+			<td>{{user.extend}}</td>
+			<td>
+				<a href="javascript:void(0);" onclick="active_user('ua-{{user.uid}}', {{user.uid}})">激活</a>
+				<a id='uc-{{user.uid}}' href="javascript:void(0);
+					"onclick="forbid_user('ub-{{user.uid}}', {{user.uid}}, 'uc-{{user.uid}}')">
+					{% if user.block == True %}解封{% else %}封禁{% endif %}</a>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	{% if pagination.pages > 1 %}
+    <nav align='center'>
+        <ul class='pagination'>
+            {% if pagination.has_prev %}
+            <li><a href="/user?page={{pagination.prev_num}}"><span aria-hidden="true">上一页</span></a></li>
+            {% else %}
+            <li class='disabled'><span aria-hidden="true">上一页</span></li>
+            {% endif %}
+            <li class='active'><span aria-hidden="true">{{pagination.page}}/{{pagination.pages}}</span></li>
+            {% if pagination.has_next %}
+            <li><a href="/user?page={{pagination.next_num}}"><span aria-hidden="true">下一页</span></a></li>
+            {% else %}
+            <li class='disabled'><span aria-hidden="true">下一页</span></li>
+            {% endif %}
+      	</ul>
+    </nav>
+    {% endif %}
+</div>
+
+<script src="/static/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/custom_common.js"></script>
+<script type="text/javascript">
+	function search_user() {
+		var name = document.getElementById("search_user_name").value;
+		if (empty_input(name)) {
+			$.MsgBox.Alert("非法输入", "用户名/手机号/邮箱为空");
+			return;
+		}
+		window.location.href = "/search_user?username=" + name;
+	}
+	function forbid_user(tdid, uid, btnid) {
+    	if (empty_input(uid)) {
+			$.MsgBox.Alert("非法输入", "uid为空");
+	    } else {
+	    	var td = $("#"+tdid);
+	    	if (td.html() == 'True') {
+	    		block = 0;
+	    	} else {
+	    		block = 1;
+	    	}
+	    	var text = (block == 1) ? '封禁失败' : '解封失败';
+	    	$.ajax({
+				url:'/rest/forbid_user',
+			    data: {"uid":uid, "block":block},
+			    type: 'post',
+			    cache: false,
+			    dataType: 'json',
+			    success: function(data) {
+			    	if (data["error"] > 0) {
+			    		$.MsgBox.Alert(text, data["cause"]);
+			    	} else {
+			    		if (block == 1) {
+			    			td.html("True");
+			    			$("#"+btnid).html("解封");
+			    		} else {
+			    			td.html("False");
+			    			$("#"+btnid).html("封禁");
+			    		}
+			    	}
+			    },
+			    error: function() {
+			        $.MsgBox.Alert(text, "操作失败，请稍候重试");
+			    }
+			})
+	    }
+	}
+	function active_user(tdid, uid) {
+    	if (empty_input(uid)) {
+			$.MsgBox.Alert("非法输入", "uid为空");
+	    } else {
+	    	$.ajax({
+				url:'/rest/active_user',
+			    data: {"uid":uid},
+			    type: 'post',
+			    cache: false,
+			    dataType: 'json',
+			    success: function(data) {
+			    	if (data["error"] > 0) {
+			    		$.MsgBox.Alert("激活失败", data["cause"]);
+			    	} else {
+			    		$("#"+tdid).html("True")
+			    	}
+			    },
+			    error: function() {
+			        $.MsgBox.Alert("激活失败", "操作失败，请稍候重试");
+			    }
+			})
+	    }
+	}
+</script>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}
