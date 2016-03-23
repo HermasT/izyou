@@ -26,10 +26,9 @@
 			<td class='td-title'>开班人数</td>
 			<td class='td-content'>{{course.min_student}}-{{course.max_student}}人</td>
 		</tr>
-		<tr>
+		<!-- <tr>
 			<td class='td-title'>课程目的</td>
 			<td>
-				<!-- just majic -->
 				<ol class='td-targets'>
 					<li style='list-style-type:none;'>1. 学中玩：收获乐趣，培养兴趣</li>
   					<li style='list-style-type:none;'>2. 玩中学：掌握初级知识，参与桥牌运动</li>
@@ -37,10 +36,10 @@
   					<li style='list-style-type:none;'>4. 进阶：为走向竞赛阶段打下坚实基础</li>
 				</ol>
 			</td>
-		</tr>
+		</tr> -->
 		<tr>
 			<td class='td-title'>课程费用</td>
-			<td class='td-content'>{{course.charge}}元</td>
+			<td class='td-content'>{{course.charge|int}}元</td>
 		</tr>
 	</table>
 
