@@ -246,6 +246,13 @@ class Users(db.Model):
     def is_privileged(self, level):
         return self.type >= level
 
+    # 获取可读名称
+    def getName(self):
+        if self.name=='':
+            return self.username
+        else:
+            return self.name
+
     # 封禁/解封
     def do_forbid(self, block):
         self.block = block
@@ -356,8 +363,9 @@ class CourseStatus(Enum):
 class Course(db.Model):
     cid = db.Column(Integer, primary_key=True)
     name = db.Column(String(32), nullable=False)
+    active = db.Column(Boolean, default=True) # 是否上架
     gtype = db.Column(Integer, nullable=False)
-    tid = db.Column(Integer) # ForeignKey('teacher.tid')
+    time = db.Column(String(64), nullable=False)
     start = db.Column(Date) # 开始日期
     end = db.Column(Date)  # 结束日期
     max_student = db.Column(Integer) # 最大学生人数
@@ -368,14 +376,16 @@ class Course(db.Model):
     charge = db.Column(Float) # 课程费用
     discount = db.Column(Float) # 折扣率（0.9=9折）
     status = db.Column(Integer)  # CourseStatus
+    target = db.Column(String(64)) # 招生对象
     desc = db.Column(String(128)) # 课程介绍
     extend = db.Column(String(64))
 
-    def __init__(self, name, gtype, tid, start, end, count, period, charge, 
-                max_student=65536, min_student=1, audition=0, discount=1, desc='', extend=''):
+    def __init__(self, name, gtype, tid, time, start, end, count, period, charge,
+                max_student=65536, min_student=1, audition=0, discount=1, target='', desc='', extend=''):
         self.name = name
         self.gtype = gtype;
         self.tid = tid
+        self.time = time
         self.start = start
         self.end = end
         self.count = count
@@ -386,36 +396,50 @@ class Course(db.Model):
         self.audition = audition
         self.discount = discount
         self.status = CourseStatus.applying
+        self.target = target
         self.desc = desc
         self.extend = extend
  
     def __repr__(self):
         return "<Course{:d}: {:s}>".format(self.cid, self.name)
 
-#课程详情
 class CourseDetail(db.Model):
-    detialID = db.Column(Integer, primary_key=True) #单次课程详情主键
-    detailName = db.Column(String(32), nullable=False)  #具体课程内容概要
-    cid = db.Column(Integer, nullable=False) #ForeignKey('Course.cid')
-    rid = db.Column(Integer) # ForeignKey('Room.rid')
-    fullAddress = db.Column(String(64), nullable=False) #冗余字段， 展示班次时使用
-    startTime = db.Column(Date) # 单次课程开始时间
-    endTime = db.Column(Date)  # 单次课程结束时间
-    courseIndex = db.Column(Integer, nullable=False) #同一个课程下的多个详情排序
+    cdid = db.Column(Integer, primary_key=True)     # 主键
+    cid = db.Column(Integer, nullable=False)        # 课程 ForeignKey('Course.cid')
+    index = db.Column(Integer, nullable=False)      # 同一个课程下的多个详情排序
+    title = db.Column(String(32), nullable=False)   # 课程标题
+    detail = db.Column(String(64), nullable=False)  # 具体内容
     extend = db.Column(String(64))
 
-    def __init__(self, detailName, cid, rid, fullAddress, startTime, endTime, courseIndex, extend=''):
-        self.detailName = detailName
+    def __init__(self, cid, index, title, detail, extend=''):
         self.cid = cid;
-        self.rid = rid
-        self.fullAddress = fullAddress
-        self.startTime = startTime
-        self.endTime = endTime
-        self.courseIndex = courseIndex
+        self.index = index
+        self.title = title
+        self.detail = detail
         self.extend = extend
  
     def __repr__(self):
-        return "<CourseDetail{:d}:{:d}:{:d}:{:d}: {:s}:{:s}>".format(self.detialID, self.cid, self.rid, self.courseIndex, self.detailName, self.fullAddress)
+        return "<CourseDetail{:s} {:s}>".format(self.title, self.detail)
+
+class CourseSchedule(db.Model):
+    csid = db.Column(Integer, primary_key=True)     # 主键
+    cid = db.Column(Integer, nullable=False)        # ForeignKey('Course.cid')
+    rid = db.Column(Integer, nullable=False)        # 教室 ForeignKey('Room.rid')
+    time = db.Column(String(32), nullable=False)    # 班次时间
+    mteacher = db.Column(Integer, nullable=False)   # 主教 ForeignKey('Teacher.tid')
+    bteacher = db.Column(Integer, nullable=True)    # 助教 ForeignKey('Teacher.tid')
+    extend = db.Column(String(64))                  # 暂规定一个课程同时最多有2个教师
+
+    def __init__(self, cid, rid, time, mteacher, bteacher=0, extend=''):
+        self.cid = cid;
+        self.rid = rid;
+        self.time = time
+        self.mteacher = mteacher
+        self.bteacher = bteacher
+        self.extend = extend
+
+    def __repr__(self):
+        return "<CourseSchedule{:d} {:s}>".format(self.cid, self.time)
 
 #课程上课学生
 class CourseStudent(db.Model):
