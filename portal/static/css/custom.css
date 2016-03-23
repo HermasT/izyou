@@ -139,6 +139,12 @@ body {
 	position: absolute;
 	left:45%;
 }
+.user-popover{
+    width: 120px;
+    font-size: 18px;
+    text-align: center;
+    padding-top: 10px;
+}
 
 .custom_index {
 	font-size: 16px;
