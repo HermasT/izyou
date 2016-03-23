@@ -40,8 +40,31 @@
 			<td class='td-content'>4200元（15次课，每次280元）</td>
 		</tr>
 	</table>
+	{% for c in courses %}
+		<table class="table table-striped table-bordered table-hover table-content">
+			<caption class="table-caption">{{c.name}}-具体班次</caption>
+			<tr align="center">
+				<td class='td-title'>序号</td>
+				<td class='td-title'>时间</td>
+				<td class='td-title'>地点</td>
+				<td class='td-title'>授课老师</td>
+			</tr>
+		{% for schedule in courseSchedules[courses.index(c)] %}  
+			<tr>
+				<td class='td-title'>{{schedule.courseIndex}}</td>
+				<td class='td-title'>{{schedule.startTime}}~{{schedule.endTime}}</td>
+				<td class='td-title'>{{schedule.fullAddress}}</td>
+				<td class='td-title'>{{teachers[courses.index(c)]}}</td>
+			</tr>
 
-	<table class="table table-striped table-bordered table-hover table-content">
+		{% endfor %}
+		</table>
+		<p class="text-info summary-detail table-footmark">&nbsp备注：其他时间可攒班，满8人开课</p>
+		<br />
+		<input type='button' class='btn btn-primary btn-register' onclick=" location.href = '/course_userregister?cid={{c.cid}}' " value='我要报名'/>
+		<br /><br />
+	{% endfor %}
+	<!-- <table class="table table-striped table-bordered table-hover table-content">
 		<caption class="table-caption">具体课程</caption>
 		<tr align="center">
 			<td class='td-title'>课次</td>
@@ -134,7 +157,7 @@
 	<p class='text-info summary-detail table-footmark'>&nbsp备注：其他时间可攒班，满8人开班</p>
 	<br />
 	<input type='button' class='btn btn-primary btn-register' onclick=" location.href = '/course_register?type=3' " value='我要报名'/>
-	<br /><br />
+	<br /><br /> -->
 </div>
 
 <script src="/static/jquery.min.js"></script>

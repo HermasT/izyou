@@ -8,7 +8,7 @@ from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from portal import app, db, lm, mail
-from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus, PayType, Orders, OrdersList
+from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus, PayType, Orders, OrdersList, OrderStatus
 from mail import MailUtil
 from sms import SmsUtil
 
@@ -221,11 +221,11 @@ def api_register_course():
 				charged = True
 			# register = Register(username=username, cid=cid, op=operator, charged=charged, ptype=paytype, extend=extend)
 			# db.session.add(register)
-			order = Orders(username = username, operator=operator, charged=charged, paytype=paytype, extend=extend)
+			order = Orders(username = username, op=operator, charged=charged, amount = 0, paytype=paytype, status=OrderStatus.order, extend=extend)
 			db.session.add(order)
 
 			db.session.commit()
-			return jsonify({'error':0, 'rid': register.rid})
+			return jsonify({'error':0, 'rid': order.orderid})
 	except Exception , e:
 		print e
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
