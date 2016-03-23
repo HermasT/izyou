@@ -14,7 +14,7 @@ if __name__ == '__main__':
 	# 默认用户初始化
 	# u = Users(username="hermas", email='hermasTang@hotmail.com',
 	#  	phone='13636539441', password='123456', name='测试员工', type=UserType.staff)
-	# u.update_info(birth=u'1997-09-11', gender=GenderType.male, desc=u'CTO')
+	# u.update_info(birth=u'1997-09-11', gender=GenderType.male, desc=u'河马')
 	# db.session.add(u)
 	# u = Users(username="test", email='test@qq.com',
 	# 	phone='18612345678', password='123456', name='测试账号', type=UserType.registered)
@@ -43,7 +43,7 @@ if __name__ == '__main__':
 	# db.session.commit()
 	
 	# for i in range(1, 18):
-	# 	u = Users(username=u'桥牌{0}'.format(i), email=u'teacher{0}@gmail.com'.format(i), 
+	# 	u = Users(username=u'bridge{0}'.format(i), email=u'teacher{0}@gmail.com'.format(i),
 	# 		phone=u'{0}'.format(i + 19924681357), password=u'123456', name=u'桥牌教师{0}'.format(i), type=UserType.faculty)
 	# 	u.update_info(birth=u'1997-01-12', gender=GenderType.female, desc=u'zoo', extend=u'特长')
 	# 	db.session.add(u)

@@ -135,22 +135,29 @@ def api_verify_sms_code():
 @app.route('/rest/add_teacher', methods=['GET', 'POST'])
 def api_add_teacher():
 	name = request.args.get("name")
-	birth = request.args.get("birth")
-	gender = request.args.get("gender")
+	# birth = request.args.get("birth")
+	# gender = request.args.get("gender")
 	gtype = request.args.get("gtype")
 	uprice = request.args.get("uprice")
-	desc = request.args.get("desc")
-	extend = request.args.get("extend")
+	# desc = request.args.get("desc")
+	# extend = request.args.get("extend")
 	if uprice is None or uprice == "":
 		uprice = 0.0
 
 	try:
-		t = Teacher(username=name, birth=birth, gender=gender, gtype=gtype, uprice=uprice, desc=desc, extend=extend)
-		db.session.add(t)
-		db.session.commit()
-		return jsonify({'error':0, 'tid': t.tid})
+		user = Users.query.filter(Users.username==name).first()
+		teacher = Teacher.query.filter(Teacher.username==name).first()
+		if not user:
+			return jsonify({'error':403, 'cause': '您添加的教师用户名尚未注册，请先注册用户'})
+		elif teacher:
+			return jsonify({'error':403, 'cause': '您添加的教师用户名已经被使用了'})
+		else:
+			t = Teacher(username=name, gtype=gtype, uprice=uprice)
+			db.session.add(t)
+			db.session.commit()
+			return jsonify({'error':0, 'tid': t.tid})
 	except Exception , e:
- 		print e
+		# app.logger.error(e)
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
 @app.route('/rest/update_teacher', methods=['GET', 'POST'])
