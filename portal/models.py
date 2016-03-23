@@ -203,10 +203,10 @@ def load_user(username):
 
 class Users(db.Model):
     uid = db.Column(db.Integer, primary_key=True)
-    username = db.Column(String(32), unique=True, nullable=False) # 用户名
+    username = db.Column(String(32), unique=True, nullable=False, index=True) # 用户名
     password = db.Column(String(32), nullable=False) # 密码密文
-    phone = db.Column(String(16), unique=True, nullable=False) # 手机号
-    email = db.Column(String(64), nullable=True) # 邮箱（后期可选）
+    phone = db.Column(String(16), unique=True, nullable=False, index=True) # 手机号
+    email = db.Column(String(64), unique=True, nullable=True, index=True) # 邮箱（后期可选）
     name = db.Column(String(32), nullable=False) # 姓名
     active = db.Column(Boolean, default=False, nullable=False) # 是否激活, false：未激活， true：激活； 未激活状态无法登录
     salt = db.Column(String(64), nullable=False) # 安全登录
@@ -215,7 +215,7 @@ class Users(db.Model):
     birth = db.Column(Date) # 出生日期
     gender = db.Column(Integer, default=GenderType.undefined) # 性别
     desc = db.Column(String(64), nullable=True) # 基本信息
-    extend = db.Column(String(64), nullable=True) # 扩展信息
+    extend = db.Column(String(256), nullable=True) # 扩展信息
 
     def __init__(self, username, password, phone, email, name, type=UserType.normal):
         self.username = username
@@ -281,13 +281,13 @@ class Users(db.Model):
 # 学生
 class Student(db.Model):
     sid = db.Column(Integer, primary_key=True) 
-    username = db.Column(String(32), unique=True, nullable=False) # ForeignKey('Users.username')
+    username = db.Column(String(32), unique=True, nullable=False, index=True) # ForeignKey('Users.username')
     # birth = db.Column(Date) # 出生日期
     # gender = db.Column(Integer, default=GenderType.undefined) # 性别
     # school = db.Column(String(64)) # 学校
     # extend = db.Column(String(64), nullable=True)
 
-    def __init__(self, username, birth, gender, school='', extend=''):
+    def __init__(self, username):
         self.username = username
         # self.birth = birth
         # self.gender = gender
@@ -300,22 +300,22 @@ class Student(db.Model):
 # 教师
 class Teacher(db.Model):
     tid = db.Column(Integer, primary_key=True)
-    username = db.Column(String(32), unique=True, nullable=False) # ForeignKey('Users.username')
-    birth = db.Column(Date)
-    gender = db.Column(Integer, default=GenderType.undefined)
+    username = db.Column(String(32), unique=True, nullable=False, index=True) # ForeignKey('Users.username')
+    # birth = db.Column(Date)
+    # gender = db.Column(Integer, default=GenderType.undefined)
     gtype = db.Column(Integer)
     uprice = db.Column(Float, default=0.0)
-    desc = db.Column(String(128))
-    extend = db.Column(String(64), nullable=True)
+    # desc = db.Column(String(128))
+    # extend = db.Column(String(64), nullable=True)
 
-    def __init__(self, username, birth, gtype, gender=GenderType.undefined, uprice=0.0, desc='', extend=''):
+    def __init__(self, username, gtype, uprice=0.0):
         self.username = username
-        self.birth = birth
-        self.gender = gender
+        # self.birth = birth
+        # self.gender = gender
         self.gtype = gtype
         self.uprice = uprice
-        self.desc = desc
-        self.extend = extend
+        # self.desc = desc
+        # self.extend = extend
  
     def __repr__(self):
         return "<Teacher({:d}): {:s}>".format(self.tid, self.username)

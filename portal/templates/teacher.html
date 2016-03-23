@@ -29,10 +29,11 @@
 		<tr class='info' align="center">
 			<td>#</td>
 			<td>用户名</td>
+			<td>姓名</td>
 			<td>出生年月</td>
 			<td>性别</td>
 			<td>科目</td>
-			<!-- <td>单位课时费</td> -->
+			<td>单位课时费</td>
 			<td>基本信息</td>
 			<td>其他</td>
 			<td width="140px"></td>
@@ -41,10 +42,11 @@
 		<tr align="center">
 			<td>{{teacher.tid}}</td>
 			<td><a href='/userinfo?username={{teacher.username}}'>{{teacher.username}}</a></td>
+			<td>{{teacher.name}}</td>
 			<td>{{teacher.birth}}</td>
 			<td>{{teacher.gender}}</td>
 			<td>{{teacher.gtype}}</td>
-			<!-- <td>{{teacher.uprice}}</td> -->
+			<td>{{teacher.uprice}}</td>
 			<td>{{teacher.desc}}</td>
 			<td>{{teacher.extend}}</td>
 			<td><a href="/update_teacher?tid={{teacher.tid}}">编辑</a></td>

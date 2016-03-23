@@ -34,8 +34,13 @@ def teacher():
 		# 因此直接使用数据后处理进行替换，效率虽低，但安全性和扩展性更好，对于本应用来说是可以接受的
 		teachers = []
 		for teacher in paginate.items:
-			teacher.gender = GenderType.getName(teacher.gender)
+			user = Users.query.filter(Users.username==teacher.username).first()
+			teacher.name = user.name
+			teacher.birth = user.birth
+			teacher.gender = GenderType.getName(user.gender)
 			teacher.gtype = GameType.getName(teacher.gtype)
+			teacher.desc = user.desc
+			teacher.extend = user.extend
 			teachers.append(teacher)
 		return render_template('teacher.html', username=current_user.username, index=2, pagination=paginate)
 	else:
@@ -63,8 +68,13 @@ def search_teacher():
 
 			teachers = []
 			for teacher in result:
-				teacher.gender = GenderType.getName(teacher.gender)
+				user = Users.query.filter(Users.username==teacher.username).first()
+				teacher.name = user.name
+				teacher.birth = user.birth
+				teacher.gender = GenderType.getName(user.gender)
 				teacher.gtype = GameType.getName(teacher.gtype)
+				teacher.desc = user.desc
+				teacher.extend = user.extend
 				teachers.append(teacher)
 			return render_template('search_teacher.html', username=current_user.username, teachers=teachers)
 		except Exception , e:
