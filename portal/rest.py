@@ -265,3 +265,23 @@ def api_register_course():
 	except Exception , e:
 		print e
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
+
+@app.route('/rest/add_room', methods=['POST'])
+def api_add_room():
+	name = request.values.get("name")
+	location = request.values.get("location")
+	traffic = request.values.get("traffic")
+	extend = request.values.get("extend")
+
+	try:
+		room = Room.query.filter(Room.name==name).first()
+		if room:
+			return jsonify({'error':403, 'cause': '您添加的教室已存在'})
+		else:
+			r = Room(name=name, location=location, traffic=traffic, extend=extend)
+			db.session.add(r)
+			db.session.commit()
+			return jsonify({'error':0, 'rid': r.rid})
+	except Exception , e:
+		# app.logger.error(e)
+		return jsonify({'error':4, 'cause': '数据库操作失败'})

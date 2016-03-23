@@ -431,7 +431,7 @@ class CourseStudent(db.Model):
 # 教室
 class Room(db.Model):
     rid = db.Column(Integer, primary_key=True)
-    name = db.Column(String(32), nullable=False)
+    name = db.Column(String(64), unique=True, nullable=False)
     location = db.Column(String(128))
     traffic = db.Column(String(128))
     extend = db.Column(String(64))

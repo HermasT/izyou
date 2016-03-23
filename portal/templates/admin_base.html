@@ -58,6 +58,11 @@
                         {% else %}
                         <li><a class='title-navbar' href="/user">用户管理</a></li>
                         {% endif %}
+                        {% if index == 5 %}
+                        <li class='active'><a class='title-navbar' href="/room">教室管理</a></li>
+                        {% else %}
+                        <li><a class='title-navbar' href="/room">教室管理</a></li>
+                        {% endif %}
                     </ul>
                     <ul class="nav navbar-nav navbar-right" align='center'>
                         {% if username %}

@@ -260,6 +260,36 @@ def room():
 		if page < 1:
 			page = 1
 		paginate = Room.query.paginate(int(page), config.PAGE_ITEMS, False)
-		return render_template('room.html', username=current_user.username, pagination=paginate)
+		return render_template('room.html', username=current_user.username, pagination=paginate, index=5)
+	else:
+		abort(403)
+
+@app.route('/search_room', methods=['GET'])
+@login_required
+def search_room():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		# 由于使用站内搜索功能时结果集一般很少，为简单起见不再支持分页
+		name = request.args.get("q")
+		if name == '':
+			return render_template('error.html', message='请输入查询的教室信息')
+		try:
+			pattern = '%' + name + '%'	# 支持模糊查询
+			result = Room.query.filter(Room.name.like(pattern)).order_by(Room.rid).all()
+			return render_template('search_room.html', username=current_user.username, rooms=result, index=5)
+		except Exception , e:
+			# app.logger.error(e)
+			return render_template('error.html', message='查询失败')
+	else:
+		abort(403)
+
+@app.route('/add_room', methods=['GET'])
+@login_required
+def add_room():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		page = request.args.get("page", 1)
+		if page < 1:
+			page = 1
+		paginate = Room.query.paginate(int(page), config.PAGE_ITEMS, False)
+		return render_template('add_room.html', username=current_user.username, pagination=paginate, index=5)
 	else:
 		abort(403)
