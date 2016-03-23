@@ -93,8 +93,12 @@ def update_teacher():
 		if teacher is None:
 			return render_template('error.html', message='查找不到与之匹配的讲师')
 		else:
-			return render_template('update_teacher.html', username=current_user.username, teacher=teacher, types=GameType.getAll(),
-				genderName=GenderType.getName(teacher.gender), gname=GameType.getName(teacher.gtype))
+			user = Users.query.filter(Users.username==teacher.username).first()
+			if not user:
+				return render_template('error.html', message='找不到教师的基本用户数据')
+			else:
+				return render_template('update_teacher.html', username=current_user.username, teacher=teacher, types=GameType.getAll(),
+				genderName=GenderType.getName(user.gender), gname=GameType.getName(teacher.gtype))
 	else:
 		abort(403)
 
