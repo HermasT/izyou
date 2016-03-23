@@ -21,10 +21,12 @@ def api_login():
     u = Users.query.filter(or_(Users.username==account, Users.phone==account, Users.email==account)).first()
     if not u:
         return jsonify({'error':1, 'cause':'用户名不存在'})
+    elif u.block == True:
+        return jsonify({'error':2, 'cause':'您的账号已被封禁，请与管理员联系'})
     elif u.active != True:
-        return jsonify({'error':2, 'cause':'用户未激活'})
+        return jsonify({'error':3, 'cause':'用户未激活'})
     elif u.password != Users.get_crypto_password(password, u.salt):
-        return jsonify({'error':3, 'cause':'密码不正确'})
+        return jsonify({'error':4, 'cause':'密码不正确'})
     else:
     	login_user(u, remember=True)
         return jsonify({'error':0, 'next': request.args.get('next')})
