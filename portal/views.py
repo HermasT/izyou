@@ -296,44 +296,43 @@ def course_register():
 	else:
 		return render_template('error.html', message='请您登录')
 
-# 用户基本信息 
-@app.route('/userprofile', methods = ['GET'])
-@login_required
-def userprofile():
+# # 用户基本信息 
+# @app.route('/userprofile', methods = ['GET'])
+# @login_required
+# def userprofile():
 
-	if current_user is not None and current_user.is_privileged(UserType.registered):
-		username = request.args.get("username")
+# 	if current_user is not None and current_user.is_privileged(UserType.registered):
+# 		username = request.args.get("username")
 
-		if not username:
-			abort(404)
-		elif current_user.username.lower() != username.lower():
-			abort(404)
-		else:
-			return render_template('userprofile.html', username=current_user.username, user=current_user, genderName = GenderType.getName(current_user.gender), birthStr = current_user.getBirthStr())
-	else:
-		abort(403)
+# 		if not username:
+# 			abort(404)
+# 		elif current_user.username.lower() != username.lower():
+# 			abort(404)
+# 		else:
+# 			return render_template('userprofile.html', username=current_user.username, user=current_user, genderName = GenderType.getName(current_user.gender), birthStr = current_user.getBirthStr())
+# 	else:
+# 		abort(403)
 
 # 用户基本信息 
 @app.route('/edit_userprofile', methods = ['GET'])
+@app.route('/userprofile', methods = ['GET'])
 @login_required
 def edit_userprofile():
-
 	if current_user is not None and current_user.is_privileged(UserType.registered):
 		username = request.args.get("username")
-
 		if not username:
 			abort(404)
 		elif current_user.username.lower() != username.lower():
-			abort(404)
+			abort(403)
 		else:
-			return render_template('edit_userprofile.html', username=current_user.username, user=current_user, genderName = GenderType.getName(current_user.gender), birthStr = current_user.getBirthStr())
+			return render_template('edit_userprofile.html', username=current_user.username, user=current_user, 
+				genderName = GenderType.getName(current_user.gender), typeName=UserType.getName(current_user.type), birthStr = current_user.getBirthStr())
 	else:
 		abort(403)
 
 @app.route('/change_password', methods = ['GET'])
 @login_required
 def change_password():
-
 	return render_template('change_password.html', username=current_user.username)
 
 

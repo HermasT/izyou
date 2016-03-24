@@ -49,15 +49,19 @@ $(document).ready(function() {
 
 		var btn_user_gender = document.getElementById("btn_user_gender");
 		var txtBirth = document.getElementById("txtBirth");
+		var txtDesc = document.getElementById("txtDesc");
+		var txtExtend = document.getElementById("txtExtend");
 	
 		$.ajax({
-			url:'/rest/api_update_userprofile',
+			url:'/rest/update_userprofile',
 		    data: {
 		    	"name": txtName.value,
 		    	"email": txtEmail.value,
 		    	"phone": txtMobile.value,
 		    	"birth": txtBirth.value,
-		    	"gender": btn_user_gender.value
+		    	"gender": btn_user_gender.value,
+		    	"desc": txtDesc.value,
+		    	"extend": txtExtend.value
 		    },
 		    type: 'post',
 		    cache: false,
@@ -68,11 +72,11 @@ $(document).ready(function() {
 			    		window.location.href = "/userprofile?username=" + $('#hidden_userName').val();
 			    	});
 		    	} else {
-		    		$.MsgBox.Alert("更改课程信息", data["cause"]);
+		    		$.MsgBox.Alert("编辑用户信息", data["cause"]);
 		    	}
 		    },
 		    error: function() {
-		        $.MsgBox.Alert("更改课程信息", "请求失败，请稍候重试");
+		        $.MsgBox.Alert("编辑用户信息", "请求失败，请稍候重试");
 		    }
 		})
     });

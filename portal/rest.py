@@ -235,7 +235,7 @@ def api_add_course_schedule():
 	cid = request.values.get('cid')
 	schedules = json.loads(request.values.get('schedules'))
 
-	# 将课程的step设置为2
+	# 将课程的step设置为3
 	course = Course.query.filter(Course.cid==cid).first()
 	if not course:
 		abort(404)
@@ -341,31 +341,35 @@ def api_add_room():
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
 # 用户更新自己的信息
-@app.route('/rest/api_update_userprofile', methods=['POST'])
+@app.route('/rest/update_userprofile', methods=['POST'])
 def  api_update_userprofile():
 	name = request.values.get("name")
 	birth = request.values.get("birth")
 	phone = request.values.get("phone")
 	email = request.values.get("email")
 	gender = request.values.get("gender")
+	desc = request.values.get("desc")
+	extend = request.values.get("extend")
 
+	userToUpdate = Users.query.filter(Users.uid == current_user.uid).first()
+	if not userToUpdate:
+		return jsonify({'error':403, 'cause': '用户名不存在'})
+
+	userToUpdate.name = name;
+	userToUpdate.birth = birth;
+	userToUpdate.phone = phone;
+	userToUpdate.gender = gender;
+	userToUpdate.email = email;
+	userToUpdate.desc = desc
+	userToUpdate.extend = extend
+
+	db.session.add(userToUpdate)
 	try:
-		userToUpdate = Users.query.filter(Users.uid == current_user.uid).first()
-		if not userToUpdate:
-			return jsonify({'error':403, 'cause': '用户名不存在'})
-
-		userToUpdate.name = name;
-		userToUpdate.birth = birth;
-		userToUpdate.phone = phone;
-		userToUpdate.gender = gender;
-		userToUpdate.email = email;
-
-		db.session.add(userToUpdate)
 		db.session.commit()
-
-		return jsonify({'error':0, 'username': current_user.username})
+		return jsonify({'error':0})
 	except Exception , e:
 		# app.logger.error(e)
+		db.session.rollback()
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
 # 修改用户密码
