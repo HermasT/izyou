@@ -1,0 +1,112 @@
+{% extends "portal_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}
+智益加 - 用户信息
+{% endblock %}
+
+{% block content %}
+<div class='container'>
+	<input type="hidden" id="hidden_userName" value="{{user.username}}" ></input>
+	<div class='page-title'>益智加－编辑用户信息1</div>
+	<div class="panel panel-default">
+	  	<div class="panel-body">
+			<div class="row row-padding">
+			  	<div class="col-lg-2" align='right'>
+				    <span class='group-info'>邮箱地址：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtEmail' type="text" class="form-control" value="{{user.email}}"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-2" align='right'>
+				    <span class='group-info'>手机号：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtMobile' type="text" class="form-control" value="{{user.phone}}"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-2" align='right'>
+				    <span class='group-info'>姓名：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtName' type="text" class="form-control" value="{{user.name}}"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-2" align='right'>
+				    <span class='group-info'>性别：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<!-- <input id='txtGender' type="text" class="form-control" value="{{genderName}}"></input> -->
+					<div class="dropdown">
+  						<button id='btn_user_gender' class="btn btn-default dropdown-toggle" type="button" 
+  							data-toggle="dropdown" aria-haspopup="true" value="{{user.gender}}" aria-expanded="true">{{genderName}}
+    						<span class="caret"></span>
+  						</button>
+					    <ul class="dropdown-menu" aria-labelledby="btn_create_course_gtype">
+					    	<li onclick="select_gtype('0', '未知')"><a>未知</a></li>
+					    	<li onclick="select_gtype('1', '男')"><a>男</a></li>
+					    	<li onclick="select_gtype('2', '女')"><a>女</a></li>
+					    </ul>
+					</div>
+			  	</div>
+			</div>
+			<div class="row row-padding">
+			  	<div class="col-lg-2" align='right'>
+				    <span class='group-info'>生日：</span>
+			  	</div>
+				<div id="birthPicker" class="col-lg-4 input-group date padding-left" align='left'>
+					<input id='txtBirth' class='form-control' type='text' readonly="readonly" value="2016-01-01"></input>
+	                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			  	</div>
+			</div>
+			<div class="row row-padding">
+			  	<div class="col-lg-7" align='right'>
+			  		<button id='btnEditUser' class='btn btn-primary'>更新</button>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script src="/static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script src="/static/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script src="/static/js/edit_userprofile.js"></script>
+<script src="/static/js/custom_common.js"></script>
+<!-- <script src="/static/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/custom_common.js"></script>
+<link href="/static/css/custom.css" rel="stylesheet"> -->
+<script type="text/javascript">
+    $('#birthPicker').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+  		autoclose: 1,
+  		todayHighlight: 1,
+  		startView: 2,
+  		minView: 2,
+  		forceParse: 0
+    });
+   
+    function select_gtype(type, name) {
+    	$("#btn_user_gender").val(type);
+		$("#btn_user_gender").html(name + " <span class='caret'></span>");
+    }
+</script>
+
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

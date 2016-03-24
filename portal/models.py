@@ -254,7 +254,9 @@ class Users(db.Model):
             return self.name
 
     def getBirthStr(self):
-        return "getBirthStr"
+        if not self.birth:
+            return ""
+        return self.birth.strftime('%Y-%m-%d')
 
     # 封禁/解封
     def do_forbid(self, block):
