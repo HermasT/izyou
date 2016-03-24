@@ -138,11 +138,10 @@
 			</div>
 
 			<hr/>
-
 			<div class="row row-padding">
 			  	<div class="col-lg-1" align='right'></div>
 				<div class="col-lg-2">
-					<button id='btn_create_course' class='btn btn-primary full'>提交</button>
+					<button id='btn_create_course' class='btn btn-primary full'>下一步</button>
 			  	</div>
 			</div>
 		</div>
@@ -244,8 +243,8 @@
 		    success: function(data) {
 		    	if (data["error"] == 0) {
 		    		$("#create_course_id").val(data["cid"]);
-			    	$.MsgBox.Alert("新增课程", "您的请求已提交成功", function() {
-			    		window.location.href = "/course";
+			    	$.MsgBox.Alert("新增课程", "您的请求已提交成功，请添加课程内容", function() {
+			    		window.location.href = "/add_course_detail?cid=" + data["cid"] + "&name=" + name + "&count=" + count;
 			    	});
 			    } else {
 			    	$.MsgBox.Alert("新增课程", data["cause"]);

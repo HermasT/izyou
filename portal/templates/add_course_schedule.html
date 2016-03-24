@@ -1,0 +1,123 @@
+{% extends "admin_base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}
+智益加 - 新增课程
+{% endblock %}
+
+{% block content %}
+<div class='container'>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row row-padding hide">
+                <div class="col-lg-1" align='right'>
+                    <span class='group-info'>课程编号</span>
+                </div>
+                <div class="col-lg-5" align='left'>
+                    <input id='add_schedule_course_id' type="text" class="form-control" readonly value='{{cid}}'></input>
+                </div>
+            </div>
+
+            <div class="row row-padding">
+                <div class="col-lg-1" align='right'>
+                    <span class='group-info'>课程名称</span>
+                </div>
+                <div class="col-lg-5" align='left'>
+                    <input type="text" class="form-control" readonly value='{{name}}'></input>
+                </div>
+            </div>
+
+            <div class="row row-padding">
+                <div class="col-lg-1" align='right'>
+                    <span class='group-info'>课程班次</span><strong class='info-nessecary'>*</strong>
+                </div>
+                <div class="col-lg-10">
+                    <div id='add_schedule_table'></div>
+                </div>
+            </div>
+
+            <hr/>
+            <div class="row row-padding">
+                <div class="col-lg-1" align='right'></div>
+                <div class="col-lg-2">
+                    <button id='add_course_schedule' class='btn btn-primary full'>提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/jquery.edittable.js?v=0.2.0"></script>
+<script src="/static/js/jquery-ui.js"></script>
+<script type="text/javascript">
+    schedule_table_data = ['1', '', '', '', '']
+    $(document).ready(function () {
+        add_schedule_table = $("#add_schedule_table").editTable({
+            data: [schedule_table_data],
+            headerCols: ['班次', '时间', '地点', '主授课教师', '辅授课教师'],
+            first_row: false,
+            has_add_icon: true,
+            validate_field: function (col_id, value, col_type, element) {
+                if (col_type === 'text') {
+                    $(element).css({
+                        'background-color': '#fff'
+                    });
+                    if (value == null || value == "") {
+                        $(element).css({
+                            'background-color': '#DB4A39'
+                        });
+                        return false;
+                    }
+                }
+                return true;
+            },
+        });
+
+        $("#add_course_schedule").bind("click", function () {
+            var cid = document.getElementById("add_schedule_course_id").value;
+            if (empty_input(cid)) {
+                $.MsgBox.Alert("非法输入", "非法访问");
+                return;
+            }
+
+            var schedules = add_schedule_table.getJsonData();
+            if (JSON.parse(schedules).length == 0) {
+                $.MsgBox.Alert("非法输入", "至少应当配置一个班次");
+                return;
+            }
+            if (!add_schedule_table.isValidated()) {
+                $.MsgBox.Alert("非法输入", "班次内容输入不合法");
+                return;
+            }
+
+            $.ajax({
+                url: '/rest/add_course_schedule',
+                data: {"cid":cid, "schedules": JSON.stringify(schedule_array_to_json_array(schedules))},
+                type: 'post',
+                cache: false,
+                dataType: 'json',
+                success: function (data) {
+                    if (data["error"] == 0) {
+                        $.MsgBox.Alert("添加课程班次", "您成功添加了新的课程", function () {
+                            window.location.href = "/course";
+                        });
+                    } else {
+                        $.MsgBox.Alert("添加课程班次", data["cause"]);
+                    }
+                },
+                error: function () {
+                    $.MsgBox.Alert("添加课程班次", "请求失败，请稍候重试");
+                }
+            })
+        });
+    })
+</script>
+
+<link rel="stylesheet" href="/static/css/jquery.edittable.css?v=0.2.0">
+<link rel="stylesheet" href="/static/css/jquery-ui.css">
+<!-- <link href="/static/css/custom.css" rel="stylesheet">  -->
+{% endblock %} 
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

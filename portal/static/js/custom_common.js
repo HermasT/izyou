@@ -53,6 +53,32 @@ function is_valid_code(code) {
     }
 }
 
+function content_array_to_json_array(contents) {
+    var content_json_array = [];
+　　 $.each(JSON.parse(contents), function(i, content){
+        var content_json = {};
+        content_json.index = content[0];
+        content_json.title = content[1];
+        content_json.detail = content[2];
+        content_json_array.push(content_json);
+　　 });
+    return content_json_array;
+}
+
+function schedule_array_to_json_array(schedules) {
+    var schedule_json_array = [];
+　　 $.each(JSON.parse(schedules), function(i, schedule){
+        var schedule_json = {};
+        schedule_json.index = schedule[0];
+        schedule_json.time = schedule[1];
+        schedule_json.rid = schedule[2];
+        schedule_json.mteacher = schedule[3];
+        schedule_json.bteacher = schedule[4];
+        schedule_json_array.push(schedule_json);
+　　 });
+    return schedule_json_array;
+}
+
 (function ($) {
     $.MsgBox = {
         Alert: function (title, msg) {

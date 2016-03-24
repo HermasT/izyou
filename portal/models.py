@@ -374,11 +374,12 @@ class Course(db.Model):
     charge = db.Column(Float) # 课程费用
     discount = db.Column(Float) # 折扣率（0.9=9折）
     status = db.Column(Integer)  # CourseStatus
+    step = db.Column(Integer, default=0) # 1=提交了基本信息 2=提交了课程详情  3=提交了班次设置
     target = db.Column(String(64)) # 招生对象
     desc = db.Column(String(128)) # 课程介绍
     extend = db.Column(String(64)) # 备注
 
-    def __init__(self, name, gtype, time, count, period, charge, active=True,
+    def __init__(self, name, gtype, time, count, period, charge, active=True, step=0,
             max_student=65536, min_student=1, audition=0, discount=1, target='', desc='', extend=''):
         self.name = name
         self.active = active
@@ -392,6 +393,7 @@ class Course(db.Model):
         self.audition = audition
         self.discount = discount
         self.status = CourseStatus.applying
+        self.step = step
         self.target = target
         self.desc = desc
         self.extend = extend
@@ -420,15 +422,17 @@ class CourseDetail(db.Model):
 class CourseSchedule(db.Model):
     csid = db.Column(Integer, primary_key=True)     # 主键
     cid = db.Column(Integer, nullable=False)        # ForeignKey('Course.cid')
+    index = db.Column(Integer, nullable=False)      # 同一个课程下的多个班次排序
     rid = db.Column(Integer, nullable=False)        # 教室 ForeignKey('Room.rid')
     time = db.Column(String(32), nullable=False)    # 班次时间
     mteacher = db.Column(Integer, nullable=False)   # 主教 ForeignKey('Teacher.tid')
     bteacher = db.Column(Integer, nullable=True)    # 助教 ForeignKey('Teacher.tid')
     extend = db.Column(String(64))                  # 暂规定一个课程同时最多有2个教师
 
-    def __init__(self, cid, rid, time, mteacher, bteacher=0, extend=''):
+    def __init__(self, cid, rid, index, time, mteacher, bteacher=0, extend=''):
         self.cid = cid;
         self.rid = rid;
+        self.index = index
         self.time = time
         self.mteacher = mteacher
         self.bteacher = bteacher

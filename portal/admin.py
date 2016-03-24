@@ -120,13 +120,34 @@ def course():
 	else:
 		abort(403)
 
-@app.route('/create_course', methods=['GET', 'POST'])
+@app.route('/create_course', methods=['GET'])
 @login_required
 def create_course():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
 		teachers = Teacher.query.order_by(Teacher.tid).all()
 		print teachers
 		return render_template('create_course.html', username=current_user.username, types=GameType.getAll(), teachers=teachers)
+	else:
+		abort(403)
+
+@app.route('/add_course_detail', methods=['GET'])
+@login_required
+def add_course_detail():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		cid = request.args.get("cid")
+		name = request.args.get("name")
+		count = request.args.get("count")
+		return render_template('add_course_detail.html', username=current_user.username, cid=cid, name=name, count=count)
+	else:
+		abort(403)
+
+@app.route('/add_course_schedule', methods=['GET'])
+@login_required
+def add_course_schedule():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		cid = request.args.get("cid")
+		name = request.args.get("name")
+		return render_template('add_course_schedule.html', username=current_user.username, cid=cid, name=name)
 	else:
 		abort(403)
 

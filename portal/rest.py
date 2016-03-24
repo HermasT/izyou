@@ -8,11 +8,12 @@ from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from portal import app, db, lm, mail
-from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus, PayType, Orders, OrdersList, OrderStatus
+from models import Users, Teacher, Room, UserType, GenderType, GameType, PayType, Orders, OrdersList, OrderStatus
+from models import Course, CourseStatus, CourseDetail, CourseSchedule, CourseStudent
 from mail import MailUtil
 from sms import SmsUtil
 
-# REST APIs
+# 用户账号
 @app.route('/rest/login', methods=['GET'])
 def api_login():
     account = request.args.get("username")
@@ -134,6 +135,7 @@ def api_verify_sms_code():
 			user.do_active();
 	return result
 
+# 师资管理
 @app.route('/rest/add_teacher', methods=['GET', 'POST'])
 def api_add_teacher():
 	name = request.args.get("name")
@@ -189,11 +191,12 @@ def api_update_teacher():
 	except:
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
+# 课程管理
 @app.route('/rest/create_course', methods=['POST'])
 def api_create_course():
 	summary = json.loads(request.values.get('summary'))
 	try:
-		c = Course(name=summary['name'], gtype=summary['gtype'], time=summary['time'], count=summary['count'],
+		c = Course(name=summary['name'], gtype=summary['gtype'], time=summary['time'], count=summary['count'], step=1,
 			period=summary['period'], charge=summary['charge'], max_student=summary['max'], min_student=summary['min'],
 			audition=summary['audition'], target=summary['target'], desc=summary['desc'], extend=summary['extend'])
 		db.session.add(c)
@@ -201,6 +204,56 @@ def api_create_course():
 		return jsonify({'error':0, 'cid': c.cid})
 	except Exception, e:
 		print e
+		return jsonify({'error':4, 'cause': '数据库操作失败'})
+
+@app.route('/rest/add_course_detail', methods=['POST'])
+def api_add_course_detail():
+	cid = request.values.get('cid')
+	contents = json.loads(request.values.get('contents'))
+
+	# 将课程的step设置为2
+	course = Course.query.filter(Course.cid==cid).first()
+	if not course:
+		abort(404)
+	else:
+		course.step = 2
+		db.session.add(course)
+
+	for c in contents:
+		course_content = CourseDetail(cid=cid, index=c['index'], title=c['title'], detail=c['detail'], extend='')
+		db.session.add(course_content)
+
+	try:
+		db.session.commit()
+		return jsonify({'error':0})
+	except Exception, e:
+		db.session.rollback()
+		return jsonify({'error':4, 'cause': '数据库操作失败'})
+
+@app.route('/rest/add_course_schedule', methods=['POST'])
+def api_add_course_schedule():
+	cid = request.values.get('cid')
+	schedules = json.loads(request.values.get('schedules'))
+
+	# 将课程的step设置为2
+	course = Course.query.filter(Course.cid==cid).first()
+	if not course:
+		abort(404)
+	else:
+		course.step = 3
+		db.session.add(course)
+
+	for s in schedules:
+		course_schedule = CourseSchedule(cid=cid, rid=s['rid'], index=s['index'], 
+			time=s['time'], mteacher=s['mteacher'], bteacher=s['bteacher'], extend='')
+		db.session.add(course_schedule)
+	try:
+		db.session.commit()
+		print 's'
+		return jsonify({'error':0})
+	except Exception, e:
+		print e
+		db.session.rollback()
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
 @app.route('/rest/update_course', methods=['GET', 'POST'])
@@ -257,6 +310,7 @@ def api_register_course():
 		print e
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
+# 教室管理
 @app.route('/rest/add_room', methods=['POST'])
 def api_add_room():
 	name = request.values.get("name")
