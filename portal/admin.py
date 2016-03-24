@@ -182,7 +182,9 @@ def update_course():
 			# status = CourseStatus.getName(course.status)
 			# teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
 			# allteachers = Teacher.query.order_by(Teacher.tid).all()
-			return render_template('update_course.html', username=current_user.username, course=course)
+			gtype = {'type':course.gtype, "name": GameType.getName(course.gtype)}
+			return render_template('update_course.html', username=current_user.username, course=course,
+				gtype = gtype, types=GameType.getAll())
 	else:
 		abort(403)
 

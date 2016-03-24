@@ -258,27 +258,36 @@ def api_add_course_schedule():
 
 @app.route('/rest/update_course', methods=['GET', 'POST'])
 def api_update_course():
-	try:
-		cid = request.args.get('cid')
-		course = Course.query.filter(Course.cid==cid).first()
-		if course is None:
-			flash(u'查找不到与之匹配的课程信息')
-			return render_template('error.html')
-		else:
-			course.name = request.args.get("name")
-			course.status = request.args.get("status")
-			course.tid = request.args.get("teacher")
-			course.start = request.args.get("start")
-			course.end = request.args.get("end")
-			course.count = request.args.get("count")
-			course.desc = request.args.get("desc")
-			course.charge = request.args.get("fee")
-			course.extend = request.args.get("extend")
-
+	cid = request.values.get('cid')
+	print cid
+	course = Course.query.filter(Course.cid==cid).first()
+	print course
+	if course is None:
+		return jsonify({'error':1, 'cause': '查找不到与之匹配的课程信息'})
+	else:
+		summary = json.loads(request.values.get('summary'))
+		print summary
+		print type(summary)
+		course.name = name=summary['name']
+		course.gtype=summary['gtype']
+		course.time=summary['time']
+		course.count=summary['count']
+		course.period=summary['period']
+		course.charge=summary['charge']
+		course.max_student=summary['max']
+		course.min_student=summary['min']
+		course.audition=summary['audition']
+		course.target=summary['target']
+		course.desc=summary['desc']
+		course.extend=summary['extend']
+		db.session.add(course)
+		try:
 			db.session.commit()
 			return jsonify({'error':0})
-	except:
-		return jsonify({'error':4, 'cause': '数据库操作失败'})
+		except Exception, e:
+			print e
+			db.session.rollback()
+			return jsonify({'error':4, 'cause': '数据库操作失败'})
 
 @app.route('/rest/register_course', methods=['GET', 'POST'])
 def api_register_course():
