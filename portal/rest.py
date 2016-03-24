@@ -189,27 +189,18 @@ def api_update_teacher():
 	except:
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
-@app.route('/rest/create_course', methods=['GET', 'POST'])
+@app.route('/rest/create_course', methods=['POST'])
 def api_create_course():
-	name = request.args.get("name")
-	gtype = request.args.get("gtype")
-	start = request.args.get("start")
-	end = request.args.get("end")
-	tid = request.args.get("teacher")
-	count = request.args.get("count")
-	fee = request.args.get("fee")
-	desc = request.args.get("desc")
-	extend = request.args.get("extend")
-
-	print 'name', name, 'gjgj'
-
+	summary = json.loads(request.values.get('summary'))
 	try:
-		c = Course(name=name, gtype=gtype, tid=tid, start=start, end=end, count=count, period = 0, charge=fee, desc=desc, extend=extend)
+		c = Course(name=summary['name'], gtype=summary['gtype'], time=summary['time'], count=summary['count'],
+			period=summary['period'], charge=summary['charge'], max_student=summary['max'], min_student=summary['min'],
+			audition=summary['audition'], target=summary['target'], desc=summary['desc'], extend=summary['extend'])
 		db.session.add(c)
 		db.session.commit()
 		return jsonify({'error':0, 'cid': c.cid})
-	except Exception, ex:
-		print ex
+	except Exception, e:
+		print e
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
 @app.route('/rest/update_course', methods=['GET', 'POST'])

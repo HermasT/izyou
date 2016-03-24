@@ -362,32 +362,28 @@ class CourseStatus(Enum):
 
 class Course(db.Model):
     cid = db.Column(Integer, primary_key=True)
-    name = db.Column(String(32), nullable=False)
+    name = db.Column(String(32), unique=True, nullable=False)
     active = db.Column(Boolean, default=True) # 是否上架
     gtype = db.Column(Integer, nullable=False)
     time = db.Column(String(64), nullable=False)
-    start = db.Column(Date) # 开始日期
-    end = db.Column(Date)  # 结束日期
     max_student = db.Column(Integer) # 最大学生人数
     min_student = db.Column(Integer) # 最小学生人数
     audition = db.Column(Integer) # 允许试听次数
-    count = db.Column(Integer) # 课程总计次数
-    period = db.Column(Integer) # 课程时长（以分钟计）
+    count = db.Column(Integer) # 课时次数
+    period = db.Column(Integer) # 课时时长（以分钟计）
     charge = db.Column(Float) # 课程费用
     discount = db.Column(Float) # 折扣率（0.9=9折）
     status = db.Column(Integer)  # CourseStatus
     target = db.Column(String(64)) # 招生对象
     desc = db.Column(String(128)) # 课程介绍
-    extend = db.Column(String(64))
+    extend = db.Column(String(64)) # 备注
 
-    def __init__(self, name, gtype, tid, time, start, end, count, period, charge,
-                max_student=65536, min_student=1, audition=0, discount=1, target='', desc='', extend=''):
+    def __init__(self, name, gtype, time, count, period, charge, active=True,
+            max_student=65536, min_student=1, audition=0, discount=1, target='', desc='', extend=''):
         self.name = name
+        self.active = active
         self.gtype = gtype;
-        self.tid = tid
         self.time = time
-        self.start = start
-        self.end = end
         self.count = count
         self.period = period
         self.charge = charge

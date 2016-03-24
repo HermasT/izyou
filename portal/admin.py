@@ -8,7 +8,8 @@ from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from portal import app, db, lm, mail
-from models import Users, Teacher, Room, Course, UserType, GenderType, GameType, CourseStatus, PayType, Orders, OrdersList
+from models import Users, Teacher, Room, UserType, GenderType, GameType, PayType, Orders, OrdersList
+from models import Course, CourseStatus, CourseDetail, CourseSchedule, CourseStudent
 
 # 后台管理
 @app.route('/admin', methods=['GET', 'POST'])
@@ -111,18 +112,11 @@ def course():
 		if page < 1:
 			page = 1
 
-		# 需要从Course和Teacher两个表中进行联合查询
-		# 第一种办法是直接关联，这样需要代码进行分页，实现太复杂
-		# 第二种办法是直接对Course分页，然后根据外键进行关联查询
 		paginate = Course.query.order_by(Course.cid).paginate(int(page), config.PAGE_ITEMS, False)
-
-		status = []
-		teachers = []
 		for course in paginate.items:
-			status.append(CourseStatus.getName(course.status))
-			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
-			teachers.append(teacher.username)
-		return render_template('course.html', index=3, username=current_user.username, pagination=paginate, status=status, teachers=teachers)
+			schedule_count = db.session.query(CourseSchedule).filter(CourseSchedule.cid==course.cid).count()
+			course.scount = schedule_count
+		return render_template('course.html', index=3, username=current_user.username, pagination=paginate)
 	else:
 		abort(403)
 
@@ -140,19 +134,16 @@ def create_course():
 @login_required
 def search_course():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
-		name = request.args.get("name")
+		name = request.args.get("q")
 		try:
 			pattern = '%' + name + '%'
-			result = Course.query.filter(Course.name.like(pattern)).order_by(Course.tid).all()
-
-			status = []
-			teachers = []
+			result = Course.query.filter(Course.name.like(pattern)).order_by(Course.cid).all()
 			for course in result:
-				status.append(CourseStatus.getName(course.status))
-				teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
-				teachers.append(teacher.name)
-			return render_template('search_course.html', username=current_user.username, courses=result, status=status, teachers=teachers)
-		except:
+				schedule_count = db.session.query(CourseSchedule).filter(CourseSchedule.cid==course.cid).count()
+				course.scount = schedule_count
+			return render_template('search_course.html', username=current_user.username, courses=result, index=3)
+		except Exception, e:
+			print e
 			return render_template('error.html', message='查询失败')
 	else:
 		abort(403)

@@ -9,11 +9,6 @@
 {% block content %}
 <div class='container'>
 	<div class="panel panel-default">
-	  	<div class="panel-heading">
-	  		<a class='custom_index' href="/index"></a>
-	  		<span class='custom_title' align='center'>课程管理</span>
-  		</div>
-
 	  	<div class="panel-body">
 		  	<div class="col-lg-4">
 			      <input id='search_course_name' type="text" class="form-control" placeholder="课程名称"></input>
@@ -32,37 +27,26 @@
 	<br/><br/>
 	<table class="table table-striped table-bordered table-hover">
 		<tr class='info' align="center">
-			<td>ID</td>
+			<td>#</td>
 			<td>名称</td>
-			<td>授课讲师</td>
-			<td>开始时间</td>
-			<td>结束时间</td>
+			<td>时间安排</td>
 			<td>授课次数</td>
 			<td>报名费</td>
-			<td>当前状态</td>
-			<td>课程介绍</td>
-			<td>其他</td>
+			<td>班次总数</td>
+			<td>备注</td>
 			<td width="140px"></td>
 		</tr>
 		{% for course in pagination.items %}
 		<tr align="center">
 			<td>{{course.cid}}</td>
 			<td>{{course.name}}</td>
-			<td>{{teachers[loop.index - 1]}}</td>
-			<td>{{course.start}}</td>
-			<td>{{course.end}}</td>
+			<td>{{course.time}}</td>
 			<td>{{course.count}}</td>
-			<td>￥{{course.charge}}</td>
-			<td>{{status[loop.index - 1]}}</td>
-			<td>{{course.desc}}</td>
+			<td>￥{{course.charge|int}}</td>
+			<td>{{course.scount}}</td>
 			<td>{{course.extend}}</td>
 			<td>
-				{% if course.status == 1 or course.status == 3 %}
-				<a href="javascript:void(0)">报名</a>
-				{% else %}
-				<a href="/register_course?cid={{course.cid}}&&username={{username}}">报名</a>
-				{% endif %}
-				&nbsp;&nbsp;<a href="/update_course?cid={{course.cid}}">编辑</a>
+				<a href="/course_detail?cid={{course.cid}}">详情</a>&nbsp;&nbsp;<a href="/update_course?cid={{course.cid}}">编辑</a>
 			</td>
 		</tr>
 		{% endfor %}
@@ -92,8 +76,12 @@
 <script src="/static/js/custom_common.js"></script>
 <script type="text/javascript">
 	function search_course() {
-		var name = document.getElementById("search_course_name");
-		window.location.href = "/search_course?name=" + name.value;
+		var name = document.getElementById("search_course_name").value;
+		if (empty_input(name)) {
+			$.MsgBox.Alert("非法输入", "搜索的课程名称为空");
+			return;
+		}
+		window.location.href = "/search_course?q=" + name;
 	}
 </script>
 {% endblock %}

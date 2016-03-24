@@ -171,10 +171,18 @@ def all_courses():
 			schedules = CourseSchedule.query.filter(CourseSchedule.cid == c.cid).all()
 			if schedules is not None:
 				for schedule in schedules:
-					teacher = Teacher.query.filter(Teacher.tid == schedule.mteacher).first();
-					user = Users.query.filter(Users.username==teacher.username).first()
-					if user:
-						schedule.teacher = user.getName()
+					mteacher = Teacher.query.filter(Teacher.tid == schedule.mteacher).first();
+					muser = Users.query.filter(Users.username==mteacher.username).first()
+					if muser:
+						schedule.mteacher = muser.getName()
+
+					bteacher = Teacher.query.filter(Teacher.tid == schedule.bteacher).first();
+					schedule.bteacher = ''
+					if bteacher:
+						buser = Users.query.filter(Users.username==bteacher.username).first()
+						if buser:
+							schedule.bteacher = buser.getName()
+
 					room = Room.query.filter(Room.rid==schedule.rid).first();
 					if room:
 						schedule.room = room.name
