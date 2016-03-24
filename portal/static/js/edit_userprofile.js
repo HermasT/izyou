@@ -1,8 +1,16 @@
 $(document).ready(function() {
+	
+	$("#btnChangePassword").bind("click", function() {
+		var username = document.getElementById("hidden_userName").value;
+		if (empty_input(username)) {
+			$.MsgBox.Alert("非法访问", "非法的用户名");
+			return;
+		}
+		window.location.href = "/change_password?username=" + username;
+	});
 
     $("#btnEditUser").bind("click", function() {
-    	var cid = document.getElementById("update_course_id");
-    	var name = document.getElementById("update_course_name");
+    	
 
     	var txtEmail = document.getElementById("txtEmail");
 		if (empty_input(txtEmail.value)) {

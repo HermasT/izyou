@@ -91,6 +91,11 @@ body {
 	left: 15px;
 }
 
+ .padding-top {
+ 	margin-top: 15px;
+ 	margin-bottom: 15px;
+ }
+
 .group-info,
 .group-info-secondary {
 	font-size: 14px;

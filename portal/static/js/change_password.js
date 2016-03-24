@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    $("#btnEditUser").bind("click", function() {
+    $("#btnChangePassword").bind("click", function() {
     	
     	var txtOldPassword = document.getElementById("txtOldPassword");
 		if (empty_input(txtOldPassword.value)) {
@@ -26,7 +26,7 @@ $(document).ready(function() {
 		}
 	
 		$.ajax({
-			url:'/rest/api_update_password',
+			url:'/rest/update_password',
 		    data: {
 		    	"oldPassword": txtOldPassword.value,
 		    	"newPassword": txtNewPassword.value

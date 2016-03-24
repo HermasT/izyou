@@ -333,7 +333,16 @@ def edit_userprofile():
 @app.route('/change_password', methods = ['GET'])
 @login_required
 def change_password():
-	return render_template('change_password.html', username=current_user.username)
+	if current_user is not None and current_user.is_privileged(UserType.registered):
+		username = request.args.get("username")
+		if not username:
+			abort(404)
+		elif current_user.username.lower() != username.lower():
+			abort(403)
+		else:
+			return render_template('change_password.html', username=current_user.username)
+	else:
+		abort(403)
 
 
 # # 联系我们

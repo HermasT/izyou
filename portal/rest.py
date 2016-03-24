@@ -373,30 +373,22 @@ def  api_update_userprofile():
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
 # 修改用户密码
-@app.route('/rest/api_update_password', methods=['POST'])
+@app.route('/rest/update_password', methods=['POST'])
 def  api_update_password():
-
 	oldPassword = request.values.get('oldPassword')
 	newPassword = request.values.get('newPassword')
 
 	saltOldPassword = Users.get_crypto_password(oldPassword, current_user.salt)
 	saltNewPassword = Users.get_crypto_password(newPassword, current_user.salt)
-
 	if saltOldPassword == saltNewPassword:
 		return jsonify({'error':404, 'cause': '新密码不能与原密码相同'})
-
+	
 	try:
-
 		user = Users.query.filter(Users.password == saltOldPassword).first()
 		if not user:
 			return jsonify({'error':404, 'cause': '原密码输入错误'})
-
 		current_user.reset_password(newPassword);
-
+		return jsonify({'error':0})
 	except Exception, e:
-		print e
+		db.session.rollback()
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
-
-	return jsonify({'error':0, 'username': current_user.username})
-
-
