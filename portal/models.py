@@ -253,6 +253,9 @@ class Users(db.Model):
         else:
             return self.name
 
+    def getBirthStr(self):
+        return "getBirthStr"
+
     # 封禁/解封
     def do_forbid(self, block):
         self.block = block

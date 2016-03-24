@@ -16,6 +16,10 @@ from sms import SmsUtil
 # 测试页面
 @app.route('/test')
 def test():
+
+	print 'name', current_user.name
+	print 'username', current_user.username
+
 	# SmsUtil.requestCode('18516595221')
 	# SmsUtil.verifyCode('18516595221', '916838')
 
@@ -292,6 +296,47 @@ def course_register():
 	else:
 		return render_template('error.html', message='请您登录')
 
+# 用户基本信息 
+@app.route('/userprofile', methods = ['GET'])
+@login_required
+def userprofile():
+
+	if current_user is not None and current_user.is_privileged(UserType.registered):
+		username = request.args.get("username")
+
+		if not username:
+			abort(404)
+		elif current_user.username.lower() != username.lower():
+			abort(404)
+		else:
+			return render_template('userprofile.html', username=current_user.username, user=current_user, genderName = GenderType.getName(current_user.gender), birthStr = current_user.getBirthStr())
+	else:
+		abort(403)
+
+# 用户基本信息 
+@app.route('/edit_userprofile', methods = ['GET'])
+@login_required
+def edit_userprofile():
+
+	if current_user is not None and current_user.is_privileged(UserType.registered):
+		username = request.args.get("username")
+
+		if not username:
+			abort(404)
+		elif current_user.username.lower() != username.lower():
+			abort(404)
+		else:
+			return render_template('edit_userprofile.html', username=current_user.username, user=current_user, genderName = GenderType.getName(current_user.gender), birthStr = current_user.getBirthStr())
+	else:
+		abort(403)
+
+@app.route('/change_password', methods = ['GET'])
+@login_required
+def change_password():
+
+	return render_template('change_password.html', username=current_user.username)
+
+
 # # 联系我们
 # @app.route('/contact', methods=['GET', 'POST'])
 # def contact():
@@ -300,9 +345,4 @@ def course_register():
 # 		return render_template('contact.html', index=4, username=username)
 # 	except:
 # 		return render_template('contact.html', index=4, username=None)
-
-
-#这里是action的辅助方法
-def loadCourseSchedule():
-	pass
 
