@@ -196,6 +196,48 @@ def all_courses():
 	except:
 		return render_template('all_course.html', username=None, pagetitle=pagetitle, courses=courses)
 
+@app.route('/course_info', methods = ['GET'])
+def course_info():
+	cid = request.args.get("cid", -1)
+	if int(cid) == -1:
+		abort(404)
+
+	courses = []
+	pagetitle = '课程信息预览'
+
+	c = Course.query.filter(Course.cid==cid).first()
+	if c is not None:
+		courses.append(c)
+		contents = CourseDetail.query.filter(CourseDetail.cid == c.cid).order_by(CourseDetail.index).all()
+		if contents is not None:
+			c.contents = contents
+
+		schedules = CourseSchedule.query.filter(CourseSchedule.cid == c.cid).all()
+		if schedules is not None:
+			for schedule in schedules:
+				mteacher = Teacher.query.filter(Teacher.tid == schedule.mteacher).first();
+				muser = Users.query.filter(Users.username==mteacher.username).first()
+				if muser:
+					schedule.mteacher = muser.getName()
+
+				bteacher = Teacher.query.filter(Teacher.tid == schedule.bteacher).first();
+				schedule.bteacher = ''
+				if bteacher:
+					buser = Users.query.filter(Users.username==bteacher.username).first()
+					if buser:
+						schedule.bteacher = buser.getName()
+
+				room = Room.query.filter(Room.rid==schedule.rid).first();
+				if room:
+					schedule.room = room.name
+			c.schedules = schedules
+
+	try:
+		username = current_user.username
+		return render_template('all_course.html', username=username, pagetitle='课程信息预览', courses=courses)
+	except:
+		return render_template('all_course.html', username=None, pagetitle='课程信息预览', courses=courses)
+
  #我要报名
 @app.route('/course_userregister', methods = ['GET'])
 @login_required

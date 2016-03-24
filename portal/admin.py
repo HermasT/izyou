@@ -151,7 +151,7 @@ def add_course_schedule():
 	else:
 		abort(403)
 
-@app.route('/search_course', methods=['GET', 'POST'])
+@app.route('/search_course', methods=['GET'])
 @login_required
 def search_course():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
@@ -169,7 +169,7 @@ def search_course():
 	else:
 		abort(403)
 
-@app.route('/update_course', methods=['GET', 'POST'])
+@app.route('/update_course', methods=['GET'])
 @login_required
 def update_course():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
@@ -179,15 +179,14 @@ def update_course():
 		if course is None:
 			return render_template('error.html', message='查找不到与之匹配的课程')
 		else:
-			status = CourseStatus.getName(course.status)
-			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
-			allteachers = Teacher.query.order_by(Teacher.tid).all()
-			return render_template('update_course.html', username=current_user.username, course=course, 
-				tname=teacher.username, teachers=allteachers, status=status, allstatus=CourseStatus.getAll())
+			# status = CourseStatus.getName(course.status)
+			# teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
+			# allteachers = Teacher.query.order_by(Teacher.tid).all()
+			return render_template('update_course.html', username=current_user.username, course=course)
 	else:
 		abort(403)
 
-@app.route('/register_course',methods=['GET', 'POST'])
+@app.route('/register_course',methods=['GET'])
 @login_required
 def register_course():
 	if current_user is not None and current_user.is_privileged(UserType.staff):

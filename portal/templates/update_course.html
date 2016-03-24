@@ -8,10 +8,6 @@
 {% block content %}
 <div class='container'>
 	<div class="panel panel-default">
-	  	<div class="panel-heading" >
-	  		<a class='custom_index' href="javascript:history.back(-1)">返回</a>
-	  		<span class='custom_title' align='center'>修改课程信息</span>
-	  	</div>
 	  	<div class="panel-body">
 			<div class="row row-padding">
 	  			<div class="col-lg-1" align='right'>
@@ -31,7 +27,7 @@
 			  	</div>
 			</div>
 
-			<div class="row row-padding">
+			<!-- <div class="row row-padding">
 			  	<div class="col-lg-1" align='right'>
 				    <span class='group-info'>课程状态</span><strong class='info-nessecary'>*</strong>
 			  	</div>
@@ -48,9 +44,9 @@
 					    </ul>
 					</div>
 			  	</div>
-			</div>
+			</div> -->
 
-			<div class="row row-padding">
+			<!-- <div class="row row-padding">
 			  	<div class="col-lg-1" align='right'>
 				    <span class='group-info'>开始日期</span><strong class='info-nessecary'>*</strong>
 			  	</div>
@@ -89,7 +85,7 @@
 					    </ul>
 					</div>
 			  	</div>
-			</div>
+			</div> -->
 
 			<div class="row row-padding">
 			  	<div class="col-lg-1" align='right'>
@@ -141,36 +137,36 @@
 <script src="/static/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script src="/static/js/update_course.js"></script>
 <script type="text/javascript">
-    $('#startpicker').datetimepicker({
-        language: 'zh-CN',
-        weekStart: 1,
-        todayBtn: 1,
-  		autoclose: 1,
-  		todayHighlight: 1,
-  		startView: 2,
-  		minView: 2,
-  		forceParse: 0
-    });
-    $('#endpicker').datetimepicker({
-        language: 'zh-CN',
-        weekStart: 1,
-        todayBtn: 1,
-  		autoclose: 1,
-  		todayHighlight: 1,
-  		startView: 2,
-  		minView: 2,
-  		forceParse: 0
-    });
-    function select_teacher(tid, name) {
-    	$("#btn_update_course_teacher").val(tid);
-		$("#btn_update_course_teacher").html(name + " <span class='caret'></span>");
-    }
-    function select_status(status, name) {
-    	console.log(status);
-    	console.log(name);
-    	$("#btn_update_course_status").val(status);
-		$("#btn_update_course_status").html(name + " <span class='caret'></span>");
-    }
+    // $('#startpicker').datetimepicker({
+    //     language: 'zh-CN',
+    //     weekStart: 1,
+    //     todayBtn: 1,
+  		// autoclose: 1,
+  		// todayHighlight: 1,
+  		// startView: 2,
+  		// minView: 2,
+  		// forceParse: 0
+    // });
+    // $('#endpicker').datetimepicker({
+    //     language: 'zh-CN',
+    //     weekStart: 1,
+    //     todayBtn: 1,
+  		// autoclose: 1,
+  		// todayHighlight: 1,
+  		// startView: 2,
+  		// minView: 2,
+  		// forceParse: 0
+    // });
+  //   function select_teacher(tid, name) {
+  //   	$("#btn_update_course_teacher").val(tid);
+		// $("#btn_update_course_teacher").html(name + " <span class='caret'></span>");
+  //   }
+  //   function select_status(status, name) {
+  //   	console.log(status);
+  //   	console.log(name);
+  //   	$("#btn_update_course_status").val(status);
+		// $("#btn_update_course_status").html(name + " <span class='caret'></span>");
+  //   }
 </script>
 {% endblock %}
 
