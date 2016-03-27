@@ -214,8 +214,8 @@ class Users(db.Model):
     type = db.Column(Integer, default=UserType.normal) # 用户类别
     birth = db.Column(Date) # 出生日期
     gender = db.Column(Integer, default=GenderType.undefined) # 性别
-    desc = db.Column(String(64), nullable=True) # 基本信息
-    extend = db.Column(String(256), nullable=True) # 扩展信息
+    desc = db.Column(String(64), nullable=True, default='') # 基本信息
+    extend = db.Column(String(256), nullable=True, default='') # 扩展信息
 
     def __init__(self, username, password, phone, email, name, type=UserType.normal):
         self.username = username

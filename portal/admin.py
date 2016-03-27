@@ -17,7 +17,7 @@ from models import Course, CourseStatus, CourseDetail, CourseSchedule, CourseStu
 def admin():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
 
-		userCount = Users.query.filter(Users.type <= 1).count()
+		userCount = Users.query.filter(Users.type >= 1).count()
 		teacherCount = Teacher.query.count()
 		courseCount = Course.query.count()
 		roomCount = Room.query.count()
