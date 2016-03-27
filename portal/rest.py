@@ -173,18 +173,25 @@ def api_update_teacher():
 			flash(u'查找不到与之匹配的讲师信息')
 			return render_template('error.html')
 		else:
-			teacher.name = request.args.get("name")
-			teacher.birth = request.args.get("birth")
-			teacher.gender = request.args.get("gender")
-			teacher.gtype = request.args.get("gtype")
-			teacher.desc = request.args.get("desc")
-			teacher.extend = request.args.get("extend")
+
+			userToUpdate = Users.query.filter(Users.username == teacher.username).first()
+			if not userToUpdate:
+				return jsonify({'error':403, 'cause': '您添加的教师用户名尚未注册，请先注册用户'})			
+
+			userToUpdate.name = request.args.get("name")
+			userToUpdate.birth = request.args.get("birth")
+			userToUpdate.gender = request.args.get("gender")
+			userToUpdate.gtype = request.args.get("gtype")
+			teauserToUpdatecher.desc = request.args.get("desc")
+			userToUpdate.extend = request.args.get("extend")
+
 			uprice = request.args.get("uprice")
 			if uprice is None or uprice == "":
 				teacher.uprice = 0.0
 			else:
 				teacher.uprice = uprice
 
+			db.session.add(userToUpdate)
 			db.session.add(teacher)
 			db.session.commit()
 			return jsonify({'error':0})

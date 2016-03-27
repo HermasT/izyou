@@ -33,6 +33,8 @@
 			<td>授课次数</td>
 			<td>报名费</td>
 			<td>班次总数</td>
+			<td>报名人数</td>
+			<td>是否满员</td>
 			<td>备注</td>
 			<td width="140px"></td>
 		</tr>
@@ -44,6 +46,8 @@
 			<td>{{course.count}}</td>
 			<td>￥{{course.charge|int}}</td>
 			<td>{{course.scount}}</td>
+			<td>{{course.studentCount}}</td>
+			<td>{{course.studentIsFull}}</td>
 			<td>{{course.extend}}</td>
 			<td>
 				<a href="/course_info?cid={{course.cid}}">详情</a>&nbsp;&nbsp;

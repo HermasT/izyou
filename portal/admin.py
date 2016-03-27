@@ -122,6 +122,13 @@ def course():
 		for course in paginate.items:
 			schedule_count = db.session.query(CourseSchedule).filter(CourseSchedule.cid==course.cid).count()
 			course.scount = schedule_count
+
+			studentCount = db.session.query(CourseStudent).filter(CourseStudent.cid == course.cid).count()
+			course.studentCount = studentCount
+
+			studentIsFull = '已满员' if studentCount >= course.max_student else '未满员'
+			course.studentIsFull = studentIsFull
+
 		return render_template('course.html', index=3, username=current_user.username, pagination=paginate)
 	else:
 		abort(403)
