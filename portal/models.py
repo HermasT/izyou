@@ -267,6 +267,7 @@ class Users(db.Model):
     # 激活用户
     def do_active(self):
         self.active = True
+        self.type = UserType.registered
         db.session.add(self)
         db.session.commit()
 
@@ -450,12 +451,14 @@ class CourseSchedule(db.Model):
 class CourseStudent(db.Model):
     csid = db.Column(Integer, primary_key=True) #课程学生主键
     cid = db.Column(Integer, nullable=False) #ForeignKey('Course.cid')
-    sid = db.Column(Integer, nullable=False) #ForeignKey('Student.sid')
+    uid = db.Column(Integer, nullable=False) #ForeignKey('User.uid')   此处应该是uid
     
     def __repr__(self):
         return "<CourseStudent{:d}:{:d}:{:d}>".format(self.csid, self.cid, seld.sid)
 
-
+    def __init__(self, cid, uid):
+        self.uid = uid
+        self.cid = cid
 
 # 教室
 class Room(db.Model):

@@ -16,7 +16,13 @@ from models import Course, CourseStatus, CourseDetail, CourseSchedule, CourseStu
 @login_required
 def admin():
 	if current_user is not None and current_user.is_privileged(UserType.staff):
-		return render_template('admin.html', username=current_user.username, index=1)
+
+		userCount = Users.query.filter(Users.type <= 1).count()
+		teacherCount = Teacher.query.count()
+		courseCount = Course.query.count()
+		roomCount = Room.query.count()
+
+		return render_template('admin.html', username=current_user.username, registeredUserCount = userCount, teacherCount = teacherCount, courseCount = courseCount, roomCount = roomCount, index=1)
 	else:
 		abort(403)
 
@@ -39,10 +45,10 @@ def teacher():
 			teacher.name = user.name
 			teacher.birth = user.birth
 			teacher.gender = GenderType.getName(user.gender)
-			teacher.gtype = GameType.getName(teacher.gtype)
+			teacher.gtypename = GameType.getName(teacher.gtype) # gtypename
 			teacher.desc = user.desc
 			teacher.extend = user.extend
-			teachers.append(teacher)
+			# teachers.append(teacher)
 		return render_template('teacher.html', username=current_user.username, index=2, pagination=paginate)
 	else:
 		abort(403)

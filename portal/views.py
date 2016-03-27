@@ -16,9 +16,9 @@ from sms import SmsUtil
 # 测试页面
 @app.route('/test')
 def test():
-
-	print 'name', current_user.name
-	print 'username', current_user.username
+	print '1111111111111111111111111111111111111111111111111111111111111111111111111111'
+	userCount = Users.query.filter(Users.type >= 5 ).count()
+	print 'userCount', userCount
 
 	# SmsUtil.requestCode('18516595221')
 	# SmsUtil.verifyCode('18516595221', '916838')
@@ -170,22 +170,25 @@ def all_courses():
 		for c in courses:
 			contents = CourseDetail.query.filter(CourseDetail.cid == c.cid).order_by(CourseDetail.index).all()
 			if contents is not None:
-				c.contents = contents
+				c.contents = contents	
 
 			schedules = CourseSchedule.query.filter(CourseSchedule.cid == c.cid).all()
 			if schedules is not None:
 				for schedule in schedules:
+					print '111111111111111111111111111111111111111111111111111111111111111111'
 					mteacher = Teacher.query.filter(Teacher.tid == schedule.mteacher).first();
 					muser = Users.query.filter(Users.username==mteacher.username).first()
 					if muser:
-						schedule.mteacher = muser.getName()
+						schedule.mteachername = muser.getName() # 
 
 					bteacher = Teacher.query.filter(Teacher.tid == schedule.bteacher).first();
-					schedule.bteacher = ''
+
+					schedule.bteachername = ''
 					if bteacher:
 						buser = Users.query.filter(Users.username==bteacher.username).first()
 						if buser:
-							schedule.bteacher = buser.getName()
+							# print 'buser', bteacher.username, buser
+							schedule.bteachername = buser.getName()
 
 					room = Room.query.filter(Room.rid==schedule.rid).first();
 					if room:
@@ -201,6 +204,7 @@ def all_courses():
 		return render_template('all_course.html', username=None, pagetitle=pagetitle, courses=courses)
 
 @app.route('/course_info', methods = ['GET'])
+@login_required
 def course_info():
 	cid = request.args.get("cid", -1)
 	if int(cid) == -1:
@@ -222,14 +226,14 @@ def course_info():
 				mteacher = Teacher.query.filter(Teacher.tid == schedule.mteacher).first();
 				muser = Users.query.filter(Users.username==mteacher.username).first()
 				if muser:
-					schedule.mteacher = muser.getName()
+					schedule.mteachername = muser.getName()
 
 				bteacher = Teacher.query.filter(Teacher.tid == schedule.bteacher).first();
-				schedule.bteacher = ''
+				schedule.bteachername = ''
 				if bteacher:
 					buser = Users.query.filter(Users.username==bteacher.username).first()
 					if buser:
-						schedule.bteacher = buser.getName()
+						schedule.bteachername = buser.getName()
 
 				room = Room.query.filter(Room.rid==schedule.rid).first();
 				if room:
@@ -253,9 +257,10 @@ def course_userregister():
 		if course is None:
 			return render_template('error.html', message='查找不到与之匹配的课程')
 		else:
+
 			status = CourseStatus.getName(course.status)
-			teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
-			allteachers = Teacher.query.order_by(Teacher.tid).all()
+			#teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
+			#allteachers = Teacher.query.order_by(Teacher.tid).all()
 			studentCount =  CourseStudent.query.filter(CourseStudent.cid == cid).count()
 			return render_template('register_usercourse.html', username=current_user.username, course=course, studentCount=studentCount, pays=PayType.getAll())
 	else:

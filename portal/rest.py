@@ -298,20 +298,30 @@ def api_register_course():
 		extend = request.args.get("extend")
 		course = Course.query.filter(Course.cid==cid).first()
 		user = Users.query.filter(Users.username==username).first()
+		courseStudent = CourseStudent.query.filter(CourseStudent.cid == cid, CourseStudent.uid == current_user.uid).first()
+		studentCount =  CourseStudent.query.filter(CourseStudent.cid == cid).count()
+
 		if course is None:
 			return jsonify({'error':5, 'cause': u'查找不到与之匹配的课程信息'})
 		elif user is None:
 			return jsonify({'error':5, 'cause': u'查找不到报名的用户，请先注册用户'})
+		elif courseStudent:
+			return jsonify({'error':5, 'cause': u'已报名'})
+		elif studentCount == course.max_student:
+			return jsonify({'error':5, 'cause': u'课程已报满'})
 		else:
 			operator = current_user.username
 			if paytype == 0 or paytype == str(0):
 				charged = False
 			else:
 				charged = True
-			# register = Register(username=username, cid=cid, op=operator, charged=charged, ptype=paytype, extend=extend)
-			# db.session.add(register)
+
+
 			order = Orders(username = username, op=operator, charged=charged, amount = 0, paytype=paytype, status=OrderStatus.order, extend=extend)
 			db.session.add(order)
+
+			courseStudent = CourseStudent(cid = cid, uid = user.uid)
+			db.session.add(courseStudent)
 
 			db.session.commit()
 			return jsonify({'error':0, 'rid': order.orderid})

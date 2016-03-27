@@ -6,7 +6,50 @@
 {% endblock %}
 
 {% block content %}
+
 <div class='container'>
+
+	<div class='page-title'>益智加－统计信息</div>
+	<div class="panel panel-default">
+	  	<div class="panel-body">
+			<div class="row row-padding">
+	  			<div class="col-lg-2" align='right'>
+				    <span class='group-info'>注册用户数：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtUser' type="text" class="form-control" readonly value="{{registeredUserCount}}"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-2" align='right'>
+				    <span class='group-info'>教师数：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtTeacher' type="text" class="form-control" readonly value="{{teacherCount}}"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-2" align='right'>
+				    <span class='group-info'>课程数：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtCourse' type="text" class="form-control" readonly value="{{courseCount}}"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-2" align='right'>
+				    <span class='group-info'>教室数：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtRoom' type="text" class="form-control" readonly value="{{roomCount}}"></input>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
 </div>
 
 <script src="/static/jquery.min.js"></script>
