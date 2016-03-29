@@ -1,0 +1,172 @@
+{% extends "admin_base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block title %}
+智友文化 - 修改课程信息
+{% endblock %}
+
+{% block content %}
+<div class='container'>
+	<div class="panel panel-default">
+	  	<div class="panel-body">
+			<div class="row row-padding">
+	  			<div class="col-lg-1" align='right'>
+				    <span class='group-info'>订单编号</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='update_order_id' type="text" class="form-control" readonly value='{{order.orderid}}'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>用户名</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='update_order_name' type="text" class="form-control" value='{{order.username}}' readonly="readonly" ></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>订单状态</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<div class="dropdown">
+  						<button id='btn_update_order_status' class="btn btn-default dropdown-toggle" type="button" 
+  							data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" value='{{order.status}}'>{{order.statusname}}
+    						<span class="caret"></span>
+  						</button>
+					    <ul class="dropdown-menu" aria-labelledby="btn_update_course_gtype">
+					    	{% for orderStatus in orderStatus %}
+						    <li onclick="select_orderstatus('{{orderStatus.type}}', '{{orderStatus.name}}')"><a>{{orderStatus.name}}</a></li>
+						    {% endfor %}
+					    </ul>
+					</div>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>支付类型</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<div class="dropdown">
+  						<button id='btn_update_order_paytype' class="btn btn-default dropdown-toggle" type="button" 
+  							data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" value='{{order.paytype}}'>{{order.paytypename}}
+    						<span class="caret"></span>
+  						</button>
+					    <ul class="dropdown-menu" aria-labelledby="btn_update_course_gtype">
+					    	{% for paytype in payTypes %}
+						    <li onclick="select_paytype('{{paytype.type}}', '{{paytype.name}}')"><a>{{paytype.name}}</a></li>
+						    {% endfor %}
+					    </ul>
+					</div>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>应收账款</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='update_order_amount' type="text" class="form-control" value='{{order.amount}}' placeholder='输入应收账款金额'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>实收账款</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='update_order_income' type="text" class="form-control" value='{{order.income}}' placeholder='输入实收账款金额'></input>
+			  	</div>
+			</div>
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>备注</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='update_order_extend' type="text" class="form-control" value='{{order.extend}}' placeholder='输入备注'></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'></div>
+				<div class="col-lg-2">
+					<button id='btn_update_order' class='btn btn-primary full'>提交</button>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function select_paytype(type, name) {
+    	$("#btn_update_course_gtype").val(type);
+		$("#btn_update_course_gtype").html(name + " <span class='caret'></span>");
+    }
+
+	function select_orderstatus(type, name) {
+		$("#btn_update_course_gtype").val(type);
+		$("#btn_update_course_gtype").html(name + " <span class='caret'></span>");
+	}
+
+
+    $("#btn_update_order").bind("click", function() {
+    	var orderid = document.getElementById("update_order_id").value;
+
+    	var order_paytype = document.getElementById("btn_update_order_paytype").value;
+		var order_status = document.getElementById("btn_update_order_status").value;
+
+		var amount = document.getElementById("update_order_amount").value;
+		if (empty_input(gtype)) {
+			$.MsgBox.Alert("非法输入", "请输入应收账款");
+			return;
+		}
+
+		var income = document.getElementById("update_order_income").value;
+		if (empty_input(time)) {
+			$.MsgBox.Alert("非法输入", "请输入实收账款");
+			return;
+		}
+
+		var extend = document.getElementById("update_course_extend").value;
+	    
+		$.ajax({
+			url:'/rest/update_order',
+		    data: {
+		    	"orderid":orderid,
+		    	"summary": JSON.stringify({
+			    	"income": name,
+			    	"amount": target,
+			    	"paytype`": gtype,
+			    	"status": time,
+			    	"extend": count
+			    })
+		    },
+		    type: 'post',
+		    cache: false,
+		    dataType: 'json',
+		    success: function(data) {
+		    	if (data["error"] == 0) {
+		    		$("#create_course_id").val(data["cid"]);
+			    	$.MsgBox.Alert("更新订单", "您的请求已提交成功", function() {
+			    		window.location.href = "/orders";
+			    	});
+			    } else {
+			    	$.MsgBox.Alert("更新订单", data["cause"]);
+			    }
+		    },
+		    error: function() {
+		        $.MsgBox.Alert("更新课程", "请求失败，请稍候重试");
+		    }
+		})
+    });
+</script>
+{% endblock %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}

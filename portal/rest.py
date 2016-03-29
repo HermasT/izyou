@@ -409,3 +409,28 @@ def  api_update_password():
 	except Exception, e:
 		db.session.rollback()
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
+
+@app.route('/rest/update_order', methods=['GET', 'POST'])
+def api_update_course():
+	orderid = request.values.get('orderid')
+	order = Orders.query.filter(Orders.orderid == orderid).first()
+	
+	if order is None:
+		return jsonify({'error':1, 'cause': '查找不到与之匹配的订单信息'})
+	else:
+		summary = json.loads(request.values.get('summary'))
+
+		order.amount = summary['name']
+		order.income = summary['gtype']
+		order.status = summary['time']
+		order.paytype = summary['count']
+		order.extend = summary['period']
+		
+		db.session.add(order)
+		try:
+			db.session.commit()
+			return jsonify({'error':0})
+		except Exception, e:
+			print e
+			db.session.rollback()
+			return jsonify({'error':4, 'cause': '数据库操作失败'})		

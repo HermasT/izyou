@@ -9,7 +9,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from portal import app, db, lm, mail
 from models import Users, Teacher, Room, UserType, GenderType, GameType, PayType, Orders, OrdersList
-from models import Course, CourseStatus, CourseDetail, CourseSchedule, CourseStudent
+from models import Course, CourseStatus, CourseDetail, CourseSchedule, CourseStudent,OrderStatus
 
 # 后台管理
 @app.route('/admin', methods=['GET', 'POST'])
@@ -319,3 +319,61 @@ def add_room():
 		return render_template('add_room.html', username=current_user.username, pagination=paginate, index=5)
 	else:
 		abort(403)
+
+@app.route('/orders', methods=['GET'])
+@login_required
+def orders():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		page = request.args.get("page", 1)
+		if page < 1:
+			page = 1
+
+		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator)\
+			.join(CourseStudent, CourseStudent.uid == Users.uid)\
+			.join(Orders, Orders.username == Users.username)\
+			.join(Course, Course.cid == CourseStudent.cid)\
+			.paginate(int(page), config.PAGE_ITEMS, False)
+
+		orderDataList = []
+		for item in data.items:
+			orderData = {}
+
+			orderData['username'] = item[0]
+			orderData['name'] = item[1]
+			orderData['coursename'] = item[2]
+			orderData['amount'] = item[3]
+			orderData['income'] = item[4]
+			orderData['orderstatusname'] = OrderStatus.getName(item[5])
+			orderData['paytpyename'] = PayType.getName(item[6])
+			orderData['orderid'] = item[7]
+			orderData['operator'] = item[8]
+
+			orderDataList.append(orderData)
+
+		data.items = orderDataList
+
+		return render_template('orders.html', username=current_user.username, pagination=data, index=5)
+	else:
+		abort(403)
+
+@app.route('/update_order', methods=['GET'])
+@login_required
+def update_order():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		orderid = request.args.get("orderid", -1)
+		if int(orderid) == -1:
+			abort(404)
+		elif int(orderid) == 0:
+			abort(404)
+
+		order = Orders.query.filter(Orders.orderid == orderid).first()
+		if order is None:
+			return render_template('error.html', message='查找不到与之匹配的订单')
+
+		order.paytypename = PayType.getName(order.paytype)
+		order.statusname = OrderStatus.getName(order.status)
+
+		return render_template('update_order.html', username=current_user.username, order=order, orderStatus=OrderStatus.getAll(), payTypes=PayType.getAll())
+	else:
+		abort(403)
+
