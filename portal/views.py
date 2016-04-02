@@ -16,10 +16,6 @@ from sms import SmsUtil
 # 测试页面
 @app.route('/test')
 def test():
-	print '1111111111111111111111111111111111111111111111111111111111111111111111111111'
-	userCount = Users.query.filter(Users.type >= 5 ).count()
-	print 'userCount', userCount
-
 	# SmsUtil.requestCode('18516595221')
 	# SmsUtil.verifyCode('18516595221', '916838')
 
@@ -175,14 +171,12 @@ def all_courses():
 			schedules = CourseSchedule.query.filter(CourseSchedule.cid == c.cid).all()
 			if schedules is not None:
 				for schedule in schedules:
-					print '111111111111111111111111111111111111111111111111111111111111111111'
 					mteacher = Teacher.query.filter(Teacher.tid == schedule.mteacher).first();
 					muser = Users.query.filter(Users.username==mteacher.username).first()
 					if muser:
 						schedule.mteachername = muser.getName() # 
 
 					bteacher = Teacher.query.filter(Teacher.tid == schedule.bteacher).first();
-
 					schedule.bteachername = ''
 					if bteacher:
 						buser = Users.query.filter(Users.username==bteacher.username).first()
@@ -264,7 +258,8 @@ def course_userregister():
 			studentCount =  CourseStudent.query.filter(CourseStudent.cid == cid).count()
 			return render_template('register_usercourse.html', username=current_user.username, course=course, studentCount=studentCount, pays=PayType.getAll())
 	else:
-		return render_template('error.html', message='请您登录')
+		flash(u'您需要登录后才能访问该页面')
+		return redirect(url_for('login'))
 
 
 # 我要报名

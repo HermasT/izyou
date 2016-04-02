@@ -42,12 +42,13 @@ def teacher():
 		teachers = []
 		for teacher in paginate.items:
 			user = Users.query.filter(Users.username==teacher.username).first()
-			teacher.name = user.name
-			teacher.birth = user.birth
-			teacher.gender = GenderType.getName(user.gender)
-			teacher.gtypename = GameType.getName(teacher.gtype) # gtypename
-			teacher.desc = user.desc
-			teacher.extend = user.extend
+			if user:
+				teacher.name = user.name
+				teacher.birth = user.birth
+				teacher.gender = GenderType.getName(user.gender)
+				teacher.gtypename = GameType.getName(teacher.gtype) # gtypename
+				teacher.desc = user.desc
+				teacher.extend = user.extend
 			# teachers.append(teacher)
 		return render_template('teacher.html', username=current_user.username, index=2, pagination=paginate)
 	else:
@@ -238,18 +239,6 @@ def user():
 			user.type = UserType.getName(user.type)
 			users.append(user)
 		return render_template('user.html', username=current_user.username, index=4, pagination=paginate)
-	else:
-		abort(403)
-
-@app.route('/userinfo', methods=['GET'])
-@login_required
-def userinfo():
-	if current_user is not None and current_user.is_privileged(UserType.staff):
-		username = request.args.get("username")
-		if not username:
-			abort(404)
-		else:
-			return render_template('userinfo.html', username=current_user.username, index=4)
 	else:
 		abort(403)
 

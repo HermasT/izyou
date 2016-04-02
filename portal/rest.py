@@ -411,7 +411,7 @@ def  api_update_password():
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
 @app.route('/rest/update_order', methods=['GET', 'POST'])
-def api_update_course():
+def api_update_order():
 	orderid = request.values.get('orderid')
 	order = Orders.query.filter(Orders.orderid == orderid).first()
 	
