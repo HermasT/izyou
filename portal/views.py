@@ -359,7 +359,6 @@ def userorders():
 			page = 1
 
 		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator, CourseSchedule.time)\
-			# .join(CourseStudent, CourseStudent.uid == Users.uid)\
 			.join(Orders, Orders.username == Users.username)\
 			.join(CourseSchedule, CourseSchedule.csid == Orders.csid)\
 			.join(Course, Course.cid == Orders.cid)\

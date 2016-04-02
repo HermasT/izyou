@@ -18,9 +18,6 @@
 		  	</div>
 		  	<div class="col-lg-4" align='center'>
 		  	</div>
-		  	<div class="col-lg-2" align='center'>
-		        <a href='/add_teacher'><button input='button' class='btn btn-primary full'>新增教师</button></a>
-		  	</div>
 		</div>
 	</div>
 
@@ -79,13 +76,13 @@
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="/static/js/custom_common.js"></script>
 <script type="text/javascript">
-	function search_teacher() {
+	function search_order() {
 		var name = document.getElementById("search_teacher_name").value;
 		if (empty_input(name)) {
 			$.MsgBox.Alert("非法输入", "用户名为空");
 			return;
 		}
-		window.location.href = "/search_teacher?username=" + name;
+		window.location.href = "/searchorders?username=" + name;
 	}
 </script>
 {% endblock %}

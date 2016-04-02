@@ -318,10 +318,9 @@ def orders():
 			page = 1
 
 		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator, CourseSchedule.time)\
-			.join(CourseStudent, CourseStudent.uid == Users.uid)\
-			.join(CourseSchedule, CourseSchedule.csid == CourseStudent.csid)\
 			.join(Orders, Orders.username == Users.username)\
-			.join(Course, Course.cid == CourseStudent.cid)\
+			.join(CourseSchedule, CourseSchedule.csid == Orders.csid)\
+			.join(Course, Course.cid == Orders.cid)\
 			.paginate(int(page), config.PAGE_ITEMS, False)
 
 		orderDataList = []
@@ -346,6 +345,46 @@ def orders():
 		return render_template('orders.html', username=current_user.username, pagination=data, index=6)
 	else:
 		abort(403)
+
+@app.route('/searchorders', methods=['GET'])
+@login_required
+def searchorders():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		page = request.args.get("page", 1)
+		if page < 1:
+			page = 1
+
+		username = 	request.args.get("username")
+
+		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator, CourseSchedule.time)\
+			.join(Orders, Orders.username == Users.username)\
+			.join(CourseSchedule, CourseSchedule.csid == Orders.csid)\
+			.join(Course, Course.cid == Orders.cid)\
+			.filter(Users.username == username)\
+			.paginate(int(page), config.PAGE_ITEMS, False)
+
+		orderDataList = []
+		for item in data.items:
+			orderData = {}
+
+			orderData['username'] = item[0]
+			orderData['name'] = item[1]
+			orderData['coursename'] = item[2]
+			orderData['amount'] = item[3]
+			orderData['income'] = item[4]
+			orderData['orderstatusname'] = OrderStatus.getName(item[5])
+			orderData['paytpyename'] = PayType.getName(item[6])
+			orderData['orderid'] = item[7]
+			orderData['operator'] = item[8]
+			orderData['schedulename'] = item[9]
+
+			orderDataList.append(orderData)
+
+		data.items = orderDataList
+
+		return render_template('orders.html', username=current_user.username, pagination=data, index=6)
+	else:
+		abort(403)		
 
 @app.route('/update_order', methods=['GET'])
 @login_required

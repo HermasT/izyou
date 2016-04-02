@@ -493,8 +493,7 @@ class Orders(db.Model):
     csid = db.Column(Integer, nullable=False) # ForeignKey('courseschedule.csid') 报名课程班次
     extend = db.Column(String(64)) # 退费记录原因
 
-    def __init__(self, username, op, amount, income=0, charged=False, 
-                status=OrderStatus.undefined, paytype=PayType.undefined, cid, csid,extend=''):
+    def __init__(self, username, op, amount,cid,csid,income=0,charged=False,status=OrderStatus.undefined,paytype=PayType.undefined,extend=''):
         self.username = username
         self.charged = charged
         self.paytype = paytype

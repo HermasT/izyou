@@ -333,7 +333,7 @@ def api_register_course():
 			else:
 				charged = True
 
-			order = Orders(username = username, op=operator, charged=charged, amount = course.charge, paytype=paytype, status=OrderStatus.order, cid = course.cid, csid=courseSchedule.csid, extend=extend)
+			order = Orders(username = username, op=operator, charged=charged, cid = course.cid, csid=courseSchedule.csid, amount = course.charge, status=OrderStatus.order, paytype=paytype, extend=extend)
 			db.session.add(order)
 
 			courseStudent = CourseStudent(cid = courseSchedule.cid, uid = user.uid, scheduleid = courseSchedule.csid)
