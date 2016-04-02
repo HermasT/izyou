@@ -451,14 +451,16 @@ class CourseSchedule(db.Model):
 class CourseStudent(db.Model):
     csid = db.Column(Integer, primary_key=True) #课程学生主键
     cid = db.Column(Integer, nullable=False) #ForeignKey('Course.cid')
-    uid = db.Column(Integer, nullable=False) #ForeignKey('User.uid')   此处应该是uid
-    
-    def __repr__(self):
-        return "<CourseStudent{:d}:{:d}:{:d}>".format(self.csid, self.cid, seld.sid)
+    uid = db.Column(Integer, nullable=False) #ForeignKey('User.uid')  此处应该是uid
+    courseScheduleid = db.Column(Integer, nullable=False) #ForeignKey('CourseSchedule.csid')
 
-    def __init__(self, cid, uid):
+    def __repr__(self):
+        return "<CourseStudent{:d}:{:d}:{:d}:{:d}>".format(self.csid, self.cid, self.sid, self.courseScheduleid)
+
+    def __init__(self, cid, uid, scheduleid):
         self.uid = uid
         self.cid = cid
+        self.courseScheduleid = scheduleid
 
 # 教室
 class Room(db.Model):
@@ -487,10 +489,12 @@ class Orders(db.Model):
     income = db.Column(Float) # 实收账款（处理打折、减免等）
     status = db.Column(Integer) # 订单状态 OrderStatus
     operator = db.Column(String(32)) # ForeignKey('users.username') 操作的用户名（工作人员）
+    cid = db.Column(Integer, nullable=False) # ForeignKey('course.cid') 报名课程
+    csid = db.Column(Integer, nullable=False) # ForeignKey('courseschedule.csid') 报名课程班次
     extend = db.Column(String(64)) # 退费记录原因
 
     def __init__(self, username, op, amount, income=0, charged=False, 
-                status=OrderStatus.undefined, paytype=PayType.undefined, extend=''):
+                status=OrderStatus.undefined, paytype=PayType.undefined, cid, csid,extend=''):
         self.username = username
         self.charged = charged
         self.paytype = paytype
@@ -501,6 +505,8 @@ class Orders(db.Model):
         else:
             self.income = income
         self.operator = op
+        self.cid = cid
+        self.csid = csid
         self.extend = extend
  
     def __repr__(self):

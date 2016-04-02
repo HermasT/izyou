@@ -8,7 +8,7 @@ from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from portal import app, db, lm, mail
-from models import Users, Teacher, Room, Course, CourseDetail, CourseStudent, UserType, GenderType, GameType
+from models import Users, Teacher, Room, Course, CourseDetail, CourseStudent, UserType, GenderType, GameType,OrderStatus
 from models import CourseStatus, PayType, Orders, OrdersList, CourseSchedule
 from mail import MailUtil
 from sms import SmsUtil
@@ -16,6 +16,7 @@ from sms import SmsUtil
 # 测试页面
 @app.route('/test')
 def test():
+
 	# SmsUtil.requestCode('18516595221')
 	# SmsUtil.verifyCode('18516595221', '916838')
 
@@ -181,7 +182,6 @@ def all_courses():
 					if bteacher:
 						buser = Users.query.filter(Users.username==bteacher.username).first()
 						if buser:
-							# print 'buser', bteacher.username, buser
 							schedule.bteachername = buser.getName()
 
 					room = Room.query.filter(Room.rid==schedule.rid).first();
@@ -245,9 +245,15 @@ def course_info():
 @login_required
 def course_userregister():
 	if current_user is not None and current_user.is_privileged(UserType.registered):
-		cid = request.args.get('cid')
-		course = Course.query.filter(Course.cid==cid).first()
+		csid = request.args.get('csid', -1)
+		if csid < 0:
+			return render_template('error.html', message='查找不到与之匹配的课程班次')
 
+		courseSchedule = CourseSchedule.query.filter(CourseSchedule.csid == csid).first()
+		if courseSchedule is None:
+			return render_template('error.html', message='查找不到与之匹配的课程班次')
+
+		course = Course.query.filter(Course.cid==courseSchedule.cid).first()
 		if course is None:
 			return render_template('error.html', message='查找不到与之匹配的课程')
 		else:
@@ -255,8 +261,8 @@ def course_userregister():
 			status = CourseStatus.getName(course.status)
 			#teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
 			#allteachers = Teacher.query.order_by(Teacher.tid).all()
-			studentCount =  CourseStudent.query.filter(CourseStudent.cid == cid).count()
-			return render_template('register_usercourse.html', username=current_user.username, course=course, studentCount=studentCount, pays=PayType.getAll())
+			studentCount =  CourseStudent.query.filter(CourseStudent.csid == csid).count()
+			return render_template('register_usercourse.html', username=current_user.username, course=course, courseSchedule = courseSchedule, studentCount=studentCount, pays=PayType.getAll())
 	else:
 		flash(u'您需要登录后才能访问该页面')
 		return redirect(url_for('login'))
@@ -344,6 +350,44 @@ def change_password():
 	else:
 		abort(403)
 
+@app.route('/userorders', methods=['GET'])
+@login_required
+def userorders():
+	if current_user is not None and current_user.is_privileged(UserType.registered):
+		page = request.args.get("page", 1)
+		if page < 1:
+			page = 1
+
+		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator, CourseSchedule.time)\
+			# .join(CourseStudent, CourseStudent.uid == Users.uid)\
+			.join(Orders, Orders.username == Users.username)\
+			.join(CourseSchedule, CourseSchedule.csid == Orders.csid)\
+			.join(Course, Course.cid == Orders.cid)\
+			.filter(Users.uid == current_user.uid)\
+			.paginate(int(page), config.PAGE_ITEMS, False)
+
+		orderDataList = []
+		for item in data.items:
+			orderData = {}
+
+			orderData['username'] = item[0]
+			orderData['name'] = item[1]
+			orderData['coursename'] = item[2]
+			orderData['amount'] = item[3]
+			orderData['income'] = item[4]
+			orderData['orderstatusname'] = OrderStatus.getName(item[5])
+			orderData['paytpyename'] = PayType.getName(item[6])
+			orderData['orderid'] = item[7]
+			orderData['operator'] = item[8]
+			orderData['schedulename'] = item[9]
+
+			orderDataList.append(orderData)
+
+		data.items = orderDataList
+
+		return render_template('userorders.html', username=current_user.username, pagination=data)
+	else:
+		abort(403)
 
 # # 联系我们
 # @app.route('/contact', methods=['GET', 'POST'])

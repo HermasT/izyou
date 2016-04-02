@@ -1,4 +1,5 @@
-{% extends "admin_base.html" %}
+{% extends "portal_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 {% import "bootstrap/fixes.html" as fixes %}
 
 {% block title %}
@@ -7,12 +8,77 @@
 
 {% block content %}
 <div class='container'>
+	<div class='page-title'>益智加－用户信息</div>
+	<div class="panel panel-default">
+	  	<div class="panel-body">
+			<div class="row row-padding">
+	  			<div class="col-lg-1" align='right'>
+				    <span class='group-info'>用户名：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtUserName' type="text" class="form-control" readonly value="{{user.username}}"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>邮箱地址：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtEmail' type="text" class="form-control" readonly value="{{user.email}}"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>手机号：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtMobile' type="text" class="form-control" readonly value="{{user.phone}}"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>姓名：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtName' type="text" class="form-control" readonly value="{{user.name}}"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>性别：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtGender' type="text" class="form-control" readonly value="{{genderName}}"></input>
+			  	</div>
+			</div>
+			<div class="row row-padding">
+			  	<div class="col-lg-1" align='right'>
+				    <span class='group-info'>生日：</span>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='txtBirth' class='form-control' type='text' readonly value="{{birthStr}}"></input>
+			  	</div>
+			</div>
+
+			<div class="row row-padding">
+			  	<div class="col-lg-2" align='right'>
+			  		<button id='btnEditUser' class='btn btn-primary'>编辑用户信息</button>
+			  		<button id='btnModifyPassword' class='btn btn-primary'>修改密码</button>
+			  	</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script src="/static/jquery.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="/static/js/custom_common.js"></script>
 <link href="/static/css/custom.css" rel="stylesheet">
+
 {% endblock %}
 
 {% block head %}

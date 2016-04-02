@@ -24,6 +24,7 @@ $(document).ready(function() {
 		$.ajax({
 			url:'/rest/register_course',
 		    data: {
+		    	"csid": $('#register_course_name').attr('data-csid'),
 		    	"cid": $('#register_course_name').attr('data-cid'),
 		    	"username": username.value,
 		    	"paytype": paytype.value,

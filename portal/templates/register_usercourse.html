@@ -1,4 +1,4 @@
-{% extends "admin_base.html" %}
+{% extends "portal_base.html" %}
 {% import "bootstrap/fixes.html" as fixes %}
 
 {% block title %}
@@ -18,7 +18,15 @@
 				    <span class='group-info'>课程名称</span><strong class='info-nessecary'>*</strong>
 			  	</div>
 				<div class="col-lg-5" align='left'>
-					<input id='register_course_name' data-cid="{{course.cid}}" type="text" class="form-control" readonly value='{{course.name}}'></input>
+					<input id='register_course_name' data-csid="{{courseSchedule.csid}}" data-cid="{{course.cid}}" type="text" class="form-control" readonly value='{{course.name}}'></input>
+			  	</div>
+			</div>
+				<div class="row row-padding">
+	  			<div class="col-lg-1" align='right'>
+				    <span class='group-info'>班次</span><strong class='info-nessecary'>*</strong>
+			  	</div>
+				<div class="col-lg-5" align='left'>
+					<input id='register_schedule_name' type="text" class="form-control" readonly value='{{courseSchedule.time}}'></input>
 			  	</div>
 			</div>
 

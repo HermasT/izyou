@@ -317,8 +317,9 @@ def orders():
 		if page < 1:
 			page = 1
 
-		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator)\
+		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator, CourseSchedule.time)\
 			.join(CourseStudent, CourseStudent.uid == Users.uid)\
+			.join(CourseSchedule, CourseSchedule.csid == CourseStudent.csid)\
 			.join(Orders, Orders.username == Users.username)\
 			.join(Course, Course.cid == CourseStudent.cid)\
 			.paginate(int(page), config.PAGE_ITEMS, False)
@@ -336,12 +337,13 @@ def orders():
 			orderData['paytpyename'] = PayType.getName(item[6])
 			orderData['orderid'] = item[7]
 			orderData['operator'] = item[8]
+			orderData['schedulename'] = item[9]
 
 			orderDataList.append(orderData)
 
 		data.items = orderDataList
 
-		return render_template('orders.html', username=current_user.username, pagination=data, index=5)
+		return render_template('orders.html', username=current_user.username, pagination=data, index=6)
 	else:
 		abort(403)
 

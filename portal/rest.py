@@ -298,23 +298,33 @@ def api_update_course():
 
 @app.route('/rest/register_course', methods=['GET', 'POST'])
 def api_register_course():
+
+	print '-1-1-1-1-1-1-1--11-1--1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1'
+
 	try:
-		cid = request.args.get('cid')
+		csid = request.args.get('csid')
 		username = request.args.get("username")
 		paytype = request.args.get("paytype")
 		extend = request.args.get("extend")
-		course = Course.query.filter(Course.cid==cid).first()
-		user = Users.query.filter(Users.username==username).first()
-		courseStudent = CourseStudent.query.filter(CourseStudent.cid == cid, CourseStudent.uid == current_user.uid).first()
-		studentCount =  CourseStudent.query.filter(CourseStudent.cid == cid).count()
 
+		courseSchedule = CourseSchedule.query.filter(CourseSchedule.csid == csid).first()
+		if courseSchedule is None:
+			return jsonify({'error':5, 'cause': u'查找不到与之匹配的课程班次信息'})
+
+		course = Course.query.filter(Course.cid==courseSchedule.cid).first()
 		if course is None:
 			return jsonify({'error':5, 'cause': u'查找不到与之匹配的课程信息'})
-		elif user is None:
+
+		user = Users.query.filter(Users.username==username).first()
+		if user is None:
 			return jsonify({'error':5, 'cause': u'查找不到报名的用户，请先注册用户'})
-		elif courseStudent:
+
+		courseStudent = CourseStudent.query.filter(CourseStudent.cid == course.cid, CourseStudent.uid == current_user.uid).first()
+		if courseStudent:
 			return jsonify({'error':5, 'cause': u'已报名'})
-		elif studentCount == course.max_student:
+
+		studentCount =  CourseStudent.query.filter(CourseStudent.cid == course.cid).count()
+		if studentCount == course.max_student:
 			return jsonify({'error':5, 'cause': u'课程已报满'})
 		else:
 			operator = current_user.username
@@ -323,11 +333,10 @@ def api_register_course():
 			else:
 				charged = True
 
-
-			order = Orders(username = username, op=operator, charged=charged, amount = 0, paytype=paytype, status=OrderStatus.order, extend=extend)
+			order = Orders(username = username, op=operator, charged=charged, amount = course.charge, paytype=paytype, status=OrderStatus.order, cid = course.cid, csid=courseSchedule.csid, extend=extend)
 			db.session.add(order)
 
-			courseStudent = CourseStudent(cid = cid, uid = user.uid)
+			courseStudent = CourseStudent(cid = courseSchedule.cid, uid = user.uid, scheduleid = courseSchedule.csid)
 			db.session.add(courseStudent)
 
 			db.session.commit()

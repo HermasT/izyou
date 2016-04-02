@@ -94,6 +94,11 @@
                         {% else %}
                         <li><a class='title-navbar' href="/room">教室管理</a></li>
                         {% endif %}
+                        {% if index == 6 %}
+                        <li class='active'><a class='title-navbar' href="/orders">订单管理</a></li>
+                        {% else %}
+                        <li><a class='title-navbar' href="/orders">订单管理</a></li>
+                        {% endif %}
                     </ul>
                     <div class="collapse navbar-collapse" id="navbar-collapse-login">
                         <ul class="nav navbar-nav navbar-right" align='center'>
