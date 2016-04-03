@@ -262,8 +262,30 @@ def course_userregister():
 			#teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
 			#allteachers = Teacher.query.order_by(Teacher.tid).all()
 			studentCount =  CourseStudent.query.filter(CourseStudent.csid == csid).count()
-			return render_template('register_usercourse.html', username=current_user.username, course=course, courseSchedule = courseSchedule, studentCount=studentCount, pays=PayType.getAll())
-	else:
+			teachernames = ""
+			mteacher = Teacher.query.filter(Teacher.tid == courseSchedule.mteacher).first();
+			muser = Users.query.filter(Users.username==mteacher.username).first()
+			if muser:
+				teachernames = muser.getName() # 
+
+			if(len( teachernames ) > 0):
+				teachernames += ", "
+
+			bteacher = Teacher.query.filter(Teacher.tid == courseSchedule.bteacher).first();
+			if bteacher:
+				buser = Users.query.filter(Users.username==bteacher.username).first()
+				if buser:
+					teachernames += buser.getName()
+
+			return render_template('register_usercourse.html',\
+				username=current_user.username,\
+				course=course,\
+				courseSchedule = courseSchedule, \
+				studentCount=studentCount, \
+				pays=PayType.getAll(), \
+				teachernames = teachernames, \
+				amount = course.charge)
+
 		flash(u'您需要登录后才能访问该页面')
 		return redirect(url_for('login'))
 

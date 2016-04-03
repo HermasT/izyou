@@ -366,6 +366,31 @@ def api_add_room():
 		# app.logger.error(e)
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
+@app.route('/rest/update_room', methods=['POST'])
+def api_update_room():
+	rid = request.values.get("rid", -1);
+	name = request.values.get("name")
+	location = request.values.get("location")
+	traffic = request.values.get("traffic")
+	extend = request.values.get("extend")
+
+	try:
+		room = Room.query.filter(Room.rid==rid).first()
+		if room is None:
+			return jsonify({'error':403, 'cause': '您添加的教室不存在'})
+		else:
+			room.traffic = traffic
+			room.name = name
+			room.extend = extend
+			room.location = location
+
+			db.session.add(room)
+			db.session.commit()
+			return jsonify({'error':0, 'rid': room.rid})
+	except Exception , e:
+		print '++++++++++++++++++++++++=', e
+		return jsonify({'error':4, 'cause': '数据库操作失败'})		
+
 # 用户更新自己的信息
 @app.route('/rest/update_userprofile', methods=['POST'])
 def  api_update_userprofile():
@@ -429,11 +454,11 @@ def api_update_order():
 	else:
 		summary = json.loads(request.values.get('summary'))
 
-		order.amount = summary['name']
-		order.income = summary['gtype']
-		order.status = summary['time']
-		order.paytype = summary['count']
-		order.extend = summary['period']
+		order.amount = summary['amount']
+		order.income = summary['income']
+		order.status = summary['status']
+		order.paytype = summary['paytype']
+		order.extend = summary['extend']
 		
 		db.session.add(order)
 		try:

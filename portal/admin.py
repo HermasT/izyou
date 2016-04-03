@@ -309,6 +309,20 @@ def add_room():
 	else:
 		abort(403)
 
+@app.route('/update_room', methods=['GET'])
+@login_required
+def update_room():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		rid = request.args.get("rid", -1)
+		room = Room.query.filter(Room.rid == rid).first()
+
+		if room is None:
+			return render_template('error.html', message='查找不到与之匹配的教室')
+
+		return render_template('update_room.html', username=current_user.username, room=room)
+	else:
+		abort(403)		
+
 @app.route('/orders', methods=['GET'])
 @login_required
 def orders():
@@ -355,12 +369,13 @@ def searchorders():
 			page = 1
 
 		username = 	request.args.get("username")
+		pattern = '%' + username + '%'	# 支持模糊查询
 
 		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator, CourseSchedule.time)\
 			.join(Orders, Orders.username == Users.username)\
 			.join(CourseSchedule, CourseSchedule.csid == Orders.csid)\
 			.join(Course, Course.cid == Orders.cid)\
-			.filter(Users.username == username)\
+			.filter(Users.username.like(pattern))\
 			.paginate(int(page), config.PAGE_ITEMS, False)
 
 		orderDataList = []

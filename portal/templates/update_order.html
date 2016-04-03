@@ -103,13 +103,13 @@
 
 <script type="text/javascript">
 	function select_paytype(type, name) {
-    	$("#btn_update_course_gtype").val(type);
-		$("#btn_update_course_gtype").html(name + " <span class='caret'></span>");
+    	$("#btn_update_order_paytype").val(type);
+		$("#btn_update_order_paytype").html(name + " <span class='caret'></span>");
     }
 
 	function select_orderstatus(type, name) {
-		$("#btn_update_course_gtype").val(type);
-		$("#btn_update_course_gtype").html(name + " <span class='caret'></span>");
+		$("#btn_update_order_status").val(type);
+		$("#btn_update_order_status").html(name + " <span class='caret'></span>");
 	}
 
 
@@ -120,29 +120,29 @@
 		var order_status = document.getElementById("btn_update_order_status").value;
 
 		var amount = document.getElementById("update_order_amount").value;
-		if (empty_input(gtype)) {
+		if (empty_input(amount)) {
 			$.MsgBox.Alert("非法输入", "请输入应收账款");
 			return;
 		}
 
 		var income = document.getElementById("update_order_income").value;
-		if (empty_input(time)) {
+		if (empty_input(income)) {
 			$.MsgBox.Alert("非法输入", "请输入实收账款");
 			return;
 		}
 
-		var extend = document.getElementById("update_course_extend").value;
+		var extend = document.getElementById("update_order_extend").value;
 	    
 		$.ajax({
 			url:'/rest/update_order',
 		    data: {
 		    	"orderid":orderid,
 		    	"summary": JSON.stringify({
-			    	"income": name,
-			    	"amount": target,
-			    	"paytype`": gtype,
-			    	"status": time,
-			    	"extend": count
+			    	"income": income,
+			    	"amount": amount,
+			    	"paytype": order_paytype,
+			    	"status": order_status,
+			    	"extend": extend
 			    })
 		    },
 		    type: 'post',

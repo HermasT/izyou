@@ -15,6 +15,7 @@
 			<td>地址位置</td>
 			<td>交通信息</td>
 			<td>备注</td>
+			<td style="width: 140px;" ></td>
 		</tr>
 		{% for room in rooms %}
 		<tr align="center">
@@ -23,6 +24,7 @@
 			<td>{{room.location}}</td>
 			<td>{{room.traffic}}</td>
 			<td>{{room.extend}}</td>
+			<td><a href="/update_room?rid={{room.rid}}">编辑</td>
 		</tr>
 		{% endfor %}
 	</table>
