@@ -377,7 +377,7 @@ def api_update_room():
 	try:
 		room = Room.query.filter(Room.rid==rid).first()
 		if room is None:
-			return jsonify({'error':403, 'cause': '您添加的教室不存在'})
+			return jsonify({'error':403, 'cause': '您更新的教室不存在'})
 		else:
 			room.traffic = traffic
 			room.name = name
@@ -388,7 +388,6 @@ def api_update_room():
 			db.session.commit()
 			return jsonify({'error':0, 'rid': room.rid})
 	except Exception , e:
-		print '++++++++++++++++++++++++=', e
 		return jsonify({'error':4, 'cause': '数据库操作失败'})		
 
 # 用户更新自己的信息

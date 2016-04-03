@@ -94,15 +94,15 @@
 		    success: function(data) {
 		    	if (data["error"] == 0) {
 		    		$("#add_room_id").val(data["rid"]);
-			    	$.MsgBox.Alert("新增教室", "您的请求已提交成功", function() {
+			    	$.MsgBox.Alert("更新教室", "您的请求已提交成功", function() {
 			    		window.location.href = "/room";
 			    	});
 		    	} else {
-		    		$.MsgBox.Alert("新增教室", data["cause"]);
+		    		$.MsgBox.Alert("更新教室", data["cause"]);
 		    	}
 		    },
 		    error: function() {
-		        $.MsgBox.Alert("新增教室", "请求失败，请稍候重试");
+		        $.MsgBox.Alert("更新教室", "请求失败，请稍候重试");
 		    }
 		})
     });
