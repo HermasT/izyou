@@ -266,11 +266,6 @@ def course_userregister():
 			return render_template('error.html', message='查找不到与之匹配的课程')
 		else:
 			count = CourseStudent.query.filter(CourseStudent.cid==cid, CourseStudent.csid==csid).count()
-
-			status = CourseStatus.getName(course.status)
-			#teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
-			#allteachers = Teacher.query.order_by(Teacher.tid).all()
-			studentCount =  CourseStudent.query.filter(CourseStudent.csid == csid).count()
 			teachernames = ""
 			mteacher = Teacher.query.filter(Teacher.tid == courseSchedule.mteacher).first();
 			muser = Users.query.filter(Users.username==mteacher.username).first()
@@ -278,7 +273,7 @@ def course_userregister():
 				teachernames = muser.getName() # 
 
 			if(len( teachernames ) > 0):
-				teachernames += ", "
+				teachernames += " "
 
 			bteacher = Teacher.query.filter(Teacher.tid == courseSchedule.bteacher).first();
 			if bteacher:
@@ -290,48 +285,13 @@ def course_userregister():
 				username=current_user.username,\
 				course=course,\
 				courseSchedule = courseSchedule, \
-				studentCount=studentCount, \
+				studentCount=count, \
 				pays=PayType.getAll(), \
 				teachernames = teachernames, \
 				amount = course.charge)
 	else:
 		flash(u'您需要登录后才能访问该页面')
 		return redirect(url_for('login'))
-
-
-# 我要报名
-# @app.route('/course_register', methods = ['GET'])
-# @login_required
-# def course_register():
-# 	if current_user is not None and current_user.is_privileged(UserType.registered):
-# 		page = request.args.get("page", 1)
-# 		if page < 1:
-# 			page = 1
-
-# 		gtype = request.args.get('type', GameType.undefined)
-# 		try:
-# 			if int(gtype) >= GameType.count:
-# 				gtype = GameType.undefined
-# 		except:
-# 			gtype = GameType.undefined
-		
-# 		if int(gtype) == GameType.undefined:
-# 			paginate = Course.query.order_by(Course.cid).paginate(int(page), config.PAGE_ITEMS, False)
-# 		else:
-# 			paginate = Course.query.filter(Course.gtype==gtype, Course.status<2).order_by(desc(Course.cid)).paginate(int(page), config.PAGE_ITEMS, False)
-
-# 		status = []
-# 		teachers = []
-# 		for course in paginate.items:
-# 			status.append(CourseStatus.getName(course.status))
-# 			# 采用多表联合查询
-# 			q = db.session.query(Users.name).join(Teacher, Teacher.username==Users.username) \
-# 					.filter(Teacher.tid==course.tid).first()
-# 			teachers.append(q.username)
-# 		return render_template('course_register.html', index=5, type=gtype,
-# 			username=current_user.username, pagination=paginate, status=status, teachers=teachers)
-# 	else:
-# 		return render_template('error.html', message='请您登录')
 
 # # 用户基本信息 
 # @app.route('/userprofile', methods = ['GET'])

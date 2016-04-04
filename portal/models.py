@@ -452,15 +452,15 @@ class CourseStudent(db.Model):
     id = db.Column(Integer, primary_key=True) #主键
     uid = db.Column(Integer, nullable=False) #ForeignKey('User.uid')
     cid = db.Column(Integer, nullable=False) #ForeignKey('Course.cid')
-    courseScheduleid = db.Column(Integer, nullable=False) #ForeignKey('CourseSchedule.csid')
-    
+    csid = db.Column(Integer, nullable=False) #ForeignKey('CourseSchedule.csid')
+
     def __repr__(self):
         return "<CourseStudent{:d}:{:d}:{:d}:{:d}>".format(self.csid, self.cid, self.sid, self.courseScheduleid)
 
-    def __init__(self, cid, uid, scheduleid):
+    def __init__(self, cid, uid, csid):
         self.uid = uid
         self.cid = cid
-        self.courseScheduleid = scheduleid
+        self.csid = csid
 
 # 教室
 class Room(db.Model):
