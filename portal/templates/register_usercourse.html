@@ -132,7 +132,7 @@
 			    	if (data['error'] == 0) {
 			    		$.MsgBox.Alert("课程报名", "您的请求已提交成功", function() {
 			    			if (paytype == 0) { // 不付费
-			    				window.location.href = "/index";
+			    				window.location.href = "/userorders?username=" + username;
 			    			} else if (paytype == 3) { //支付宝H5
 			    				
 			    			}

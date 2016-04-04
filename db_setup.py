@@ -92,10 +92,10 @@ if __name__ == '__main__':
 	# db.session.commit()
 
 	# 添加订单
-	for i in range(1, 20):
-		s = CourseStudent(uid=i, cid=1, csid=3)
-		db.session.add(s)
-	db.session.commit()
+	# for i in range(1, 20):
+	# 	s = CourseStudent(uid=i, cid=1, csid=3)
+	# 	db.session.add(s)
+	# db.session.commit()
 
 	# 添加教室
 	# db.session.add(Room(name=u'信远桥牌俱乐部', location=u'东三环xx路12号', traffic=u'地铁8号线望京站5号口出站即到'))

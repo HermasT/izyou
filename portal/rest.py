@@ -256,7 +256,6 @@ def api_add_course_schedule():
 		db.session.add(course_schedule)
 	try:
 		db.session.commit()
-		print 's'
 		return jsonify({'error':0})
 	except Exception, e:
 		print e
@@ -266,15 +265,11 @@ def api_add_course_schedule():
 @app.route('/rest/update_course', methods=['GET', 'POST'])
 def api_update_course():
 	cid = request.values.get('cid')
-	print cid
 	course = Course.query.filter(Course.cid==cid).first()
-	print course
 	if course is None:
 		return jsonify({'error':1, 'cause': '查找不到与之匹配的课程信息'})
 	else:
 		summary = json.loads(request.values.get('summary'))
-		print summary
-		print type(summary)
 		course.name = name=summary['name']
 		course.gtype=summary['gtype']
 		course.time=summary['time']
@@ -332,8 +327,10 @@ def api_register_course():
 
 			# 生成订单
 			order = Orders(username=username, op=operator, amount=course.charge, status=OrderStatus.order, paytype=paytype)
-			item = OrderItem(ptype=ProductType.course, pid=course.cid, subid=courseSchedule.csid, op=operator, count=1, status=0)
 			db.session.add(order)
+			db.session.commit()
+
+			item = OrderItem(orderid=order.orderid, ptype=ProductType.course, pid=course.cid, subid=courseSchedule.csid, op=operator, count=1, status=0)
 			db.session.add(item)
 
 			# 统计班次的报名学生和人数

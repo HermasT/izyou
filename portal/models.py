@@ -493,7 +493,8 @@ class Orders(db.Model):
 
 # 订单产品 一张订单中允许同时购买多个产品
 class OrderItem(db.Model):
-    orderid = db.Column(Integer, primary_key=True)
+    id = db.Column(Integer, primary_key=True)
+    orderid = db.Column(Integer, nullable=False) # 订单编号
     ptype = db.Column(Integer, nullable=False) # 产品类型
     pid = db.Column(Integer, nullable=False) # 产品编号（课程为cid）
     subid = db.Column(Integer, nullable=True, default=0) # 产品子编号（课程为班次号csid）
@@ -502,7 +503,8 @@ class OrderItem(db.Model):
     operator = db.Column(String(32)) # 当前操作的用户账号
     extend = db.Column(String(64)) # 退费记录原因
 
-    def __init__(self, ptype, pid, subid, op, count=1, status=0, extend=''):
+    def __init__(self, orderid, ptype, pid, subid, op, count=1, status=0, extend=''):
+        self.orderid = orderid
         self.pid = pid
         self.subid = subid
         self.ptype = ptype

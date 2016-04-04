@@ -292,23 +292,6 @@ def course_userregister():
 		flash(u'您需要登录后才能访问该页面')
 		return redirect(url_for('login'))
 
-# # 用户基本信息 
-# @app.route('/userprofile', methods = ['GET'])
-# @login_required
-# def userprofile():
-
-# 	if current_user is not None and current_user.is_privileged(UserType.registered):
-# 		username = request.args.get("username")
-
-# 		if not username:
-# 			abort(404)
-# 		elif current_user.username.lower() != username.lower():
-# 			abort(404)
-# 		else:
-# 			return render_template('userprofile.html', username=current_user.username, user=current_user, genderName = GenderType.getName(current_user.gender), birthStr = current_user.getBirthStr())
-# 	else:
-# 		abort(403)
-
 # 用户基本信息 
 @app.route('/edit_userprofile', methods = ['GET'])
 @app.route('/userprofile', methods = ['GET'])
@@ -348,11 +331,13 @@ def userorders():
 		if page < 1:
 			page = 1
 
+		# 暂时只考虑课程（ptype=1）
 		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator, CourseSchedule.time)\
 			.join(Orders, Orders.username == Users.username)\
-			.join(CourseSchedule, CourseSchedule.csid == Orders.csid)\
-			.join(Course, Course.cid == Orders.cid)\
+			.join(OrderItem, OrderItem.orderid == Orders.orderid)\
 			.filter(Users.uid == current_user.uid)\
+			.filter(OrderItem.pid == Course.cid)\
+			.filter(OrderItem.subid == CourseSchedule.csid)\
 			.paginate(int(page), config.PAGE_ITEMS, False)
 
 		orderDataList = []
@@ -373,7 +358,6 @@ def userorders():
 			orderDataList.append(orderData)
 
 		data.items = orderDataList
-
 		return render_template('userorders.html', username=current_user.username, pagination=data)
 	else:
 		abort(403)
