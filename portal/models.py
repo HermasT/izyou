@@ -447,13 +447,13 @@ class CourseSchedule(db.Model):
     def __repr__(self):
         return "<CourseSchedule{:d} {:s}>".format(self.cid, self.time)
 
-#课程上课学生
+# 课程报名表
 class CourseStudent(db.Model):
-    csid = db.Column(Integer, primary_key=True) #课程学生主键
+    id = db.Column(Integer, primary_key=True) #主键
+    uid = db.Column(Integer, nullable=False) #ForeignKey('User.uid')
     cid = db.Column(Integer, nullable=False) #ForeignKey('Course.cid')
-    uid = db.Column(Integer, nullable=False) #ForeignKey('User.uid')  此处应该是uid
     courseScheduleid = db.Column(Integer, nullable=False) #ForeignKey('CourseSchedule.csid')
-
+    
     def __repr__(self):
         return "<CourseStudent{:d}:{:d}:{:d}:{:d}>".format(self.csid, self.cid, self.sid, self.courseScheduleid)
 

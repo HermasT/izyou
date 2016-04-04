@@ -87,7 +87,6 @@ def active():
 	if not user:
 		abort(404)
 	elif user.active == True:
-		# flash(u'您尝试激活的账号已处于激活状态')
 		app.logger.warning('your account is active')
 		return redirect(url_for('index'))
 	else:
@@ -184,6 +183,13 @@ def all_courses():
 						if buser:
 							schedule.bteachername = buser.getName()
 
+					# 课程报名状态
+					scount = CourseStudent.query.filter(CourseStudent.cid==c.cid, CourseStudent.csid==schedule.csid).count()
+					if scount >= c.max_student:
+						schedule.full = True
+					else:
+						schedule.full = False
+
 					room = Room.query.filter(Room.rid==schedule.rid).first();
 					if room:
 						schedule.room = room.name
@@ -197,6 +203,7 @@ def all_courses():
 	except:
 		return render_template('all_course.html', username=None, pagetitle=pagetitle, courses=courses)
 
+# 课程预览
 @app.route('/course_info', methods = ['GET'])
 @login_required
 def course_info():
@@ -240,11 +247,12 @@ def course_info():
 	except:
 		return render_template('all_course.html', username=None, pagetitle='课程信息预览', courses=courses)
 
- #我要报名
+ # 我要报名
 @app.route('/course_userregister', methods = ['GET'])
 @login_required
 def course_userregister():
 	if current_user is not None and current_user.is_privileged(UserType.registered):
+		cid = request.args.get('cid', -1)
 		csid = request.args.get('csid', -1)
 		if csid < 0:
 			return render_template('error.html', message='查找不到与之匹配的课程班次')
@@ -253,10 +261,11 @@ def course_userregister():
 		if courseSchedule is None:
 			return render_template('error.html', message='查找不到与之匹配的课程班次')
 
-		course = Course.query.filter(Course.cid==courseSchedule.cid).first()
+		course = Course.query.filter(Course.cid==cid).first()
 		if course is None:
 			return render_template('error.html', message='查找不到与之匹配的课程')
 		else:
+			count = CourseStudent.query.filter(CourseStudent.cid==cid, CourseStudent.csid==csid).count()
 
 			status = CourseStatus.getName(course.status)
 			#teacher = Teacher.query.filter(Teacher.tid==course.tid).first()
@@ -285,44 +294,44 @@ def course_userregister():
 				pays=PayType.getAll(), \
 				teachernames = teachernames, \
 				amount = course.charge)
-
+	else:
 		flash(u'您需要登录后才能访问该页面')
 		return redirect(url_for('login'))
 
 
 # 我要报名
-@app.route('/course_register', methods = ['GET'])
-@login_required
-def course_register():
-	if current_user is not None and current_user.is_privileged(UserType.registered):
-		page = request.args.get("page", 1)
-		if page < 1:
-			page = 1
+# @app.route('/course_register', methods = ['GET'])
+# @login_required
+# def course_register():
+# 	if current_user is not None and current_user.is_privileged(UserType.registered):
+# 		page = request.args.get("page", 1)
+# 		if page < 1:
+# 			page = 1
 
-		gtype = request.args.get('type', GameType.undefined)
-		try:
-			if int(gtype) >= GameType.count:
-				gtype = GameType.undefined
-		except:
-			gtype = GameType.undefined
+# 		gtype = request.args.get('type', GameType.undefined)
+# 		try:
+# 			if int(gtype) >= GameType.count:
+# 				gtype = GameType.undefined
+# 		except:
+# 			gtype = GameType.undefined
 		
-		if int(gtype) == GameType.undefined:
-			paginate = Course.query.order_by(Course.cid).paginate(int(page), config.PAGE_ITEMS, False)
-		else:
-			paginate = Course.query.filter(Course.gtype==gtype, Course.status<2).order_by(desc(Course.cid)).paginate(int(page), config.PAGE_ITEMS, False)
+# 		if int(gtype) == GameType.undefined:
+# 			paginate = Course.query.order_by(Course.cid).paginate(int(page), config.PAGE_ITEMS, False)
+# 		else:
+# 			paginate = Course.query.filter(Course.gtype==gtype, Course.status<2).order_by(desc(Course.cid)).paginate(int(page), config.PAGE_ITEMS, False)
 
-		status = []
-		teachers = []
-		for course in paginate.items:
-			status.append(CourseStatus.getName(course.status))
-			# 采用多表联合查询
-			q = db.session.query(Users.name).join(Teacher, Teacher.username==Users.username) \
-					.filter(Teacher.tid==course.tid).first()
-			teachers.append(q.username)
-		return render_template('course_register.html', index=5, type=gtype,
-			username=current_user.username, pagination=paginate, status=status, teachers=teachers)
-	else:
-		return render_template('error.html', message='请您登录')
+# 		status = []
+# 		teachers = []
+# 		for course in paginate.items:
+# 			status.append(CourseStatus.getName(course.status))
+# 			# 采用多表联合查询
+# 			q = db.session.query(Users.name).join(Teacher, Teacher.username==Users.username) \
+# 					.filter(Teacher.tid==course.tid).first()
+# 			teachers.append(q.username)
+# 		return render_template('course_register.html', index=5, type=gtype,
+# 			username=current_user.username, pagination=paginate, status=status, teachers=teachers)
+# 	else:
+# 		return render_template('error.html', message='请您登录')
 
 # # 用户基本信息 
 # @app.route('/userprofile', methods = ['GET'])
@@ -409,13 +418,3 @@ def userorders():
 		return render_template('userorders.html', username=current_user.username, pagination=data)
 	else:
 		abort(403)
-
-# # 联系我们
-# @app.route('/contact', methods=['GET', 'POST'])
-# def contact():
-# 	try:
-# 		username = current_user.username
-# 		return render_template('contact.html', index=4, username=username)
-# 	except:
-# 		return render_template('contact.html', index=4, username=None)
-

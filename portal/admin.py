@@ -21,8 +21,10 @@ def admin():
 		teacherCount = Teacher.query.count()
 		courseCount = Course.query.count()
 		roomCount = Room.query.count()
+		orderCount = Room.query.count()
 
-		return render_template('admin.html', username=current_user.username, registeredUserCount = userCount, teacherCount = teacherCount, courseCount = courseCount, roomCount = roomCount, index=1)
+		return render_template('admin.html', username=current_user.username, registeredUserCount = userCount, 
+			teacherCount = teacherCount, courseCount = courseCount, roomCount = roomCount, orderCount=orderCount, index=1)
 	else:
 		abort(403)
 
@@ -323,6 +325,7 @@ def update_room():
 	else:
 		abort(403)		
 
+# 订单管理
 @app.route('/orders', methods=['GET'])
 @login_required
 def orders():
@@ -355,7 +358,6 @@ def orders():
 			orderDataList.append(orderData)
 
 		data.items = orderDataList
-
 		return render_template('orders.html', username=current_user.username, pagination=data, index=6)
 	else:
 		abort(403)
@@ -418,7 +420,7 @@ def update_order():
 		order.paytypename = PayType.getName(order.paytype)
 		order.statusname = OrderStatus.getName(order.status)
 
-		return render_template('update_order.html', username=current_user.username, order=order, orderStatus=OrderStatus.getAll(), payTypes=PayType.getAll())
+		return render_template('update_order.html', username=current_user.username, order=order, orderStatus=OrderStatus.getAll(), payTypes=PayType.getAll(), index=6)
 	else:
 		abort(403)
 

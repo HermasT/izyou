@@ -70,7 +70,7 @@
 				<td class='td-title'>时间</td>
 				<td class='td-title'>地点</td>
 				<td class='td-title'>授课老师</td>
-				<td class='td-title' width="140px" ></td>
+				<td class='td-title'></td>
 			</tr>
 			{% for schedule in course.schedules %}
 			<tr>
@@ -78,14 +78,16 @@
 				<td class='td-title'>{{schedule.time}}</td>
 				<td class='td-title'>{{schedule.room}}</td>
 				<td class='td-title'>{{schedule.mteachername}}  {{schedule.bteachername}}  </td>
-				<td class='td-title'><a href='/course_userregister?csid={{schedule.csid}}' >我要报名</a></td>
+				{% if schedule.full %}
+				<td class='td-title'>已报满</td>
+				{% else %}
+				<td class='td-title'><a href='/course_userregister?cid={{course.cid}}&csid={{schedule.csid}}'>报名</href></td>
+				{% endif %}
 			</tr>
 			{% endfor %}
 		</table>
 		<p class="text-info summary-detail table-footmark">&nbsp备注：其他时间可攒班，满12人开课</p>
 		<br />
-		<!-- <input type='button' class='btn btn-primary btn-register' onclick=" location.href = '/course_userregister?cid={{course.cid}}' " value='我要报名'/> -->
-		<br /><br />
 		{% endif %}
 
 	{% endfor %}

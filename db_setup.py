@@ -5,7 +5,8 @@ sys.path.append(os.path.dirname(__name__))
 from portal import app
 from portal import db
 from portal.models import UserType, GameType, PayType, GenderType, ProductType
-from portal.models import Users, Student, Teacher, Course, Room, Orders, OrdersList, OrderStatus, CourseDetail, CourseSchedule
+from portal.models import Users, Student, Teacher, Room, Orders, OrdersList, OrderStatus
+from portal.models import Course, CourseDetail, CourseSchedule, CourseStudent
 
 if __name__ == '__main__':
 	# 创建数据表
@@ -54,40 +55,46 @@ if __name__ == '__main__':
 
 
 	# 添加课程
-	c = Course(name=u'初级提高班', gtype=GameType.bridge, time='3月5日起连续15周，每周2小时', count=15,
-		period=120, charge=3600, max_student=16, min_student=12, audition=1, discount=0.9, step=3,
-		target='面向9-14岁，零基础的学生', desc='1. 学中玩：收获乐趣，培养兴趣\n2. 玩中学：掌握初级知识，参与桥牌运动\n" \
-		"3. 提升：沟通、合作、社交\n4. 进阶：为走向竞赛阶段打下坚实基础', extend='')
-	db.session.add(c)
-	title = ['走进桥牌', '数字的游戏', '比大小', '矛与盾', '制订计划', '四人参与', '弱牌的价值', 
-		'防守方的武器','不确定的因素', '激动人心的满贯', '聚焦', '执行计划', '奇妙的桥牌', '习题课1', '习题课2']
-	content = ['桥牌的基本概念、术语和发展史', '桥牌叫牌打牌所需基础知识', '1NT开叫及无将做庄',
-		'一阶高花开叫相关知识和防守入门', '一阶低花开叫相关知识和做庄计划', '争叫和简要飞牌入门', 
-		'阻击叫相关知识，出牌方向综述', '强开叫相关知识，防守信号入门', '飞牌知识深入，争叫后的应叫变化',
-		'满贯叫牌介绍，桥路和次序', '标准美国黄卡介绍，单套处理', '加倍和再加倍介绍，攻防整体技巧', 
-		'叫牌原则和约定叫总结，高级桥牌技巧概览', '无将做庄，牌型牌点计算', '有将做庄，简要读牌']
-	for i in range(1, len(title) + 1):
-		detail = CourseDetail(cid=1, index=i, title=title[i - 1], detail=content[i - 1])
-		db.session.add(c)
-		db.session.add(detail)
-	time = ['每周六10:00~12:00', '每周六13:30~15:30', '每周六15:50~17:50',
-		'每周六18:00~20:00', '每周日10:20~12:20', '每周日13:30~15:30', '每周日15:50~17:50']
-	for i in range(1, len(time) + 1):
-		schedule = CourseSchedule(cid=1, rid=1, index=i, time=time[i - 1], mteacher='1', bteacher='2')
-		db.session.add(schedule)
-	db.session.commit()
+	# c = Course(name=u'初级提高班', gtype=GameType.bridge, time='3月5日起连续15周，每周2小时', count=15,
+	# 	period=120, charge=3600, max_student=16, min_student=12, audition=1, discount=0.9, step=3,
+	# 	target='面向9-14岁，零基础的学生', desc='1. 学中玩：收获乐趣，培养兴趣\n2. 玩中学：掌握初级知识，参与桥牌运动\n" \
+	# 	"3. 提升：沟通、合作、社交\n4. 进阶：为走向竞赛阶段打下坚实基础', extend='')
+	# db.session.add(c)
+	# title = ['走进桥牌', '数字的游戏', '比大小', '矛与盾', '制订计划', '四人参与', '弱牌的价值', 
+	# 	'防守方的武器','不确定的因素', '激动人心的满贯', '聚焦', '执行计划', '奇妙的桥牌', '习题课1', '习题课2']
+	# content = ['桥牌的基本概念、术语和发展史', '桥牌叫牌打牌所需基础知识', '1NT开叫及无将做庄',
+	# 	'一阶高花开叫相关知识和防守入门', '一阶低花开叫相关知识和做庄计划', '争叫和简要飞牌入门', 
+	# 	'阻击叫相关知识，出牌方向综述', '强开叫相关知识，防守信号入门', '飞牌知识深入，争叫后的应叫变化',
+	# 	'满贯叫牌介绍，桥路和次序', '标准美国黄卡介绍，单套处理', '加倍和再加倍介绍，攻防整体技巧', 
+	# 	'叫牌原则和约定叫总结，高级桥牌技巧概览', '无将做庄，牌型牌点计算', '有将做庄，简要读牌']
+	# for i in range(1, len(title) + 1):
+	# 	detail = CourseDetail(cid=1, index=i, title=title[i - 1], detail=content[i - 1])
+	# 	db.session.add(c)
+	# 	db.session.add(detail)
+	# time = ['每周六10:00~12:00', '每周六13:30~15:30', '每周六15:50~17:50',
+	# 	'每周六18:00~20:00', '每周日10:20~12:20', '每周日13:30~15:30', '每周日15:50~17:50']
+	# for i in range(1, len(time) + 1):
+	# 	schedule = CourseSchedule(cid=1, rid=1, index=i, time=time[i - 1], mteacher='1', bteacher='2')
+	# 	db.session.add(schedule)
+	# db.session.commit()
 
-	c = Course(name=u'桥牌高级班', gtype=GameType.bridge, time='3月5日起连续15周，每周2小时', count=15,
-		period=120, charge=4500, max_student=20, min_student=12, audition=1, discount=1, step=3,
-		target='面向14岁的学生', desc='1. 学中玩：收获乐趣，培养兴趣\n2. 玩中学：掌握初级知识，参与桥牌运动\n" \
-		"3. 提升：沟通、合作、社交\n4. 进阶：为走向竞赛阶段打下坚实基础', extend='')
-	db.session.add(c)
-	for i in range(1, len(title) + 1):
-		detail = CourseDetail(cid=2, index=i, title=title[i - 1], detail=content[i - 1])
-		db.session.add(detail)
-	for i in range(1, len(time) + 1):
-		schedule = CourseSchedule(cid=2, rid=1, index=i, time=time[i - 1], mteacher='2', bteacher='1')
-		db.session.add(schedule)
+	# c = Course(name=u'桥牌高级班', gtype=GameType.bridge, time='3月5日起连续15周，每周2小时', count=15,
+	# 	period=120, charge=4500, max_student=20, min_student=12, audition=1, discount=1, step=3,
+	# 	target='面向14岁的学生', desc='1. 学中玩：收获乐趣，培养兴趣\n2. 玩中学：掌握初级知识，参与桥牌运动\n" \
+	# 	"3. 提升：沟通、合作、社交\n4. 进阶：为走向竞赛阶段打下坚实基础', extend='')
+	# db.session.add(c)
+	# for i in range(1, len(title) + 1):
+	# 	detail = CourseDetail(cid=2, index=i, title=title[i - 1], detail=content[i - 1])
+	# 	db.session.add(detail)
+	# for i in range(1, len(time) + 1):
+	# 	schedule = CourseSchedule(cid=2, rid=1, index=i, time=time[i - 1], mteacher='2', bteacher='1')
+	# 	db.session.add(schedule)
+	# db.session.commit()
+
+	# 添加订单
+	for i in range(1, 20):
+		s = CourseStudent(uid=i, cid=1, csid=3)
+		db.session.add(s)
 	db.session.commit()
 
 	# 添加教室
