@@ -21,7 +21,7 @@ def admin():
 		teacherCount = Teacher.query.count()
 		courseCount = Course.query.count()
 		roomCount = Room.query.count()
-		orderCount = Room.query.count()
+		orderCount = Orders.query.count()
 
 		return render_template('admin.html', username=current_user.username, registeredUserCount = userCount, 
 			teacherCount = teacherCount, courseCount = courseCount, roomCount = roomCount, orderCount=orderCount, index=1)
