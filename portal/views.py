@@ -9,14 +9,13 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from portal import app, db, lm, mail
 from models import Users, Teacher, Room, Course, CourseDetail, CourseStudent, UserType, GenderType, GameType,OrderStatus
-from models import CourseStatus, PayType, Orders, OrdersList, CourseSchedule
+from models import CourseStatus, PayType, Orders, OrderItem, CourseSchedule
 from mail import MailUtil
 from sms import SmsUtil
 
 # 测试页面
 @app.route('/test')
 def test():
-
 	# SmsUtil.requestCode('18516595221')
 	# SmsUtil.verifyCode('18516595221', '916838')
 

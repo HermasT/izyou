@@ -116,12 +116,12 @@ class PayType(Enum):
     @staticmethod
     def getAll():
         return [
-            {'type':0, 'name': '未支付'},
-            {'type':1, 'name': '现金支付'},
-            {'type':2, 'name': '微信支付'},
-            {'type':3, 'name': '支付宝'},
-            {'type':4, 'name': '在线支付'},
-            {'type':5, 'name': '其他'}
+            {'type':0, 'name': '未支付'}#,
+            # {'type':1, 'name': '现金支付'},
+            # {'type':2, 'name': '微信支付'},
+            # {'type':3, 'name': '支付宝'},
+            # {'type':4, 'name': '在线支付'},
+            # {'type':5, 'name': '其他'}
         ]
 
     @staticmethod
@@ -295,17 +295,9 @@ class Users(db.Model):
 class Student(db.Model):
     sid = db.Column(Integer, primary_key=True) 
     username = db.Column(String(32), unique=True, nullable=False, index=True) # ForeignKey('Users.username')
-    # birth = db.Column(Date) # 出生日期
-    # gender = db.Column(Integer, default=GenderType.undefined) # 性别
-    # school = db.Column(String(64)) # 学校
-    # extend = db.Column(String(64), nullable=True)
 
     def __init__(self, username):
         self.username = username
-        # self.birth = birth
-        # self.gender = gender
-        # self.school = school
-        # self.extend = extend
  
     def __repr__(self):
         return "<Student({:d}): {:s}>".format(self.sid, self.username)
@@ -314,21 +306,13 @@ class Student(db.Model):
 class Teacher(db.Model):
     tid = db.Column(Integer, primary_key=True)
     username = db.Column(String(32), unique=True, nullable=False, index=True) # ForeignKey('Users.username')
-    # birth = db.Column(Date)
-    # gender = db.Column(Integer, default=GenderType.undefined)
     gtype = db.Column(Integer)
     uprice = db.Column(Float, default=0.0)
-    # desc = db.Column(String(128))
-    # extend = db.Column(String(64), nullable=True)
 
     def __init__(self, username, gtype, uprice=0.0):
         self.username = username
-        # self.birth = birth
-        # self.gender = gender
         self.gtype = gtype
         self.uprice = uprice
-        # self.desc = desc
-        # self.extend = extend
  
     def __repr__(self):
         return "<Teacher({:d}): {:s}>".format(self.tid, self.username)
@@ -489,11 +473,9 @@ class Orders(db.Model):
     income = db.Column(Float) # 实收账款（处理打折、减免等）
     status = db.Column(Integer) # 订单状态 OrderStatus
     operator = db.Column(String(32)) # ForeignKey('users.username') 操作的用户名（工作人员）
-    cid = db.Column(Integer, nullable=False) # ForeignKey('course.cid') 报名课程
-    csid = db.Column(Integer, nullable=False) # ForeignKey('courseschedule.csid') 报名课程班次
     extend = db.Column(String(64)) # 退费记录原因
 
-    def __init__(self, username, op, amount,cid,csid,income=0,charged=False,status=OrderStatus.undefined,paytype=PayType.undefined,extend=''):
+    def __init__(self, username, op, amount, income=0, charged=False, status=OrderStatus.undefined, paytype=PayType.undefined, extend=''):
         self.username = username
         self.charged = charged
         self.paytype = paytype
@@ -504,28 +486,27 @@ class Orders(db.Model):
         else:
             self.income = income
         self.operator = op
-        self.cid = cid
-        self.csid = csid
         self.extend = extend
  
     def __repr__(self):
         return "<Order{:s}: {:s}>".format(self.orderid, self.username)
 
-# 订单产品列表 一张订单中允许同时购买多个产品
-class OrdersList(db.Model):
+# 订单产品 一张订单中允许同时购买多个产品
+class OrderItem(db.Model):
     orderid = db.Column(Integer, primary_key=True)
-    ptype = db.Column(Integer) # 产品类型
-    pid = db.Column(Integer) # 产品编号
+    ptype = db.Column(Integer, nullable=False) # 产品类型
+    pid = db.Column(Integer, nullable=False) # 产品编号（课程为cid）
+    subid = db.Column(Integer, nullable=True, default=0) # 产品子编号（课程为班次号csid）
     count = db.Column(Integer) # 产品数量
     status = db.Column(Integer) # 产品状态 0 = 正常，1 = 退费
     operator = db.Column(String(32)) # 当前操作的用户账号
     extend = db.Column(String(64)) # 退费记录原因
 
-    def __init__(self, ptype, pid, op, count=1, status=0, extend=''):
+    def __init__(self, ptype, pid, subid, op, count=1, status=0, extend=''):
         self.pid = pid
+        self.subid = subid
         self.ptype = ptype
         self.count = count
         self.operator = op
         self.status = status
         self.extend = extend
- 

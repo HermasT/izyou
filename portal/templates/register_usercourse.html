@@ -8,22 +8,27 @@
 {% block content %}
 <div class='container'>
 	<div class="panel panel-default">
-	  	<div class="panel-heading" >
-	  		<a class='custom_index' href="javascript:history.back(-1)">返回</a>
-	  		<span class='custom_title' align='center'>课程报名</span>
-	  	</div>
 	  	<div class="panel-body">
 			<div class="row row-padding">
-	  			<div class="col-lg-1" align='right'>
-				    <span class='group-info'>课程名称</span><strong class='info-nessecary'>*</strong>
+				<div class="row row-padding" style="display: none;" >
+				  	<div class="col-lg-1" align='right'>
+					    <span class='group-info'>用户姓名</span><strong class='info-nessecary'>*</strong>
+				  	</div>
+					<div class="col-lg-5" align='left'>
+						<input id='register_user_name' type="text" value="{{username}}" class="form-control"></input>
+				  	</div>
+				</div>
+
+	  			<div class="col-lg-1" align='left'>
+				    <span class='group-info'>课程名称</span>
 			  	</div>
 				<div class="col-lg-5" align='left'>
 					<input id='register_course_name' data-csid="{{courseSchedule.csid}}" data-cid="{{course.cid}}" type="text" class="form-control" readonly value='{{course.name}}'></input>
 			  	</div>
 			</div>
 				<div class="row row-padding">
-	  			<div class="col-lg-1" align='right'>
-				    <span class='group-info'>班次</span><strong class='info-nessecary'>*</strong>
+	  			<div class="col-lg-1" align='left'>
+				    <span class='group-info'>班次</span>
 			  	</div>
 				<div class="col-lg-5" align='left'>
 					<input id='register_schedule_name' type="text" class="form-control" readonly value='{{courseSchedule.time}}'></input>
@@ -31,49 +36,40 @@
 			</div>
 
 			<div class="row row-padding" >
-			  	<div class="col-lg-1" align='right'>
-				    <span class='group-info'>授课老师</span><strong class='info-nessecary'>*</strong>
+			  	<div class="col-lg-1" align='left'>
+				    <span class='group-info'>授课教师</span>
 			  	</div>
 				<div class="col-lg-5" align='left'>
-					<input id='register_teacher_name' type="text" value="{{teachernames}}" class="form-control"></input>
+					<input id='register_teacher_name' type="text" readonly value="{{teachernames}}" class="form-control"></input>
 			  	</div>
 			</div>
 
 			<div class="row row-padding" >
-			  	<div class="col-lg-1" align='right'>
-				    <span class='group-info'>费用</span><strong class='info-nessecary'>*</strong>
+			  	<div class="col-lg-1" align='left'>
+				    <span class='group-info'>报名费</span>
 			  	</div>
 				<div class="col-lg-5" align='left'>
-					<input id='register_course_amount' type="text" value="{{amount}}" class="form-control"></input>
-			  	</div>
-			</div>
-
-			<div class="row row-padding" style="display: none;" >
-			  	<div class="col-lg-1" align='right'>
-				    <span class='group-info'>用户姓名</span><strong class='info-nessecary'>*</strong>
-			  	</div>
-				<div class="col-lg-5" align='left'>
-					<input id='register_user_name' type="text" value="{{username}}" class="form-control"></input>
+					<input id='register_course_amount' type="text" readonly value="￥{{amount|int}}" class="form-control"></input>
 			  	</div>
 			</div>
 
 			<div class="row row-padding">
-			  	<div class="col-lg-1" align='right'>
-				    <span class='group-info'>已报名人数</span><strong class='info-nessecary'>*</strong>
+			  	<div class="col-lg-1" align='left'>
+				    <span class='group-info'>已报人数</span>
 			  	</div>
 				<div class="col-lg-5" align='left'>
-					<input id='register_user_name' type="text" class="form-control" readonly value='{{studentCount}}'></input>
+					<input id='register_user_name' type="text" class="form-control" readonly value='{{studentCount}}/{{course.max_student}}'></input>
 			  	</div>
 			</div>
 
 			<div class="row row-padding">
-			  	<div class="col-lg-1" align='right'>
-				    <span class='group-info'>支付类型</span><strong class='info-nessecary'>*</strong>
+			  	<div class="col-lg-1" align='left'>
+				    <span class='group-info'>支付方式（若需要后续支付，请选择‘未支付’）</span><strong class='info-nessecary'>*</strong>
 			  	</div>
 				<div class="col-lg-5" align='left'>
 					<div class="dropdown">
   						<button id='btn_register_course_paytype' class="btn btn-default dropdown-toggle" type="button" 
-  							data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">请选择支付类型
+  							data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">请选择支付方式
     						<span class="caret"></span>
   						</button>
 					    <ul class="dropdown-menu" aria-labelledby="btn_register_course_paytype">
@@ -86,30 +82,71 @@
 			</div>
 
 			<div class="row row-padding">
-			  	<div class="col-lg-1" align='right'>
-				    <span class='group-info'>备注</span><strong style="visibility:hidden">*</strong>
-			  	</div>
-				<div class="col-lg-5" align='left'>
-					<input id='register_course_extend' type="text" class="form-control"></input>
-			  	</div>
-			</div>
-
-			<div class="row row-padding">
 			  	<div class="col-lg-1" align='right'></div>
-				<div class="col-lg-2">
-					<button id='btn_register_course' class='btn btn-primary full'>提交</button>
+			  	<div class="col-lg-2">
+					<button id='btn_register_course' class='btn btn-primary full'>提交报名</button>
 			  	</div>
 			</div>
 		</div>
 	</div>
 </div>
 
-<script src="/static/js/register_usercourse.js"></script>
 <script type="text/javascript">
     function select_pay(type, name) {
     	$("#btn_register_course_paytype").val(type);
 		$("#btn_register_course_paytype").html(name + " <span class='caret'></span>");
     }
+    $(document).ready(function() {
+	    $("#btn_register_course").bind("click", function() {
+	    	var cid = document.getElementById("register_course_name").value;
+	    	if (empty_input(cid)) {
+				$.MsgBox.Alert("非法参数", "无效的课程编号");
+				return;
+			}
+
+	    	var username = document.getElementById("register_user_name").value;
+	    	if (empty_input(username)) {
+				$.MsgBox.Alert("非法参数", "报名的用户名为空");
+				return;
+			}
+
+	    	var paytype = document.getElementById("btn_register_course_paytype").value;
+			if (empty_input(paytype)) {
+				$.MsgBox.Alert("非法参数", "请选择支付方式");
+				return;
+			}
+
+			// 付费流程：提交订单 -> 支付 -> 修改订单状态
+			$.ajax({
+				url:'/rest/register_course',
+			    data: {
+			    	"csid": $('#register_course_name').attr('data-csid'),
+			    	"cid": $('#register_course_name').attr('data-cid'),
+			    	"username": username,
+			    	"paytype": paytype
+			    },
+			    type: 'post',
+			    cache: false,
+			    dataType: 'json',
+			    success: function(data) {
+			    	if (data['error'] == 0) {
+			    		$.MsgBox.Alert("课程报名", "您的请求已提交成功", function() {
+			    			if (paytype == 0) { // 不付费
+			    				window.location.href = "/index";
+			    			} else if (paytype == 3) { //支付宝H5
+			    				
+			    			}
+			    		});
+			    	} else {
+			    		$.MsgBox.Alert("课程报名", data['cause']);
+			    	}
+			    },
+			    error: function() {
+			        $.MsgBox.Alert("课程报名", "请求失败，请稍候重试");
+			    }
+			})
+	    });
+	})
 </script>
 {% endblock %}
 

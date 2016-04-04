@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(__name__))
 from portal import app
 from portal import db
 from portal.models import UserType, GameType, PayType, GenderType, ProductType
-from portal.models import Users, Student, Teacher, Room, Orders, OrdersList, OrderStatus
+from portal.models import Users, Student, Teacher, Room, Orders, OrderItem, OrderStatus
 from portal.models import Course, CourseDetail, CourseSchedule, CourseStudent
 
 if __name__ == '__main__':
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 	# 添加订单
 	# o = Orders(username=u'student', op=u'hermas', amount=800.0, income=0, 
 	# 	charged=True, status=OrderStatus.ordered, paytype=PayType.cash, extend='')
-	# p = OrdersList(ptype=ProductType.course, pid=2, op=u'hermas', count=1, status=0, extend='')
+	# p = OrderItem(ptype=ProductType.course, pid=2, op=u'hermas', count=1, status=0, extend='')
 	# db.session.add(o)
 	# db.session.add(p)
 	# db.session.commit()

@@ -8,7 +8,7 @@ from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from portal import app, db, lm, mail
-from models import Users, Teacher, Room, UserType, GenderType, GameType, PayType, Orders, OrdersList, OrderStatus
+from models import Users, Teacher, Room, UserType, GenderType, GameType, PayType, ProductType, Orders, OrderItem, OrderStatus
 from models import Course, CourseStatus, CourseDetail, CourseSchedule, CourseStudent
 from mail import MailUtil
 from sms import SmsUtil
@@ -296,16 +296,13 @@ def api_update_course():
 			db.session.rollback()
 			return jsonify({'error':4, 'cause': '数据库操作失败'})
 
-@app.route('/rest/register_course', methods=['GET', 'POST'])
+@app.route('/rest/register_course', methods=['POST'])
 def api_register_course():
-
-	print '-1-1-1-1-1-1-1--11-1--1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1'
-
 	try:
-		csid = request.args.get('csid')
-		username = request.args.get("username")
-		paytype = request.args.get("paytype")
-		extend = request.args.get("extend")
+		cid = request.values.get('cid')
+		csid = request.values.get('csid')
+		username = request.values.get("username")
+		paytype = request.values.get("paytype")
 
 		courseSchedule = CourseSchedule.query.filter(CourseSchedule.csid == csid).first()
 		if courseSchedule is None:
@@ -319,13 +316,13 @@ def api_register_course():
 		if user is None:
 			return jsonify({'error':5, 'cause': u'查找不到报名的用户，请先注册用户'})
 
-		courseStudent = CourseStudent.query.filter(CourseStudent.cid == course.cid, CourseStudent.uid == current_user.uid).first()
+		courseStudent = CourseStudent.query.filter(CourseStudent.cid==course.cid, CourseStudent.uid==current_user.uid).first()
 		if courseStudent:
-			return jsonify({'error':5, 'cause': u'已报名'})
+			return jsonify({'error':5, 'cause': u'您已报名了本班次的课程，不需要重新报名'})
 
 		studentCount =  CourseStudent.query.filter(CourseStudent.cid == course.cid).count()
 		if studentCount == course.max_student:
-			return jsonify({'error':5, 'cause': u'课程已报满'})
+			return jsonify({'error':5, 'cause': u'本班次课程已报满，请选择其他班次'})
 		else:
 			operator = current_user.username
 			if paytype == 0 or paytype == str(0):
@@ -333,17 +330,26 @@ def api_register_course():
 			else:
 				charged = True
 
-			order = Orders(username = username, op=operator, charged=charged, cid = course.cid, csid=courseSchedule.csid, amount = course.charge, status=OrderStatus.order, paytype=paytype, extend=extend)
+			# 生成订单
+			order = Orders(username=username, op=operator, amount=course.charge, status=OrderStatus.order, paytype=paytype)
+			item = OrderItem(ptype=ProductType.course, pid=course.cid, subid=courseSchedule.csid, op=operator, count=1, status=0)
 			db.session.add(order)
+			db.session.add(item)
 
-			courseStudent = CourseStudent(cid = courseSchedule.cid, uid = user.uid, scheduleid = courseSchedule.csid)
+			# 统计班次的报名学生和人数
+			courseStudent = CourseStudent(cid = courseSchedule.cid, uid = user.uid, csid = courseSchedule.csid)
 			db.session.add(courseStudent)
 
-			db.session.commit()
-			return jsonify({'error':0, 'rid': order.orderid})
+			try:
+				db.session.commit()
+				return jsonify({'error':0, 'rid': order.orderid})
+			except Exception, e:
+				print e
+				db.session.rollback()
+				return jsonify({'error':6, 'cause': '数据库操作失败'})
 	except Exception , e:
 		print e
-		return jsonify({'error':4, 'cause': '数据库操作失败'})
+		return jsonify({'error':4, 'cause': '请求处理失败'})
 
 # 教室管理
 @app.route('/rest/add_room', methods=['POST'])

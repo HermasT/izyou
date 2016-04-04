@@ -8,8 +8,8 @@ from flask_appconfig import AppConfig
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from portal import app, db, lm, mail
-from models import Users, Teacher, Room, UserType, GenderType, GameType, PayType, Orders, OrdersList
-from models import Course, CourseStatus, CourseDetail, CourseSchedule, CourseStudent,OrderStatus
+from models import Users, Teacher, Room, UserType, GenderType, GameType, PayType, Orders, OrderItem
+from models import Course, CourseStatus, CourseDetail, CourseSchedule, CourseStudent, OrderStatus
 
 # 后台管理
 @app.route('/admin', methods=['GET', 'POST'])
