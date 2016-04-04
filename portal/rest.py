@@ -311,11 +311,12 @@ def api_register_course():
 		if user is None:
 			return jsonify({'error':5, 'cause': u'查找不到报名的用户，请先注册用户'})
 
-		courseStudent = CourseStudent.query.filter(CourseStudent.cid==course.cid, CourseStudent.uid==current_user.uid).first()
+		courseStudent = CourseStudent.query.filter(CourseStudent.cid==course.cid, 
+			CourseStudent.uid==current_user.uid, CourseStudent.csid==csid).first()
 		if courseStudent:
 			return jsonify({'error':5, 'cause': u'您已报名了本班次的课程，不需要重新报名'})
 
-		studentCount =  CourseStudent.query.filter(CourseStudent.cid == course.cid).count()
+		studentCount =  CourseStudent.query.filter(CourseStudent.cid==course.cid).count()
 		if studentCount == course.max_student:
 			return jsonify({'error':5, 'cause': u'本班次课程已报满，请选择其他班次'})
 		else:
