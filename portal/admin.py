@@ -336,8 +336,10 @@ def orders():
 
 		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator, CourseSchedule.time)\
 			.join(Orders, Orders.username == Users.username)\
-			.join(CourseSchedule, CourseSchedule.csid == Orders.csid)\
-			.join(Course, Course.cid == Orders.cid)\
+			.join(OrderItem, OrderItem.orderid == Orders.orderid)\
+			.filter(Users.uid == current_user.uid)\
+			.filter(OrderItem.pid == Course.cid)\
+			.filter(OrderItem.subid == CourseSchedule.csid)\
 			.paginate(int(page), config.PAGE_ITEMS, False)
 
 		orderDataList = []
@@ -375,9 +377,10 @@ def searchorders():
 
 		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator, CourseSchedule.time)\
 			.join(Orders, Orders.username == Users.username)\
-			.join(CourseSchedule, CourseSchedule.csid == Orders.csid)\
-			.join(Course, Course.cid == Orders.cid)\
+			.join(OrderItem, OrderItem.orderid == Orders.orderid)\
 			.filter(Users.username.like(pattern))\
+			.filter(OrderItem.pid == Course.cid)\
+			.filter(OrderItem.subid == CourseSchedule.csid)\
 			.paginate(int(page), config.PAGE_ITEMS, False)
 
 		orderDataList = []
