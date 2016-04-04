@@ -337,7 +337,6 @@ def orders():
 		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator, CourseSchedule.time)\
 			.join(Orders, Orders.username == Users.username)\
 			.join(OrderItem, OrderItem.orderid == Orders.orderid)\
-			.filter(Users.uid == current_user.uid)\
 			.filter(OrderItem.pid == Course.cid)\
 			.filter(OrderItem.subid == CourseSchedule.csid)\
 			.paginate(int(page), config.PAGE_ITEMS, False)

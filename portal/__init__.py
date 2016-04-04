@@ -24,7 +24,7 @@ Bootstrap(app)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['RECAPTCHA_PUBLIC_KEY'] = RECAPTCHA_PUBLIC_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
-app.config['SQLALCHEMY_ECHO'] = False
+app.config['SQLALCHEMY_ECHO'] = True
 app.extensions['bootstrap']['cdns'] = {'jquery': StaticCDN(), 'html5shiv': StaticCDN(),
                                        'respond.js': StaticCDN(),
                                        'bootstrap': StaticCDN(), 'static': StaticCDN(), 'local': StaticCDN()}

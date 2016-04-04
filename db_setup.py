@@ -102,12 +102,14 @@ if __name__ == '__main__':
 	# db.session.commit()
 
 	# 添加订单
-	# o = Orders(username=u'student', op=u'hermas', amount=800.0, income=0, 
-	# 	charged=True, status=OrderStatus.ordered, paytype=PayType.cash, extend='')
-	# p = OrderItem(ptype=ProductType.course, pid=2, op=u'hermas', count=1, status=0, extend='')
-	# db.session.add(o)
-	# db.session.add(p)
-	# db.session.commit()
+	# for i in range(1, 20):
+	# 	o = Orders(username=u'hermas', op=u'op1', amount=4000.0, income=0,
+	# 		charged=True, status=OrderStatus.ordered, paytype=PayType.cash, extend='')
+	# 	db.session.add(o)
+	# 	db.session.commit()
+	# 	p = OrderItem(orderid=o.orderid, ptype=ProductType.course, pid=2, subid=9, op=u'hermas', count=1, status=0, extend='')
+	# 	db.session.add(p)
+	# 	db.session.commit()
 
 	# 多表联合查询示例	 查询所有课程对应的授课教师的姓名
 	#    SELECT Users.name

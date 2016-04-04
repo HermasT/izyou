@@ -503,7 +503,7 @@ class OrderItem(db.Model):
     operator = db.Column(String(32)) # 当前操作的用户账号
     extend = db.Column(String(64)) # 退费记录原因
 
-    def __init__(self, orderid, ptype, pid, subid, op, count=1, status=0, extend=''):
+    def __init__(self, orderid, ptype, op, pid, subid=0, count=1, status=0, extend=''):
         self.orderid = orderid
         self.pid = pid
         self.subid = subid
