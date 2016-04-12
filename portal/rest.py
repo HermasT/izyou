@@ -1,5 +1,5 @@
 # coding: utf-8
-import sys, time, math, json, requests, config
+import sys, time, math, json, requests, config, pingpp
 from urllib import urlencode, quote
 from flask import Flask, flash, redirect, url_for, request, jsonify, send_file
 from sqlalchemy import desc, asc, or_, not_
@@ -327,7 +327,7 @@ def api_register_course():
 				charged = True
 
 			# 生成订单
-			order = Orders(username=username, op=operator, amount=course.charge, status=OrderStatus.order, paytype=paytype)
+			order = Orders(username = username, op=operator, cid = course.cid, csid=courseSchedule.csid, charged=charged, amount = course.charge, paytype=paytype, status=OrderStatus.order, extend='')
 			db.session.add(order)
 			db.session.commit()
 
@@ -470,4 +470,66 @@ def api_update_order():
 		except Exception, e:
 			print e
 			db.session.rollback()
-			return jsonify({'error':4, 'cause': '数据库操作失败'})		
+			return jsonify({'error':4, 'cause': '数据库操作失败'})
+
+
+# 支付测试
+@app.route('/rest/test_pay', methods=['GET', 'POST'])
+def api_test_pay():
+	print '111'
+
+	appID = {'id':'app_i9CG80HifzvTPyvn'}
+	alipayPCDirectConfig = { 'success_url':'https://www.ctrip.com' }
+
+	pingpp.api_key = 'sk_test_TebTaP8yDCyPXj54eP8qvvjT'
+	ch = pingpp.Charge.create(
+		order_no='1234567890',
+		amount=100,
+		app=appID,
+		channel='alipay_pc_direct',
+		currency='cny',
+		client_ip='127.0.0.1',
+		subject='Your Subject',
+		body='Your Body',
+		extra=alipayPCDirectConfig
+	)
+	print 'pingpp.Charge.create', ch	
+
+	return jsonify(ch)
+
+# 订单支付
+@app.route('/rest/order_pay', methods=['GET', 'POST'])
+def api_order_pay():
+
+	orderid = request.values.get('orderid', -1)
+
+	if orderid <= 0:
+		return jsonify({'error':1, 'cause': '订单号不存在'})
+
+	order = Orders.query.filter(Orders.orderid == orderid).first()
+	if order is None:
+		return jsonify({'error':1, 'cause': '查找不到与之匹配的订单信息'})
+
+	if cmp(order.username, current_user.username) != 0:
+		return jsonify({'error':1, 'cause': '只能为自己支付订单'})
+
+	orderCourse = Course.query.filter(Course.cid == order.cid).first()
+	courseSchedule = CourseSchedule.query.filter(CourseSchedule.csid == order.csid).first()
+
+	appID = {'id':'app_5448OKvT00GOnb54'}
+	alipayPCDirectConfig = { 'success_url':'http://zhiyijia.cn' }
+
+	pingpp.api_key = 'sk_live_LqvfPG4mHCa9bbrP08yvjXLO'
+	ch = pingpp.Charge.create(
+		order_no= orderid,
+		amount= order.income * 100,   #单位是分！
+		app=appID,
+		channel='alipay_wap',
+		currency='cny',
+		client_ip='127.0.0.1',        # 待定
+		subject=orderCourse.name,   
+		body=courseSchedule.time,
+		extra=alipayPCDirectConfig
+	)
+
+	return jsonify(ch)

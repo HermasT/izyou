@@ -21,10 +21,12 @@
 			<td>应收账款</td>
 			<td>实收账款</td>
 			<td>操作员</td>
+			<td style="width: 75px;" ></td>
 		</tr>
 		{% for data in pagination.items %}
 		<tr align="center">
-			<td>{{data['orderid']}}</td>
+			<!-- <td>{{data['orderid']}}</td> -->
+			<td>{{data.orderid}}</td>
 			<td>{{data['orderstatusname']}}</td>
 			<td>{{data['username']}}</td>
 			<td>{{data['name']}}</td>
@@ -34,6 +36,11 @@
 			<td>{{data['amount']}}</td>
 			<td>{{data['income']}}</td>
 			<td>{{data['operator']}}</td>
+			{% if data.orderstatusname == '未支付' %}
+				<td onclick="wap_pay({{data.orderid}})" >支付</td>
+			{% else %}
+				<td></td>
+			{% endif %}
 		</tr>
 		{% endfor %}
 	</table>
@@ -60,6 +67,7 @@
 <script src="/static/jquery.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="/static/js/custom_common.js"></script>
+<script type="text/javascript" src="/static/js/pingpp.js"></script>
 <script type="text/javascript">
 	function search_teacher() {
 		var name = document.getElementById("search_teacher_name").value;
@@ -69,6 +77,28 @@
 		}
 		window.location.href = "/search_teacher?username=" + name;
 	}
+
+    function wap_pay(orderid) {
+        $.ajax({
+                url:'/rest/order_pay',
+                data: {
+                    orderid:orderid
+                },
+                type: 'post',
+                cache: false,
+                dataType: 'json',
+                success: function(data) {
+                    pingpp.createPayment(data, function(result, err) {
+                        if(!result){
+                            //todo request false
+                        }
+                });
+                },
+                error: function() {
+                 	
+                }
+            })
+    }
 </script>
 {% endblock %}
 

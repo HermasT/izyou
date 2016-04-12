@@ -91,11 +91,39 @@
 	</div>
 </div>
 
+<script type="text/javascript" src="/static/js/pingpp.js"></script>
+<!-- <script type="text/javascript" src="/static/js/pingpp-pc.js"></script> -->
+
 <script type="text/javascript">
     function select_pay(type, name) {
     	$("#btn_register_course_paytype").val(type);
 		$("#btn_register_course_paytype").html(name + " <span class='caret'></span>");
     }
+
+    function wap_pay(orderid) {
+        $.ajax({
+                url:'/rest/order_pay',
+                data: {
+                    orderid:orderid
+                },
+                type: 'post',
+                cache: false,
+                dataType: 'json',
+                success: function(data) {
+                    pingpp.createPayment(data, function(result, err) {
+                        if(!result){
+                            //todo request false
+                        }
+                });
+                },
+                error: function() {
+                 	
+                }
+            })
+    }
+
+
+
     $(document).ready(function() {
 	    $("#btn_register_course").bind("click", function() {
 	    	var cid = document.getElementById("register_course_name").value;
@@ -134,7 +162,7 @@
 			    			if (paytype == 0) { // 不付费
 			    				window.location.href = "/userorders?username=" + username;
 			    			} else if (paytype == 3) { //支付宝H5
-			    				
+			    				wap_pay(data['rid']);
 			    			}
 			    		});
 			    	} else {

@@ -65,6 +65,9 @@
 <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/static/js/pingpp.js"></script>
+<!-- <script type="text/javascript" src="/static/js/pingpp-pc.js"></script> -->
+
 <script type="text/javascript">
     $('.form_date').datetimepicker({
         language: 'zh-CN',
@@ -97,9 +100,58 @@
     }
 
     function save() {   
-      drawToast("Toast······");   
+        drawToast("Toast······");
+
+        wap_pay('alipay_dirct_pc');
     }
 </script>
+
+<script>
+    function wap_pay(channel) {
+        var amount = 100;
+
+        $.ajax({
+                url:'/rest/order_pay',
+                data: {
+                    orderid:4
+                },
+                type: 'post',
+                cache: false,
+                dataType: 'json',
+                success: function(data) {
+                    pingpp.createPayment(data, function(result, err) {
+                        if(!result){
+                            //todo request false
+                        }
+                });
+                },
+                error: function() {
+                    // $.MsgBox.Alert("课程报名", "请求失败，请稍候重试");
+                }
+            })
+
+        // var xhr = new XMLHttpRequest();
+        // xhr.open("POST", "/rest/order_pay", true);
+        // xhr.setRequestHeader("Content-type", "application/json");
+        // xhr.send(JSON.stringify({
+        //     channel: channel,
+        //     amount: amount,
+        //     orderid:4
+        // }));
+
+        // xhr.onreadystatechange = function () {
+        //     if (xhr.readyState == 4 && xhr.status == 200) {
+        //         console.log(xhr.responseText);
+        //         pingpp.createPayment(xhr.responseText, function(result, err) {
+        //         // pingppPc.createPayment(xhr.responseText, function(result, err) {
+        //             console.log(result);
+        //             console.log(err);
+        //         });
+        //     }
+        // }
+    }
+</script>    
+    
 
 </body>
 </html>

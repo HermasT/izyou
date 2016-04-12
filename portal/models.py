@@ -116,10 +116,10 @@ class PayType(Enum):
     @staticmethod
     def getAll():
         return [
-            {'type':0, 'name': '未支付'}#,
-            # {'type':1, 'name': '现金支付'},
+            {'type':0, 'name': '未支付'},
+            {'type':1, 'name': '现金支付'},
             # {'type':2, 'name': '微信支付'},
-            # {'type':3, 'name': '支付宝'},
+            {'type':3, 'name': '支付宝'}#,
             # {'type':4, 'name': '在线支付'},
             # {'type':5, 'name': '其他'}
         ]
@@ -474,8 +474,12 @@ class Orders(db.Model):
     status = db.Column(Integer) # 订单状态 OrderStatus
     operator = db.Column(String(32)) # ForeignKey('users.username') 操作的用户名（工作人员）
     extend = db.Column(String(64)) # 退费记录原因
+    cid = db.Column(Integer, nullable=False) # ForeignKey('course.cid') 报名课程
+    csid = db.Column(Integer, nullable=False) # ForeignKey('courseschedule.csid') 报名课程班次
 
-    def __init__(self, username, op, amount, income=0, charged=False, status=OrderStatus.undefined, paytype=PayType.undefined, extend=''):
+
+    def __init__(self, username, op, amount, cid, csid, income=0, charged=False, status=OrderStatus.undefined, paytype=PayType.undefined, extend=''):
+
         self.username = username
         self.charged = charged
         self.paytype = paytype
@@ -486,10 +490,12 @@ class Orders(db.Model):
         else:
             self.income = income
         self.operator = op
+        self.cid = cid
+        self.csid = csid
         self.extend = extend
  
     def __repr__(self):
-        return "<Order{:s}: {:s}>".format(self.orderid, self.username)
+        return "<Order{:d}:{:d}:{:s}>".format(self.orderid, self.status, self.username)
 
 # 订单产品 一张订单中允许同时购买多个产品
 class OrderItem(db.Model):

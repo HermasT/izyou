@@ -1,5 +1,5 @@
 # coding: utf-8
-import sys, time, math, json, requests, config
+import sys, time, math, json, requests, config, pingpp
 from urllib import urlencode, quote
 from flask import Flask, flash, render_template, redirect, url_for, request, jsonify, g, send_file, abort
 from sqlalchemy import desc, asc
@@ -13,17 +13,39 @@ from models import CourseStatus, PayType, Orders, OrderItem, CourseSchedule
 from mail import MailUtil
 from sms import SmsUtil
 
+
 # 测试页面
 @app.route('/test')
 def test():
+
+	# print '111'
+	appID = {'id':'app_i9CG80HifzvTPyvn'}
+
+	alipayPCDirectConfig = { 'success_url':'https://www.ctrip.com' }
+
+	pingpp.api_key = 'sk_test_TebTaP8yDCyPXj54eP8qvvjT'
+	ch = pingpp.Charge.create(
+		order_no='4',
+		amount=1,
+		app=appID,
+		channel='alipay_pc_direct',
+		currency='cny',
+		client_ip='127.0.0.1',
+		subject='Your Subject',
+		body='Your Body',
+		extra=alipayPCDirectConfig
+	)
+
+	print 'pingpp.Charge.create', ch
+
 	# SmsUtil.requestCode('18516595221')
 	# SmsUtil.verifyCode('18516595221', '916838')
 
 	# message = MailUtil.buildMessage('test subject', sender=config.MAIL_USERNAME, recipients=['hermasTang@hotmail.com'], body='test body')
 	# mailthread = MailUtil(message)
 	# mailthread.start()
-	# return render_template('test.html')
-	return render_template('dynamic_title.html')
+	return render_template('test.html')
+	# return render_template('dynamic_title.html')
 
 # 用户激活
 @app.route('/user_active')
@@ -361,3 +383,34 @@ def userorders():
 		return render_template('userorders.html', username=current_user.username, pagination=data)
 	else:
 		abort(403)
+
+# 支付成功回调页， 用来更新对于订单的状态
+@app.route('/orderpay_feedback', methods = ['GET'])
+@login_required
+def orderpay_feedback():
+	if current_user is not None and current_user.is_privileged(UserType.registered):
+		payResult = request.args.get("result")
+		payOrderID = request.args.get("out_trade_no", -1)
+
+
+		if(payResult == 'success'):
+			print ' -------------------- pay success '
+		
+			if(payOrderID <= 0):
+				print ' -------------------- orderID not exit '
+
+			order = Orders.query.filter(Orders.orderid == payOrderID).first()
+			if order:
+				print ' -------------------- to do update order ', order
+				order.status = 2
+				db.session.add(order)
+				db.session.commit()
+			else:
+				print ' -------------------- order not exit '
+		else:
+			print ' -------------------- pay False '
+
+		return redirect(url_for('userorders'))
+	else:
+		abort(403)
+
