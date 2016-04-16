@@ -10,9 +10,9 @@ RECAPTCHA_PUBLIC_KEY = '6Lfol9cSAAAAADAkodaYl9wvQCwBMr3qGR_PPHcw'
 # connect string for local postgresql server
 #SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://root@localhost/izyou'
 # connect string for rds mysql server
-# SQLALCHEMY_DATABASE_URI = 'mysql://izyou:ZYJizyou@rdsvdk0918cl7z915n71.mysql.rds.aliyuncs.com/izyou'
+SQLALCHEMY_DATABASE_URI = 'mysql://izyou:ZYJizyou@rdsvdk0918cl7z915n71.mysql.rds.aliyuncs.com/izyou'
 # connect string for local mysql server
-SQLALCHEMY_DATABASE_URI = 'mysql://root:123456@localhost/izyou'
+# SQLALCHEMY_DATABASE_URI = 'mysql://root:123456@localhost/izyou'
 SQLALCHEMY_ECHO = False
 
 #SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
@@ -45,4 +45,4 @@ ADMINS = ['tangshihu@zhiyijia.cn']
 PAGE_ITEMS = 10
 
 # debug switch
-IS_DEBUG=True
+IS_DEBUG = False

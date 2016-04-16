@@ -10,5 +10,5 @@ enum
 #psycopg2
 pillow
 qrcode
-#pingpp
+pingpp==2.0.6
 mysql-python

@@ -98,7 +98,10 @@ if __name__ == '__main__':
 	# db.session.commit()
 
 	# 添加教室
-	# db.session.add(Room(name=u'信远桥牌俱乐部', location=u'东三环xx路12号', traffic=u'地铁8号线望京站5号口出站即到'))
+	# db.session.add(Room(name=u'银网中心1教室', location=u'', traffic=u''))
+	# db.session.add(Room(name=u'银网中心2教室', location=u'', traffic=u''))
+	# db.session.add(Room(name=u'银网中心3教室', location=u'', traffic=u''))
+	# db.session.add(Room(name=u'银网中心4教室', location=u'', traffic=u''))
 	# db.session.commit()
 
 	# 添加订单（暂时不考虑一个订单购买多个产品的情况）
