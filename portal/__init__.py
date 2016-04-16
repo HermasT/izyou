@@ -10,7 +10,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask.ext.mail import Mail
 
-from config import SECRET_KEY, RECAPTCHA_PUBLIC_KEY, SQLALCHEMY_DATABASE_URI
+from config import SECRET_KEY, RECAPTCHA_PUBLIC_KEY, SQLALCHEMY_DATABASE_URI, SQLALCHEMY_ECHO
 from config import MAIL_SERVER, MAIL_PORT, MAIL_USE_TLS, MAIL_USE_SSL, MAIL_USERNAME, MAIL_PASSWORD
 
 # 应用实例
@@ -24,7 +24,7 @@ Bootstrap(app)
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['RECAPTCHA_PUBLIC_KEY'] = RECAPTCHA_PUBLIC_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
-app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_ECHO'] = SQLALCHEMY_ECHO
 app.extensions['bootstrap']['cdns'] = {'jquery': StaticCDN(), 'html5shiv': StaticCDN(),
                                        'respond.js': StaticCDN(),
                                        'bootstrap': StaticCDN(), 'static': StaticCDN(), 'local': StaticCDN()}
