@@ -327,12 +327,13 @@ def api_register_course():
 				charged = True
 
 			# 生成订单
-			order = Orders(username = username, op=operator, cid = course.cid, csid=courseSchedule.csid, charged=charged, amount = course.charge, paytype=paytype, status=OrderStatus.order, extend='')
+			order = Orders(username = username, op=operator, cid = course.cid, csid=courseSchedule.csid, charged=charged, amount=course.charge, paytype=paytype, status=OrderStatus.order, extend='')
 			db.session.add(order)
 			db.session.commit()
 
-			item = OrderItem(orderid=order.orderid, ptype=ProductType.course, pid=course.cid, subid=courseSchedule.csid, op=operator, count=1, status=0)
-			db.session.add(item)
+			# 暂时不支持一个订单购买多个产品
+			# item = OrderItem(orderid=order.orderid, ptype=ProductType.course, pid=course.cid, subid=courseSchedule.csid, op=operator, count=1, status=0)
+			# db.session.add(item)
 
 			# 统计班次的报名学生和人数
 			courseStudent = CourseStudent(cid = courseSchedule.cid, uid = user.uid, csid = courseSchedule.csid)
@@ -472,19 +473,32 @@ def api_update_order():
 			db.session.rollback()
 			return jsonify({'error':4, 'cause': '数据库操作失败'})
 
+@app.route('/rest/order_pay_success', methods=['GET', 'POST'])
+def api_order_pay_success():
+	orderid = request.values.get('orderid')
+	order = Orders.query.filter(Orders.orderid == orderid).first()
+	
+	if order is None:
+		return jsonify({'error':1, 'cause': '查找不到与之匹配的订单信息'})
+	else:
+		order.status = OrderStatus.ordered
+		db.session.add(order)
+		try:
+			db.session.commit()
+			return jsonify({'error':0, 'username': current_user.username})
+		except Exception, e:
+			db.session.rollback()
+			return jsonify({'error':4, 'cause': '数据库操作失败'})
 
 # 支付测试
 @app.route('/rest/test_pay', methods=['GET', 'POST'])
 def api_test_pay():
-	print '111'
-
 	appID = {'id':'app_i9CG80HifzvTPyvn'}
 	alipayPCDirectConfig = { 'success_url':'https://www.ctrip.com' }
-
 	pingpp.api_key = 'sk_test_TebTaP8yDCyPXj54eP8qvvjT'
 	ch = pingpp.Charge.create(
 		order_no='1234567890',
-		amount=100,
+		amount=1,
 		app=appID,
 		channel='alipay_pc_direct',
 		currency='cny',
@@ -493,8 +507,8 @@ def api_test_pay():
 		body='Your Body',
 		extra=alipayPCDirectConfig
 	)
-	print 'pingpp.Charge.create', ch	
 
+	print ch
 	return jsonify(ch)
 
 # 订单支付
@@ -516,13 +530,20 @@ def api_order_pay():
 	orderCourse = Course.query.filter(Course.cid == order.cid).first()
 	courseSchedule = CourseSchedule.query.filter(CourseSchedule.csid == order.csid).first()
 
-	appID = {'id':'app_5448OKvT00GOnb54'}
-	alipayPCDirectConfig = { 'success_url':'http://zhiyijia.cn' }
+	appID = {'id': config.PINGPP_APPID}
+	# 付费成功后跳转到订单状态修改
+	callback = config.PINGPP_SUCCESS_URL + "/rest/order_pay_success?orderid=" + orderid
+	alipayPCDirectConfig = {'success_url': callback}
 
-	pingpp.api_key = 'sk_live_LqvfPG4mHCa9bbrP08yvjXLO'
+	pingpp.api_key = config.PINGPP_LIVE_KEY
+	if config.IS_DEBUG:
+		amount = 1
+	else:
+		amount = order.income * 100
+
 	ch = pingpp.Charge.create(
 		order_no= orderid,
-		amount= order.income * 100,   #单位是分！
+		amount= amount,   # 单位是分
 		app=appID,
 		channel='alipay_wap',
 		currency='cny',
@@ -531,5 +552,4 @@ def api_order_pay():
 		body=courseSchedule.time,
 		extra=alipayPCDirectConfig
 	)
-
 	return jsonify(ch)

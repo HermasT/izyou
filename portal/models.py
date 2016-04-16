@@ -125,6 +125,17 @@ class PayType(Enum):
         ]
 
     @staticmethod
+    def getAllSupported():
+        return [
+            {'type':0, 'name': '未支付'},
+            # {'type':1, 'name': '现金支付'},
+            # {'type':2, 'name': '微信支付'},
+            {'type':3, 'name': '支付宝'}#,
+            # {'type':4, 'name': '在线支付'},
+            # {'type':5, 'name': '其他'}
+        ]
+
+    @staticmethod
     def getName(type):
         if type == PayType.undefined:
             return '未支付'

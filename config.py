@@ -26,12 +26,17 @@ MAIL_USE_SSL = False
 MAIL_USERNAME = 'contact@zhiyijia.cn'
 MAIL_PASSWORD = 'ZhiYJ262510~~'
 
-# sms rest api
+# leancloud sms rest api
 LC_APP_ID = '4ipytcknqxezwia4z6wj3e38h477ngevocrfc18apy1hmc5e'
 LC_APP_KEY = 'yjflu1m3vzklyxrqkmrb8w61myq834i42bo5anj5u3ynler5'
 LC_APP_MASTER_KEY = 'sty2l8s0b8hkcuh65wmnmbc05bqxtim0ljzvba8ltee9j4n6'
 LC_REQUEST_SMS_CODE_API = 'https://api.leancloud.cn/1.1/requestSmsCode'
 LC_VERIFY_SMS_CODE_API = 'https://api.leancloud.cn/1.1/verifySmsCode'
+
+# pingpp
+PINGPP_APPID = 'app_5448OKvT00GOnb54'
+PINGPP_LIVE_KEY = 'sk_live_LqvfPG4mHCa9bbrP08yvjXLO'
+PINGPP_SUCCESS_URL = 'http://zhiyijia.cn'
 
 # administrator
 ADMINS = ['tangshihu@zhiyijia.cn']

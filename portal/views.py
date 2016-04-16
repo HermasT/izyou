@@ -17,12 +17,8 @@ from sms import SmsUtil
 # 测试页面
 @app.route('/test')
 def test():
-
-	# print '111'
 	appID = {'id':'app_i9CG80HifzvTPyvn'}
-
 	alipayPCDirectConfig = { 'success_url':'https://www.ctrip.com' }
-
 	pingpp.api_key = 'sk_test_TebTaP8yDCyPXj54eP8qvvjT'
 	ch = pingpp.Charge.create(
 		order_no='4',
@@ -307,7 +303,7 @@ def course_userregister():
 				course=course,\
 				courseSchedule = courseSchedule, \
 				studentCount=count, \
-				pays=PayType.getAll(), \
+				pays=PayType.getAllSupported(), \
 				teachernames = teachernames, \
 				amount = course.charge)
 	else:
