@@ -532,7 +532,8 @@ def api_order_pay():
 
 	appID = {'id': config.PINGPP_APPID}
 	# 付费成功后跳转到订单状态修改
-	callback = config.PINGPP_SUCCESS_URL + "/rest/order_pay_success?orderid=" + orderid
+	#callback = config.PINGPP_SUCCESS_URL + "/rest/order_pay_success?orderid=" + orderid
+	callback = config.PINGPP_SUCCESS_URL + "/orderpay_feedback"
 	alipayPCDirectConfig = {'success_url': callback}
 
 	pingpp.api_key = config.PINGPP_LIVE_KEY

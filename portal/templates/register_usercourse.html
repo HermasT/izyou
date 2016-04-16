@@ -112,7 +112,7 @@
             success: function(data) {
                 pingpp.createPayment(data, function(result, err) {
                 	if (result) {
-                		onPaySuccess(orderid);
+                	//	onPaySuccess(orderid);
                 	} else {
                         $.MsgBox.Alert("课程付费", "支付失败，请稍后进入我的订单重试。");
                     }
