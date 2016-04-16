@@ -170,13 +170,13 @@ def xiangqi_detail():
 def all_courses():
 	gtype = request.args.get("type", GameType.bridge)
 	if int(gtype) == GameType.bridge:
-		pagetitle = '智益加2016年春季桥牌课程安排'
+		pagetitle = '2016年暑秋桥牌课程安排'
 	elif int(gtype) == GameType.sudoku:
-		pagetitle = '智益加2016年春季数独课程安排'
+		pagetitle = '2016年暑秋数独课程安排'
 	elif int(gtype) == GameType.go:
-		pagetitle = '智益加2016年春季围棋课程安排'
+		pagetitle = '2016年暑秋围棋课程安排'
 	elif int(gtype) == GameType.xiangqi:
-		pagetitle = '智益加2016年春季象棋课程安排'
+		pagetitle = '2016年暑秋象棋课程安排'
 
 	courses = Course.query.filter(Course.gtype==gtype, Course.status<2, Course.active==True).all() # 可以报名的课程
 	if courses is not None:
