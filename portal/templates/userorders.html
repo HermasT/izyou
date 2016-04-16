@@ -49,13 +49,13 @@
     <nav align='center'>
         <ul class='pagination'>
             {% if pagination.has_prev %}
-            <li><a href="/teacher?page={{pagination.prev_num}}"><span aria-hidden="true">上一页</span></a></li>
+            <li><a href="/userorders?page={{pagination.prev_num}}"><span aria-hidden="true">上一页</span></a></li>
             {% else %}
             <li class='disabled'><span aria-hidden="true">上一页</span></li>
             {% endif %}
             <li class='active'><span aria-hidden="true">{{pagination.page}}/{{pagination.pages}}</span></li>
             {% if pagination.has_next %}
-            <li><a href="/teacher?page={{pagination.next_num}}"><span aria-hidden="true">下一页</span></a></li>
+            <li><a href="/userorders?page={{pagination.next_num}}"><span aria-hidden="true">下一页</span></a></li>
             {% else %}
             <li class='disabled'><span aria-hidden="true">下一页</span></li>
             {% endif %}
@@ -69,35 +69,26 @@
 <script src="/static/js/custom_common.js"></script>
 <script type="text/javascript" src="/static/js/pingpp.js"></script>
 <script type="text/javascript">
-	function search_teacher() {
-		var name = document.getElementById("search_teacher_name").value;
-		if (empty_input(name)) {
-			$.MsgBox.Alert("非法输入", "用户名为空");
-			return;
-		}
-		window.location.href = "/search_teacher?username=" + name;
-	}
-
     function wap_pay(orderid) {
         $.ajax({
-                url:'/rest/order_pay',
-                data: {
-                    orderid:orderid
-                },
-                type: 'post',
-                cache: false,
-                dataType: 'json',
-                success: function(data) {
-                    pingpp.createPayment(data, function(result, err) {
-                        if(!result){
-                            //todo request false
-                        }
-                });
-                },
-                error: function() {
-                 	
-                }
-            })
+            url:'/rest/order_pay',
+            data: {
+                orderid:orderid
+            },
+            type: 'post',
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                pingpp.createPayment(data, function(result, err) {
+                    if(!result){
+                        //todo request false
+                    }
+            });
+            },
+            error: function() {
+             	
+            }
+        })
     }
 </script>
 {% endblock %}
