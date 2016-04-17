@@ -139,12 +139,8 @@ def api_verify_sms_code():
 @app.route('/rest/add_teacher', methods=['GET', 'POST'])
 def api_add_teacher():
 	name = request.args.get("name")
-	# birth = request.args.get("birth")
-	# gender = request.args.get("gender")
 	gtype = request.args.get("gtype")
 	uprice = request.args.get("uprice")
-	# desc = request.args.get("desc")
-	# extend = request.args.get("extend")
 	if uprice is None or uprice == "":
 		uprice = 0.0
 
@@ -178,20 +174,13 @@ def api_update_teacher():
 			if not userToUpdate:
 				return jsonify({'error':403, 'cause': '您添加的教师用户名尚未注册，请先注册用户'})			
 
-			userToUpdate.name = request.args.get("name")
-			userToUpdate.birth = request.args.get("birth")
-			userToUpdate.gender = request.args.get("gender")
-			userToUpdate.gtype = request.args.get("gtype")
-			teauserToUpdatecher.desc = request.args.get("desc")
-			userToUpdate.extend = request.args.get("extend")
-
 			uprice = request.args.get("uprice")
+			teacher.gtype = request.args.get("gtype")
 			if uprice is None or uprice == "":
 				teacher.uprice = 0.0
 			else:
 				teacher.uprice = uprice
 
-			db.session.add(userToUpdate)
 			db.session.add(teacher)
 			db.session.commit()
 			return jsonify({'error':0})

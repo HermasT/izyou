@@ -27,35 +27,6 @@
 			  	</div>
 			</div>
 
-			<!-- <div class="row row-padding">
-			  	<div class="col-lg-1" align='right'>
-				    <span class='group-info'>出生年月</span><strong style="visibility:hidden">*</strong>
-			  	</div>
-			  	<div id='datepicker' class="col-lg-4 input-group date padding-left" align='left'>
-                    <input id='add_teacher_birth' class='form-control' type='text' value="" readonly></input>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-			  	</div>
-			</div>
-
-			<div class="row row-padding">
-			  	<div class="col-lg-1" align='right'>
-				    <span class='group-info'>性别</span><strong class='info-nessecary'>*</strong>
-			  	</div>
-				<div class="col-lg-5" align='left'>
-					<div class="dropdown">
-  						<button id="btn_add_teacher_gender" class="btn btn-default dropdown-toggle" type="button" 
-  							data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">请选择性别
-    						<span class="caret"></span>
-  						</button>
-					    <ul class="dropdown-menu" aria-labelledby="btn_add_teacher_gender">
-						    <li id='gender_male'><a href="#">男</a></li>
-						    <li id='gender_female'><a href="#">女</a></li>
-					    </ul>
-					</div>
-			  	</div>
-			</div> -->
-
 			<div class="row row-padding">
 			  	<div class="col-lg-1" align='right'>
 				    <span class='group-info'>科目</span><strong class='info-nessecary'>*</strong>
@@ -68,7 +39,7 @@
   						</button>
 					    <ul class="dropdown-menu" aria-labelledby="group_type_dropdown">
 					    	{% for gameType in types %}
-						    <li id='gtype_{{gameType.type}}'><a href="#">{{gameType.name}}</a></li>
+						    <li onclick="select_gtype('{{gameType.type}}', '{{gameType.name}}')"><a>{{gameType.name}}</a></li>
 						    {% endfor %}
 					    </ul>
 					</div>
@@ -83,24 +54,6 @@
 					<input id='add_teacher_uprice' type="text" class="form-control"></input>
 			  	</div>
 			</div>
-
-			<!-- <div class="row row-padding">
-			  	<div class="col-lg-1" align='right'>
-				    <span class='group-info'>基本信息</span><strong style="visibility:hidden">*</strong>
-			  	</div>
-				<div class="col-lg-5" align='left'>
-					<input id='add_teacher_desc' type="text" class="form-control"></input>
-			  	</div>
-			</div>
-
-			<div class="row row-padding">
-			  	<div class="col-lg-1" align='right'>
-				    <span class='group-info'>其他信息</span><strong style="visibility:hidden">*</strong>
-			  	</div>
-				<div class="col-lg-5" align='left'>
-					<input id='add_teacher_extend' type="text" class="form-control"></input>
-			  	</div>
-			</div> -->
 
 			<div class="row row-padding">
 			  	<div class="col-lg-1" align='right'></div>
@@ -126,6 +79,10 @@
   		minView: 2,
   		forceParse: 0
     });
+    function select_gtype(type, name) {
+    	$("#btn_add_teacher_gtype").val(type);
+		$("#btn_add_teacher_gtype").html(name + " <span class='caret'></span>");
+    }
 </script>
 {% endblock %}
 

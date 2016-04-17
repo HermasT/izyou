@@ -61,7 +61,8 @@ class GameType(Enum):
             {'type':1, 'name': '桥牌'},
             {'type':2, 'name': '数独'},
             {'type':3, 'name': '围棋'},
-            {'type':4, 'name': '象棋'}
+            {'type':4, 'name': '象棋'},
+            {'type':5, 'name': '国际象棋'}
         ]
 
     @staticmethod
