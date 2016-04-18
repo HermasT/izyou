@@ -189,9 +189,11 @@ def all_courses():
 			if schedules is not None:
 				for schedule in schedules:
 					mteacher = Teacher.query.filter(Teacher.tid == schedule.mteacher).first();
-					muser = Users.query.filter(Users.username==mteacher.username).first()
-					if muser:
-						schedule.mteachername = muser.getName() # 
+					# 考虑数据异常
+					if mteacher is not None:
+						muser = Users.query.filter(Users.username==mteacher.username).first()
+						if muser:
+							schedule.mteachername = muser.getName() #
 
 					bteacher = Teacher.query.filter(Teacher.tid == schedule.bteacher).first();
 					schedule.bteachername = ''

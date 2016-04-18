@@ -336,9 +336,8 @@ def orders():
 
 		data = Users.query.with_entities(Users.username, Users.name, Course.name, Orders.amount, Orders.income, Orders.status, Orders.paytype, Orders.orderid, Orders.operator, CourseSchedule.time)\
 			.join(Orders, Orders.username == Users.username)\
-			.join(OrderItem, OrderItem.orderid == Orders.orderid)\
-			.filter(OrderItem.pid == Course.cid)\
-			.filter(OrderItem.subid == CourseSchedule.csid)\
+			.filter(Orders.cid == Course.cid)\
+			.filter(Orders.csid == CourseSchedule.csid)\
 			.paginate(int(page), config.PAGE_ITEMS, False)
 
 		orderDataList = []
