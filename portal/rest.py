@@ -136,7 +136,7 @@ def api_verify_sms_code():
 	return result
 
 # 师资管理
-@app.route('/rest/add_teacher', methods=['GET', 'POST'])
+@app.route('/rest/add_teacher', methods=['GET'])
 def api_add_teacher():
 	name = request.args.get("name")
 	gtype = request.args.get("gtype")
@@ -160,7 +160,26 @@ def api_add_teacher():
 		# app.logger.error(e)
 		return jsonify({'error':4, 'cause': '数据库操作失败'})
 
-@app.route('/rest/update_teacher', methods=['GET', 'POST'])
+@app.route('/rest/delete_teacher', methods=['POST'])
+@login_required
+def api_delete_teacher():
+	if current_user is not None and current_user.is_privileged(UserType.staff):
+		tid = request.values.get("tid")
+		print tid
+		try:
+			teacher = Teacher.query.filter(Teacher.tid==tid).delete()
+			if not teacher:
+				return jsonify({'error':403, 'cause': '您删除的教师不存在'})
+			else:
+				db.session.commit()
+				return jsonify({'error':0})
+		except Exception , e:
+			return jsonify({'error':4, 'cause': '数据库操作失败'})
+	else:
+		abort(403)
+
+@app.route('/rest/update_teacher', methods=['GET'])
+@login_required
 def api_update_teacher():
 	try:
 		tid = request.args.get('tid')

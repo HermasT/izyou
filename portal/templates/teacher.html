@@ -49,7 +49,7 @@
 			<td>{{teacher.uprice}}</td>
 			<td>{{teacher.desc}}</td>
 			<td>{{teacher.extend}}</td>
-			<td><a href="/update_teacher?tid={{teacher.tid}}">编辑</a></td>
+			<td><a href="/update_teacher?tid={{teacher.tid}}">编辑</a>&nbsp&nbsp<a onclick='delete_teacher({{teacher.tid}})' href="javascript:void(-1)">删除</a></td>
 		</tr>
 		{% endfor %}
 	</table>
@@ -84,6 +84,28 @@
 			return;
 		}
 		window.location.href = "/search_teacher?username=" + name;
+	}
+
+	function delete_teacher(tid) {
+		$.MsgBox.Confirm("删除教师", "您确定要删除该教师信息吗？", function() {
+			$.ajax({
+				url:'/rest/delete_teacher',
+			    data: {"tid": tid},
+			    type: 'post',
+			    cache: false,
+			    dataType: 'json',
+			    success: function(data) {
+			    	if (data["error"] > 0) {
+			    		$.MsgBox.Alert("删除失败", data["cause"]);
+			    	} else {
+			    		window.location.reload();
+			    	}
+			    },
+			    error: function() {
+			        $.MsgBox.Alert("删除失败", data["cause"]);
+			    }
+			})
+		});
 	}
 </script>
 {% endblock %}

@@ -51,7 +51,6 @@ def teacher():
 				teacher.gtypename = GameType.getName(teacher.gtype) # gtypename
 				teacher.desc = user.desc
 				teacher.extend = user.extend
-			# teachers.append(teacher)
 		return render_template('teacher.html', username=current_user.username, index=2, pagination=paginate)
 	else:
 		abort(403)
