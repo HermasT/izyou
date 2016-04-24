@@ -185,6 +185,9 @@ def all_courses():
 			if contents is not None:
 				c.contents = contents	
 
+			# 处理2， 如有需要， 在这里做处理不返回coursedetail 
+			# c.contents = []
+
 			schedules = CourseSchedule.query.filter(CourseSchedule.cid == c.cid).all()
 			if schedules is not None:
 				for schedule in schedules:
