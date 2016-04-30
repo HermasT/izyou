@@ -165,6 +165,17 @@ def xiangqi_detail():
 	except:
 		return render_template('xiangqi_detail.html', username=None)
 
+# 国际象棋介绍
+@app.route('/chess_detail', methods = ['GET'])
+def chess_detail():
+	try:
+		username = current_user.username
+		return render_template('chess_detail.html', username=username)
+	except:
+		return render_template('chess_detail.html', username=None)
+
+
+
 # 所有课程
 @app.route('/all_courses', methods = ['GET'])
 def all_courses():
