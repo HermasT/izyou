@@ -188,6 +188,8 @@ def all_courses():
 		pagetitle = '2016年暑秋围棋课程安排'
 	elif int(gtype) == GameType.xiangqi:
 		pagetitle = '2016年暑秋象棋课程安排'
+	elif int(gtype) == GameType.chess:
+		pagetitle = '2016年暑秋国象课程安排'
 
 	courses = Course.query.filter(Course.gtype==gtype, Course.status<2, Course.active==True).all() # 可以报名的课程
 	if courses is not None:
